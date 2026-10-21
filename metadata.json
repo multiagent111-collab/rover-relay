@@ -1,0 +1,22 @@
+{
+  "name": "ROVER Relay",
+  "version": "0.1.0",
+  "description": "Standalone campus equipment rescue with evidence-backed planning and simulated dispatch",
+  "suggested_track": "Wildcard [Tinkerer]",
+  "created_on": "2026-10-20",
+  "pre_existing_work": "This entire first iteration was created before the build window and must be disclosed.",
+  "sponsors": {
+    "zetaris": "Fixed-template federation adapter and independent source contracts; live instance unverified",
+    "meterless": "Pinned official H-MEM used at runtime; Nightshift primary provider adapter; live Runtime unverified",
+    "nvidia": "Nightshift and explicit NVIDIA-direct Nemotron adapters; actual inference unverified",
+    "cursor": "Project rules supplied; actual Cursor development pending; initial implementation authored with Codex"
+  },
+  "default_mode": "offline_sample",
+  "operations": "simulated",
+  "private_rover_dependency": false,
+  "baseline_tag": "rover-relay-pre-event-2026-10-21",
+  "baseline_scope": "Entire tagged implementation, fixture data, tests and documentation, including October 20-21 changes, are pre-existing work.",
+  "repository": "https://github.com/multiagent111-collab/rover-relay",
+  "submission_status": "pre_event_baseline_not_final_submission",
+  "build_opens_at": "2026-10-22T00:00:00Z"
+}

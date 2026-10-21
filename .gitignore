@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+.data/
+coverage/
+*.log
+*.sqlite*
+.DS_Store
+.npmrc
+*.pem
+*.p12
+*.pfx

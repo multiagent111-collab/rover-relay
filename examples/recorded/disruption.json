@@ -1,0 +1,1396 @@
+{
+  "capturedAt": "2026-10-20T18:26:04.268Z",
+  "mode": "offline_sample",
+  "input": {
+    "sku": "HDMI-USB-C",
+    "quantity": 2,
+    "destination": "auditorium",
+    "budgetCents": 3500,
+    "deadlineMinutes": 30
+  },
+  "disruption": "Supplier A stock set to zero",
+  "staleApprovalResponse": {
+    "error": "plan_replaced",
+    "message": "Evidence changed or the plan expired. Review and approve the replacement."
+  },
+  "before": {
+    "id": "1f567a2b-2316-4dde-b9d4-98b627efebef",
+    "owner": {
+      "tenant": "relay-demo",
+      "user": "coordinator"
+    },
+    "request": {
+      "sku": "HDMI-USB-C",
+      "quantity": 2,
+      "destination": "auditorium",
+      "budgetCents": 3500,
+      "deadlineMinutes": 30
+    },
+    "createdAt": "2026-10-20T18:26:04.243Z",
+    "deadlineAt": "2026-10-20T18:56:04.243Z",
+    "status": "awaiting_approval",
+    "receipt": {
+      "schemaVersion": "1.0",
+      "version": 1,
+      "digest": "7c012f4ad3ae4c5fa77a3e2e33c46d3e8abe1eb431bda638e63540b6817716fe",
+      "createdAt": "2026-10-20T18:26:04.248Z",
+      "expiresAt": "2026-10-20T18:27:04.248Z",
+      "mode": "offline_sample",
+      "sourceFingerprint": "eea057789e5b86e775bca7c2ae378e67da0dbb381d223669e468137e926f6972",
+      "memoryRevision": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "memory": {
+        "records": [],
+        "context": "",
+        "entrance": null,
+        "revision": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "engine": "Meterless H-MEM reference 1742dec56a66e58eef9dda2d2b865823758ca8cd"
+      },
+      "candidates": [
+        {
+          "id": "supplier-a:courier-1",
+          "supplier": {
+            "id": "supplier-a",
+            "name": "Campus Tech",
+            "sku": "HDMI-USB-C",
+            "stock": 6,
+            "unitPriceCents": 1200,
+            "pickupNode": "supplier-a",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-1",
+            "name": "Alex",
+            "node": "hub",
+            "deliveryCents": 800,
+            "available": true,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-a"
+          },
+          "routeEdges": [
+            "E1",
+            "E4",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-a",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 22,
+          "totalCents": 3200,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "6 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": true,
+              "detail": "Courier available in source."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": true,
+              "detail": "$32.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "22 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": true,
+          "evidenceIds": [
+            "stock-supplier-a-v1",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v1"
+          ]
+        },
+        {
+          "id": "supplier-b:courier-2",
+          "supplier": {
+            "id": "supplier-b",
+            "name": "Library AV",
+            "sku": "HDMI-USB-C",
+            "stock": 4,
+            "unitPriceCents": 1000,
+            "pickupNode": "supplier-b",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-2",
+            "name": "Sam",
+            "node": "hub",
+            "deliveryCents": 1500,
+            "available": true,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-b"
+          },
+          "routeEdges": [
+            "E2",
+            "E5",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-b",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 28,
+          "totalCents": 3500,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "4 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": true,
+              "detail": "Courier available in source."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": true,
+              "detail": "$35.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "28 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": true,
+          "evidenceIds": [
+            "stock-supplier-a-v1",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v1"
+          ]
+        },
+        {
+          "id": "supplier-a:courier-4",
+          "supplier": {
+            "id": "supplier-a",
+            "name": "Campus Tech",
+            "sku": "HDMI-USB-C",
+            "stock": 6,
+            "unitPriceCents": 1200,
+            "pickupNode": "supplier-a",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-4",
+            "name": "Taylor",
+            "node": "hub",
+            "deliveryCents": 1200,
+            "available": false,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-a"
+          },
+          "routeEdges": [
+            "E1",
+            "E4",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-a",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 22,
+          "totalCents": 3600,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "6 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": false,
+              "detail": "Courier unavailable."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": false,
+              "detail": "$36.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "22 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v1",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v1"
+          ]
+        },
+        {
+          "id": "supplier-b:courier-5",
+          "supplier": {
+            "id": "supplier-b",
+            "name": "Library AV",
+            "sku": "HDMI-USB-C",
+            "stock": 4,
+            "unitPriceCents": 1000,
+            "pickupNode": "supplier-b",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-5",
+            "name": "Morgan",
+            "node": "hub",
+            "deliveryCents": 1800,
+            "available": false,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-b"
+          },
+          "routeEdges": [
+            "E2",
+            "E5",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-b",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 28,
+          "totalCents": 3800,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "4 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": false,
+              "detail": "Courier unavailable."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": false,
+              "detail": "$38.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "28 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v1",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v1"
+          ]
+        },
+        {
+          "id": "supplier-c:courier-3",
+          "supplier": {
+            "id": "supplier-c",
+            "name": "Event Supply",
+            "sku": "HDMI-USB-C",
+            "stock": 3,
+            "unitPriceCents": 1500,
+            "pickupNode": "supplier-c",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-3",
+            "name": "Jordan",
+            "node": "hub",
+            "deliveryCents": 1000,
+            "available": true,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-c"
+          },
+          "routeEdges": [
+            "E3",
+            "E6",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-c",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 18,
+          "totalCents": 4000,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "3 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": true,
+              "detail": "Courier available in source."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": false,
+              "detail": "$40.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "18 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v1",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v1"
+          ]
+        },
+        {
+          "id": "supplier-c:courier-6",
+          "supplier": {
+            "id": "supplier-c",
+            "name": "Event Supply",
+            "sku": "HDMI-USB-C",
+            "stock": 3,
+            "unitPriceCents": 1500,
+            "pickupNode": "supplier-c",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-6",
+            "name": "Riley",
+            "node": "hub",
+            "deliveryCents": 1400,
+            "available": false,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-c"
+          },
+          "routeEdges": [
+            "E3",
+            "E6",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-c",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 18,
+          "totalCents": 4400,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "3 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": false,
+              "detail": "Courier unavailable."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": false,
+              "detail": "$44.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "18 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v1",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v1"
+          ]
+        }
+      ],
+      "selectedId": "supplier-a:courier-1",
+      "alternatives": {
+        "budgetIncreaseCents": 0,
+        "deadlineExtensionMinutes": 0
+      },
+      "evidence": [
+        {
+          "id": "stock-supplier-a-v1",
+          "source": "sample:supplier-fixture",
+          "recordId": "supplier-a",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "stock-supplier-b-v1",
+          "source": "sample:supplier-fixture",
+          "recordId": "supplier-b",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "stock-supplier-c-v1",
+          "source": "sample:supplier-fixture",
+          "recordId": "supplier-c",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-1-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-1",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-2-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-2",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-3-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-3",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-4-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-4",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-5-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-5",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-6-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-6",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "route-v1",
+          "source": "sample:route-graph",
+          "recordId": "campus",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.245Z",
+          "mode": "offline_sample"
+        }
+      ],
+      "steps": [
+        {
+          "role": "Planner",
+          "round": 1,
+          "decision": "Campus Tech with Alex; entrance not specified.",
+          "candidateId": "supplier-a:courier-1",
+          "provider": "deterministic sample substitute (no model call)",
+          "model": "sample-rules-v1",
+          "memoryIds": []
+        },
+        {
+          "role": "Critic",
+          "round": 1,
+          "decision": "approve_proposal",
+          "feedback": [],
+          "candidateId": "supplier-a:courier-1",
+          "provider": "deterministic sample substitute (no model call)",
+          "model": "sample-rules-v1",
+          "memoryIds": []
+        },
+        {
+          "role": "Validator",
+          "round": 1,
+          "decision": "checks_passed",
+          "feedback": [],
+          "candidateId": "supplier-a:courier-1",
+          "provider": "deterministic",
+          "memoryIds": []
+        }
+      ],
+      "summary": "Campus Tech with Alex; entrance not specified.",
+      "change": null
+    },
+    "taskId": null,
+    "error": null
+  },
+  "after": {
+    "id": "1f567a2b-2316-4dde-b9d4-98b627efebef",
+    "owner": {
+      "tenant": "relay-demo",
+      "user": "coordinator"
+    },
+    "request": {
+      "sku": "HDMI-USB-C",
+      "quantity": 2,
+      "destination": "auditorium",
+      "budgetCents": 3500,
+      "deadlineMinutes": 30
+    },
+    "createdAt": "2026-10-20T18:26:04.243Z",
+    "deadlineAt": "2026-10-20T18:56:04.243Z",
+    "status": "awaiting_approval",
+    "receipt": {
+      "schemaVersion": "1.0",
+      "version": 2,
+      "digest": "4af6a5119c4e1f708d81e54670024fdcc770c6547e5fe538fa99cd0538cd9a5b",
+      "createdAt": "2026-10-20T18:26:04.264Z",
+      "expiresAt": "2026-10-20T18:27:04.264Z",
+      "mode": "offline_sample",
+      "sourceFingerprint": "6a63c7fcceff5044aee3eee78e8b96aa174da71d9b1575da1175d854bd2fc432",
+      "memoryRevision": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "memory": {
+        "records": [],
+        "context": "",
+        "entrance": null,
+        "revision": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "engine": "Meterless H-MEM reference 1742dec56a66e58eef9dda2d2b865823758ca8cd"
+      },
+      "candidates": [
+        {
+          "id": "supplier-a:courier-1",
+          "supplier": {
+            "id": "supplier-a",
+            "name": "Campus Tech",
+            "sku": "HDMI-USB-C",
+            "stock": 0,
+            "unitPriceCents": 1200,
+            "pickupNode": "supplier-a",
+            "handlingMinutes": 2,
+            "version": 2
+          },
+          "courier": {
+            "id": "courier-1",
+            "name": "Alex",
+            "node": "hub",
+            "deliveryCents": 800,
+            "available": true,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-a"
+          },
+          "routeEdges": [
+            "E1",
+            "E4",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-a",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 22,
+          "totalCents": 3200,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": false,
+              "detail": "0 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": true,
+              "detail": "Courier available in source."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": true,
+              "detail": "$32.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "22 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v2",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v2"
+          ]
+        },
+        {
+          "id": "supplier-b:courier-2",
+          "supplier": {
+            "id": "supplier-b",
+            "name": "Library AV",
+            "sku": "HDMI-USB-C",
+            "stock": 4,
+            "unitPriceCents": 1000,
+            "pickupNode": "supplier-b",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-2",
+            "name": "Sam",
+            "node": "hub",
+            "deliveryCents": 1500,
+            "available": true,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-b"
+          },
+          "routeEdges": [
+            "E2",
+            "E5",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-b",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 28,
+          "totalCents": 3500,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "4 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": true,
+              "detail": "Courier available in source."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": true,
+              "detail": "$35.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "28 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": true,
+          "evidenceIds": [
+            "stock-supplier-a-v2",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v2"
+          ]
+        },
+        {
+          "id": "supplier-a:courier-4",
+          "supplier": {
+            "id": "supplier-a",
+            "name": "Campus Tech",
+            "sku": "HDMI-USB-C",
+            "stock": 0,
+            "unitPriceCents": 1200,
+            "pickupNode": "supplier-a",
+            "handlingMinutes": 2,
+            "version": 2
+          },
+          "courier": {
+            "id": "courier-4",
+            "name": "Taylor",
+            "node": "hub",
+            "deliveryCents": 1200,
+            "available": false,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-a"
+          },
+          "routeEdges": [
+            "E1",
+            "E4",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-a",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 22,
+          "totalCents": 3600,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": false,
+              "detail": "0 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": false,
+              "detail": "Courier unavailable."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": false,
+              "detail": "$36.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "22 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v2",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v2"
+          ]
+        },
+        {
+          "id": "supplier-b:courier-5",
+          "supplier": {
+            "id": "supplier-b",
+            "name": "Library AV",
+            "sku": "HDMI-USB-C",
+            "stock": 4,
+            "unitPriceCents": 1000,
+            "pickupNode": "supplier-b",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-5",
+            "name": "Morgan",
+            "node": "hub",
+            "deliveryCents": 1800,
+            "available": false,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-b"
+          },
+          "routeEdges": [
+            "E2",
+            "E5",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-b",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 28,
+          "totalCents": 3800,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "4 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": false,
+              "detail": "Courier unavailable."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": false,
+              "detail": "$38.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "28 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v2",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v2"
+          ]
+        },
+        {
+          "id": "supplier-c:courier-3",
+          "supplier": {
+            "id": "supplier-c",
+            "name": "Event Supply",
+            "sku": "HDMI-USB-C",
+            "stock": 3,
+            "unitPriceCents": 1500,
+            "pickupNode": "supplier-c",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-3",
+            "name": "Jordan",
+            "node": "hub",
+            "deliveryCents": 1000,
+            "available": true,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-c"
+          },
+          "routeEdges": [
+            "E3",
+            "E6",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-c",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 18,
+          "totalCents": 4000,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "3 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": true,
+              "detail": "Courier available in source."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": false,
+              "detail": "$40.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "18 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v2",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v2"
+          ]
+        },
+        {
+          "id": "supplier-c:courier-6",
+          "supplier": {
+            "id": "supplier-c",
+            "name": "Event Supply",
+            "sku": "HDMI-USB-C",
+            "stock": 3,
+            "unitPriceCents": 1500,
+            "pickupNode": "supplier-c",
+            "handlingMinutes": 2,
+            "version": 1
+          },
+          "courier": {
+            "id": "courier-6",
+            "name": "Riley",
+            "node": "hub",
+            "deliveryCents": 1400,
+            "available": false,
+            "version": 1,
+            "capacity": 10,
+            "supplierId": "supplier-c"
+          },
+          "routeEdges": [
+            "E3",
+            "E6",
+            "E7"
+          ],
+          "routeNodes": [
+            "hub",
+            "supplier-c",
+            "junction",
+            "auditorium"
+          ],
+          "travelMinutes": 18,
+          "totalCents": 4400,
+          "checks": [
+            {
+              "code": "sku",
+              "passed": true,
+              "detail": "Exact USB-C to HDMI compatibility required."
+            },
+            {
+              "code": "stock",
+              "passed": true,
+              "detail": "3 observed; 2 requested. Inventory is not reserved."
+            },
+            {
+              "code": "courier",
+              "passed": false,
+              "detail": "Courier unavailable."
+            },
+            {
+              "code": "capacity",
+              "passed": true,
+              "detail": "Courier capacity 10 items."
+            },
+            {
+              "code": "route",
+              "passed": true,
+              "detail": "Open route to pickup and destination."
+            },
+            {
+              "code": "budget",
+              "passed": false,
+              "detail": "$44.00 estimated including delivery; synthetic fees/tax $0."
+            },
+            {
+              "code": "deadline",
+              "passed": true,
+              "detail": "18 min needed; 29 min remaining."
+            }
+          ],
+          "feasible": false,
+          "evidenceIds": [
+            "stock-supplier-a-v2",
+            "stock-supplier-b-v1",
+            "stock-supplier-c-v1",
+            "courier-courier-1-v1",
+            "courier-courier-2-v1",
+            "courier-courier-3-v1",
+            "courier-courier-4-v1",
+            "courier-courier-5-v1",
+            "courier-courier-6-v1",
+            "route-v2"
+          ]
+        }
+      ],
+      "selectedId": "supplier-b:courier-2",
+      "alternatives": {
+        "budgetIncreaseCents": 0,
+        "deadlineExtensionMinutes": 0
+      },
+      "evidence": [
+        {
+          "id": "stock-supplier-a-v2",
+          "source": "sample:supplier-fixture",
+          "recordId": "supplier-a",
+          "sourceVersion": "2",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "stock-supplier-b-v1",
+          "source": "sample:supplier-fixture",
+          "recordId": "supplier-b",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "stock-supplier-c-v1",
+          "source": "sample:supplier-fixture",
+          "recordId": "supplier-c",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-1-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-1",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-2-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-2",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-3-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-3",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-4-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-4",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-5-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-5",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "courier-courier-6-v1",
+          "source": "sample:minirover",
+          "recordId": "courier-6",
+          "sourceVersion": "1",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        },
+        {
+          "id": "route-v2",
+          "source": "sample:route-graph",
+          "recordId": "campus",
+          "sourceVersion": "2",
+          "fetchedAt": "2026-10-20T18:26:04.261Z",
+          "mode": "offline_sample"
+        }
+      ],
+      "steps": [
+        {
+          "role": "Planner",
+          "round": 1,
+          "decision": "Campus Tech with Alex; entrance not specified.",
+          "candidateId": "supplier-a:courier-1",
+          "provider": "deterministic sample substitute (no model call)",
+          "model": "sample-rules-v1",
+          "memoryIds": []
+        },
+        {
+          "role": "Critic",
+          "round": 1,
+          "decision": "revise_proposal",
+          "feedback": [
+            "stock"
+          ],
+          "candidateId": "supplier-a:courier-1",
+          "provider": "deterministic sample substitute (no model call)",
+          "model": "sample-rules-v1",
+          "memoryIds": []
+        },
+        {
+          "role": "Validator",
+          "round": 1,
+          "decision": "rejected",
+          "feedback": [
+            "Failed stock: 0 observed; 2 requested. Inventory is not reserved.",
+            "stock",
+            "Critic requested revision."
+          ],
+          "candidateId": "supplier-a:courier-1",
+          "provider": "deterministic",
+          "memoryIds": []
+        },
+        {
+          "role": "Planner",
+          "round": 2,
+          "decision": "Library AV with Sam; entrance not specified.",
+          "candidateId": "supplier-b:courier-2",
+          "provider": "deterministic sample substitute (no model call)",
+          "model": "sample-rules-v1",
+          "memoryIds": []
+        },
+        {
+          "role": "Critic",
+          "round": 2,
+          "decision": "approve_proposal",
+          "feedback": [],
+          "candidateId": "supplier-b:courier-2",
+          "provider": "deterministic sample substitute (no model call)",
+          "model": "sample-rules-v1",
+          "memoryIds": []
+        },
+        {
+          "role": "Validator",
+          "round": 2,
+          "decision": "checks_passed",
+          "feedback": [],
+          "candidateId": "supplier-b:courier-2",
+          "provider": "deterministic",
+          "memoryIds": []
+        }
+      ],
+      "summary": "Library AV with Sam; entrance not specified.",
+      "change": "The proposal expired or stock, route, courier availability, or entrance instructions changed. Fresh approval is required."
+    },
+    "taskId": null,
+    "error": null
+  }
+}

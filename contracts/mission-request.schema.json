@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "sku": {
+      "default": "HDMI-USB-C",
+      "type": "string",
+      "enum": ["HDMI-USB-C"]
+    },
+    "quantity": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "destination": {
+      "type": "string",
+      "enum": ["auditorium", "library"]
+    },
+    "budgetCents": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+    },
+    "deadlineMinutes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 240
+    }
+  },
+  "required": [
+    "sku",
+    "quantity",
+    "destination",
+    "budgetCents",
+    "deadlineMinutes"
+  ],
+  "additionalProperties": false
+}

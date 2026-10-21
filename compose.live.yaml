@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: relay
+      POSTGRES_USER: relay
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env for the live profile}
+    ports: ["127.0.0.1:54329:5432"]
+    volumes: ["relay-postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U relay -d relay"]
+      interval: 5s
+      retries: 10
+  relay-live:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports: ["127.0.0.1:4173:4173"]
+    env_file: .env
+    environment:
+      SAMPLE_MODE: "false"
+      HOST: 0.0.0.0
+      DATABASE_URL: postgresql://relay:${POSTGRES_PASSWORD}@postgres:5432/relay
+    volumes: ["relay-live:/app/.data"]
+  suppliers:
+    build: .
+    command: [npm, run, supplier]
+    environment:
+      SUPPLIER_HOST: 0.0.0.0
+      SUPPLIER_PORT: 4174
+    ports: ["127.0.0.1:4174:4174"]
+    volumes: ["relay-supplier:/app/.data"]
+volumes:
+  relay-postgres:
+  relay-live:
+  relay-supplier:

@@ -1,0 +1,12 @@
+---
+description: Preserve Relay independence and reliable mission execution
+alwaysApply: true
+---
+
+Read AGENTS.md. Keep this repository independent of private ROVER source and configuration.
+Use typed adapters and actual H-MEM; label sample model/data substitutes explicitly.
+Never execute model-generated SQL or let a model create a task.
+Approval binds a current plan version and digest, ownership, expiry, current observations, and confirmed preferences.
+Keep dispatch durable and idempotent; retain restart recovery and bounded agent loops.
+Do not claim reservations, real bookings, or successful sponsor calls without execution evidence.
+Document actual Cursor work and preserve the October 20 pre-event disclosure.

@@ -1,0 +1,11 @@
+services:
+  relay:
+    profiles: [sample]
+    build: .
+    ports: ["127.0.0.1:4173:4173"]
+    environment:
+      SAMPLE_MODE: "true"
+      HOST: 0.0.0.0
+    volumes: ["relay-sample:/app/.data"]
+volumes:
+  relay-sample:

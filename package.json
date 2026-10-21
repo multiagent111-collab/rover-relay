@@ -1,0 +1,43 @@
+{
+  "name": "rover-relay",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Standalone campus equipment rescue agent and MiniROVER simulator",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "node --import tsx --watch src/server.ts",
+    "dev:ui": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "start": "node --import tsx src/server.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "preflight": "node --import tsx scripts/preflight.ts",
+    "preflight:live": "node --import tsx scripts/preflight.ts --live",
+    "verify:hmem": "node scripts/verify-hmem.mjs",
+    "verify:baseline": "node scripts/baseline-manifest.mjs",
+    "check:public": "node scripts/check-public-source.mjs",
+    "examples": "node --import tsx scripts/examples.ts",
+    "contracts": "node --import tsx scripts/contracts.ts",
+    "setup:hmem": "node scripts/vendor-hmem.mjs",
+    "supplier": "node --import tsx supplier-fixtures/server.ts"
+  },
+  "dependencies": {
+    "fastify": "5.12.7",
+    "pg": "8.23.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tsx": "4.23.15",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "prettier": "3.9.10",
+    "typescript": "7.0.2",
+    "vite": "8.3.4"
+  }
+}

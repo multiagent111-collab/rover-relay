@@ -1,0 +1,27 @@
+name: Standalone verification
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check:public
+      - run: npm run verify:hmem
+      - run: npm test
+      - run: npm run build
+      - run: npm run preflight
+      - name: Verify immutable pre-event baseline
+        run: npm run verify:baseline

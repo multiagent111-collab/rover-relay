@@ -1,0 +1,66 @@
+{
+  "repository": "https://github.com/Meterless/Meterless",
+  "revision": "1742dec56a66e58eef9dda2d2b865823758ca8cd",
+  "files": [
+    {
+      "path": "LICENSE",
+      "gitBlobSha1": "d1a6bb88af6e6b79738dd192fb491a99eb2a7fe3"
+    },
+    {
+      "path": "conformance/README.md",
+      "gitBlobSha1": "fb5bb7c440eee364ad9704923d6e94aa0e06af65"
+    },
+    {
+      "path": "conformance/runner.ts",
+      "gitBlobSha1": "dab4c66cac7d50542f73f5484980149072623c86"
+    },
+    {
+      "path": "conformance/vectors/vectors.json",
+      "gitBlobSha1": "776b6b6e808e82d25b110db4029b3d24f5eb7dcb"
+    },
+    {
+      "path": "package.json",
+      "gitBlobSha1": "b9f971137fa4b1509e65f5c15663e7bf7446593a"
+    },
+    {
+      "path": "src/conflictDetection.ts",
+      "gitBlobSha1": "2d444ecb901fa7e8ccd0dbbd90090316cf90660b"
+    },
+    {
+      "path": "src/dreaming.ts",
+      "gitBlobSha1": "e2c1dd041746d3369a21a38250f4a521bbb333c4"
+    },
+    {
+      "path": "src/embeddings.ts",
+      "gitBlobSha1": "e9e6ae7f2adb4eabb4f47eeeb1268099a73f960a"
+    },
+    {
+      "path": "src/index.ts",
+      "gitBlobSha1": "7f20562365b4c3149836d09cdc914b1d076d8997"
+    },
+    {
+      "path": "src/memoryMining.ts",
+      "gitBlobSha1": "a3d27743c66720dc36636e6cf61e1b32b8f2d5f4"
+    },
+    {
+      "path": "src/memoryRetrieval.ts",
+      "gitBlobSha1": "5c1b924806c203945ceb859fd62f175ed5337674"
+    },
+    {
+      "path": "src/memoryStore.ts",
+      "gitBlobSha1": "92c49358c1745cc24cb73ec99892e053b639e22e"
+    },
+    {
+      "path": "src/sleepCycle.ts",
+      "gitBlobSha1": "6d651535d5eb26e03c31ead6e5c05ff39fc3b8bb"
+    },
+    {
+      "path": "src/trustLedger.ts",
+      "gitBlobSha1": "716880f548bf682d3e8898c63211b557e9b889a9"
+    },
+    {
+      "path": "src/types.ts",
+      "gitBlobSha1": "de7838f2dceb471ef60a6b31ac0679b0303ccc91"
+    }
+  ]
+}

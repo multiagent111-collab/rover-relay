@@ -1,0 +1,604 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ROVER Relay",
+    "version": "0.1.0",
+    "description": "Standalone synthetic campus workflow. Live mode uses bearer authentication; local sample mode uses documented demo identities."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:4173"
+    }
+  ],
+  "security": [
+    {
+      "RelayBearer": []
+    }
+  ],
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "summary": "Read mode and local server health; not proof of sponsor connectivity",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/bootstrap": {
+      "get": {
+        "summary": "Read synthetic campus data and caller-owned missions",
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/missions": {
+      "post": {
+        "summary": "Create a request and a bounded planning run",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MissionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error with error code and message"
+          },
+          "503": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/missions/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Read caller-owned mission",
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/missions/{id}/replan": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Refresh observations and create a new plan version",
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled error with error code and message"
+          },
+          "503": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/missions/{id}/approve": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Approve current terms and create/recover one simulated task",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["version", "digest", "idempotencyKey"],
+                "properties": {
+                  "version": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "digest": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "idempotencyKey": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 100
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled error with error code and message"
+          },
+          "503": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/missions/{id}/events": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Read ordered evidence and task events",
+        "responses": {
+          "200": {
+            "description": "Ordered events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/missions/{id}/evidence.jsonl": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Export evidence as NDJSON",
+        "responses": {
+          "200": {
+            "description": "Ordered events",
+            "content": {
+              "application/x-ndjson": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Read caller-owned simulated task",
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/tasks/{id}/cancel": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Cancel a simulated task and release its courier reservation",
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/preferences/entrance": {
+      "get": {
+        "summary": "Retrieve confirmed preference through H-MEM",
+        "parameters": [
+          {
+            "name": "venue",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": ["auditorium", "library"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Confirm or correct an entrance preference",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["venue", "entrance"],
+                "properties": {
+                  "venue": {
+                    "enum": ["auditorium", "library"]
+                  },
+                  "entrance": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 120
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Forget the active preference; audit history remains local",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["venue"],
+                "properties": {
+                  "venue": {
+                    "enum": ["auditorium", "library"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demo/tasks/{id}/response": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Simulate courier response or delivery progress; demo mode only",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["status"],
+                "properties": {
+                  "status": {
+                    "enum": ["accepted", "declined", "in_progress", "completed"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error with error code and message"
+          },
+          "409": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/demo/disruptions": {
+      "post": {
+        "summary": "Change local sample stock or route facts; sample mode only",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["type", "supplierId", "stock"],
+                    "properties": {
+                      "type": {
+                        "const": "stock"
+                      },
+                      "supplierId": {
+                        "type": "string"
+                      },
+                      "stock": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 100
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["type", "edgeId", "closed"],
+                    "properties": {
+                      "type": {
+                        "const": "route"
+                      },
+                      "edgeId": {
+                        "type": "string"
+                      },
+                      "closed": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "RelayBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "MissionRequest": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "sku": {
+            "default": "HDMI-USB-C",
+            "type": "string",
+            "enum": ["HDMI-USB-C"]
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "destination": {
+            "type": "string",
+            "enum": ["auditorium", "library"]
+          },
+          "budgetCents": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000
+          },
+          "deadlineMinutes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 240
+          }
+        },
+        "required": [
+          "sku",
+          "quantity",
+          "destination",
+          "budgetCents",
+          "deadlineMinutes"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
