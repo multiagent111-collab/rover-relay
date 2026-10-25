@@ -1,0 +1,184 @@
+{
+  "ticket": "RELAY-02",
+  "tool": "Codex",
+  "startedAt": "2026-10-22T18:42:55.474Z",
+  "capturedAt": "2026-10-22T19:03:39.514Z",
+  "startingCommit": "3a4c550ecd8ce2eeabd40210bfedc8afa53379b1",
+  "status": "implemented_awaiting_user_test",
+  "scope": "Public Relay source evidence/federation only; Build deferred",
+  "protectedBaseline": "1b19c528d639134691289d9c0db38d82e9f277ff",
+  "checks": [
+    {
+      "command": "npm.cmd test",
+      "status": "PASS",
+      "tests": 58,
+      "failed": 0,
+      "detail": "Controlled source/citation regressions plus existing real isolated H-MEM feature and lifecycle tests"
+    },
+    {
+      "command": "npm.cmd run build",
+      "status": "PASS",
+      "detail": "TypeScript and Vite production build"
+    },
+    {
+      "command": "npm.cmd run contracts",
+      "status": "PASS",
+      "detail": "Additive SourceEvidence schema; existing receipt version 1.0 remains readable"
+    },
+    {
+      "check": "Existing local source views and restricted source reader",
+      "status": "PASS",
+      "checkedAt": "2026-10-22T18:56:38.796Z",
+      "sourceViewsInspected": 2,
+      "reader": {
+        "role": "relay_source_reader",
+        "elevated": false,
+        "can_create": false,
+        "raw_select": false,
+        "raw_write": false,
+        "courier_select": true,
+        "route_select": true,
+        "courier_write": false,
+        "route_write": false
+      },
+      "denialProbes": [
+        {
+          "name": "raw_state_select_denied",
+          "status": "PASS",
+          "sqlState": "42501",
+          "affectedRows": 0
+        },
+        {
+          "name": "raw_state_update_denied",
+          "status": "PASS",
+          "sqlState": "42501",
+          "affectedRows": 0
+        },
+        {
+          "name": "source_view_update_denied",
+          "status": "PASS",
+          "sqlState": "55000",
+          "affectedRows": 0
+        }
+      ],
+      "zetaris": {
+        "suppliers": 3,
+        "couriers": 6,
+        "edges": 9,
+        "evidence": 18,
+        "queryIds": [
+          "0dffa391-fa73-4553-b220-d432dc2c714f",
+          "65100523-ef78-4eae-a1e7-5b01449565ad"
+        ],
+        "kinds": [
+          "courier",
+          "route_edge",
+          "supplier"
+        ]
+      }
+    },
+    {
+      "check": "Real Zetaris join and isolated independent-source mutation",
+      "status": "PASS",
+      "ticket": "RELAY-02",
+      "tool": "Codex",
+      "startedAt": "2026-10-22T18:57:55.362Z",
+      "dataMode": "real Zetaris federation over isolated synthetic source records",
+      "inference": "none",
+      "executionBackend": "none; no mission/task/dispatch",
+      "supplierId": "supplier-relay02-64b79a93-a669-4edd-a39e-e5e2e98d7c66",
+      "courierId": "courier-relay02-64b79a93-a669-4edd-a39e-e5e2e98d7c66",
+      "checks": [
+        {
+          "name": "isolated independent sources joined inside Zetaris",
+          "status": "PASS",
+          "stock": 7,
+          "version": "1",
+          "contentHash": "f8c3e02067e8c8e62e292aa7ff9d5764044b93c6460121f9ae9da530f78608c0",
+          "observedAt": "2026-10-22T18:57:58.028Z",
+          "fetchedAt": "2026-10-22T18:57:58.719Z",
+          "queryIds": [
+            "f3018515-b63f-4be8-b655-4a13eb6aaf54",
+            "516dba20-ef00-4180-908a-d290093c9120"
+          ],
+          "supplierSource": "relay_supplier_http"
+        },
+        {
+          "name": "independent SQLite supplier mutation changes fresh federated result and hash",
+          "status": "PASS",
+          "stock": 3,
+          "version": "2",
+          "contentHash": "d60c2868f21eab14d6491e1c8cb2fdde6a57d764f6af9aaa23ab77a713135c4d",
+          "observedAt": "2026-10-22T18:58:01.280Z",
+          "fetchedAt": "2026-10-22T18:58:02.249Z",
+          "queryIds": [
+            "68ca7d67-4de3-470e-8e1d-f4d55f3b7826",
+            "be97ca14-8112-4b95-948c-f2968a7e7bbe"
+          ],
+          "supplierSource": "relay_supplier_http"
+        },
+        {
+          "name": "original supplier records unchanged",
+          "status": "PASS",
+          "records": 3
+        },
+        {
+          "name": "real Zetaris confirms isolated source records removed",
+          "status": "PASS",
+          "queryIds": [
+            "59b5d50c-aedc-4e3f-ba39-8c31b015b267",
+            "71a69cbe-302e-4dca-8abc-301e48be0796"
+          ]
+        }
+      ],
+      "cleanup": true,
+      "finishedAt": "2026-10-22T18:58:03.108Z"
+    },
+    {
+      "check": "Actual offline sample API after graceful managed restart",
+      "status": "awaiting_approval",
+      "checkedAt": "2026-10-22T19:02:22.710Z",
+      "mode": "offline_sample",
+      "executionBackend": "simulator; no dispatch created",
+      "missionId": "12f5af77-4d22-45ce-86af-e52245812e15",
+      "selectedId": "supplier-a:courier-1",
+      "requiredCitations": 5,
+      "totalObservations": 18,
+      "routeEdges": [
+        "E1",
+        "E4",
+        "E7"
+      ],
+      "requiredKinds": [
+        "supplier",
+        "courier",
+        "route_edge",
+        "route_edge",
+        "route_edge"
+      ],
+      "receiptVersion": "1.0"
+    }
+  ],
+  "reviewedInheritedPackaging": {
+    "detail": "Reviewed October 21 SQL projection corrections and registration/view templates, now tracked within this focused source provisioning package; their original authorship/timing is retained, not claimed as new federation implementation.",
+    "paths": [
+      "db/source-views.sql",
+      "db/zetaris-sources.example.sql",
+      "db/zetaris-views.sql"
+    ]
+  },
+  "failuresCorrected": [
+    "Initial build omitted a Fixtures type import; corrected before 58 passing tests/build.",
+    "The initial view-write probe expected permission SQLSTATE 42501; PostgreSQL rejected the non-updatable view first with 55000. Effective write privileges independently verified false; both denial paths are now recorded accurately."
+  ],
+  "limits": [
+    "Query IDs are client correlation identifiers and observations are Relay application projections, not platform-certified row-level lineage.",
+    "Source reader verification and synthetic mutation ran against the existing own local services; no source/connector DDL, provider change or hosted model call occurred.",
+    "Existing live Relay/supplier processes on 4173/4174 were preserved; isolated sample on 4183/4184 was gracefully refreshed for user testing.",
+    "Supplier HTTP timestamps its fresh SQLite read; PostgreSQL timestamps reads of persisted simulator fixtures, not real provider heartbeats or fact-change times.",
+    "Supported campus graph requires its nine base edges, including closed ones. Empty or incomplete live results fail closed.",
+    "Official H-MEM remains inherited/unmodified and passed existing product tests. Full Nightshift mission remains RELAY-05.",
+    "No Build changes, deployment, push or publication."
+  ],
+  "nextGate": "User tests RELAY-02 before RELAY-03 starts"
+}

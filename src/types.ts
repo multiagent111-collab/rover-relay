@@ -1,4 +1,11 @@
+import type { ApprovedExecutionIntent } from "./execution-contract.ts";
 import { z } from "zod";
+import type { Intake } from "./intake.ts";
+import type { ActionRecord } from "./coordinator.ts";
+import type { PlanningBudget } from "./budget.ts";
+import type { Proposal, ReviewIssue } from "./review.ts";
+import type { RuntimeRoute } from "./runtime-proof.ts";
+import type { PlanChange } from "./changes.ts";
 
 export const requestSchema = z
   .object({
@@ -19,6 +26,7 @@ export type Edge = {
   to: string;
   minutes: number;
   closed: boolean;
+  version?: number;
 };
 export type Supplier = {
   id: string;
@@ -47,16 +55,34 @@ export type Fixtures = {
   edges: Edge[];
   nodes: Node[];
 };
-export type Evidence = {
-  id: string;
-  source: string;
-  recordId: string;
-  sourceVersion: string;
-  fetchedAt: string;
-  observedAt?: string;
-  mode: Mode;
-  queryId?: string;
-};
+// Additive fields preserve stored 1.0 receipts; newly generated observations
+// include kind, facts, content hash and provenance. Legacy records cannot satisfy
+// the new candidate coverage check without a fresh source snapshot.
+export const evidenceSchema = z
+  .object({
+    id: z.string().min(1).max(200),
+    source: z.string().min(1).max(200),
+    recordId: z.string().min(1).max(200),
+    sourceVersion: z.string().min(1).max(200),
+    fetchedAt: z.string().datetime({ offset: true }),
+    observedAt: z.string().datetime({ offset: true }).optional(),
+    mode: z.enum(["offline_sample", "live_sponsors"]),
+    queryId: z.string().max(200).optional(),
+    kind: z.enum(["supplier", "courier", "route_edge"]).optional(),
+    contentHash: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
+    facts: z
+      .record(
+        z.string(),
+        z.union([z.string().max(200), z.number().finite(), z.boolean()]),
+      )
+      .optional(),
+    provenance: z.literal("application_projection").optional(),
+  })
+  .strict();
+export type Evidence = z.infer<typeof evidenceSchema>;
 export type Check = { code: string; passed: boolean; detail: string };
 export type Candidate = {
   id: string;
@@ -89,10 +115,12 @@ export type AgentStep = {
   decision: string;
   candidateId?: string | null;
   feedback?: string[];
+  issues?: ReviewIssue[];
   provider: string;
   memoryIds: string[];
   requestId?: string;
   model?: string;
+  routing?: RuntimeRoute;
 };
 export type Receipt = {
   schemaVersion: "1.0";
@@ -109,11 +137,31 @@ export type Receipt = {
   alternatives: {
     budgetIncreaseCents: number | null;
     deadlineExtensionMinutes: number | null;
+    status?:
+      | "within_constraints"
+      | "no_available_option"
+      | "combined_change_required"
+      | "either_change"
+      | "increase_budget"
+      | "extend_deadline";
+    explanation?: string;
   };
   evidence: Evidence[];
   steps: AgentStep[];
   summary: string;
+  review?: {
+    contractVersion: "proposal-2.0";
+    terms: Proposal["terms"];
+    commitment: "uncommitted";
+    repairsUsed: number;
+  };
   change: string | null;
+  changeDetails?: PlanChange;
+  coordination?: {
+    actions: ActionRecord[];
+    budget: ReturnType<PlanningBudget["usage"]>;
+    policy: "observation-guided";
+  };
 };
 export type TaskStatus =
   | "queued"
@@ -135,6 +183,20 @@ export type Task = {
   createdAt: string;
   entrance: string | null;
   idempotencyKey: string;
+  revision?: number;
+  execution?: {
+    backend: "simulator" | "http_gateway";
+    intentId: string;
+    jobId?: string;
+    rejectionCode?: string;
+    stateDigest?: string;
+  };
+  cancellation?: {
+    requestedAt: string;
+    confirmedAt: string | null;
+    backend: "simulator" | "http_gateway";
+    requestRevision?: number;
+  };
 };
 export type Mission = {
   id: string;
@@ -169,6 +231,8 @@ export type State = {
   events: Event[];
   outbox: { id: string; taskId: string; delivered: boolean }[];
   idempotency: Record<string, { signature: string; taskId: string }>;
+  intakes?: Record<string, Intake>;
+  executionIntents?: Record<string, ApprovedExecutionIntent>;
 };
 export type Store = {
   read(): Promise<State>;

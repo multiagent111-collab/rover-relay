@@ -1,0 +1,117 @@
+{
+  "ticket": "RELAY-06",
+  "capturedAt": "2026-10-22T23:09:54.826Z",
+  "kind": "actual offline API/official H-MEM feature test across three serial OS processes; deterministic model substitutes; synthetic preferences",
+  "upstreamRevision": "1742dec56a66e58eef9dda2d2b865823758ca8cd",
+  "phases": [
+    {
+      "phase": "seed",
+      "pid": 15748,
+      "startedAt": "2026-10-22T23:09:52.068Z",
+      "mode": "offline_sample",
+      "generator": "deterministic sample substitute; no hosted call",
+      "testPlanTtlSeconds": 1800,
+      "missionId": "da47d866-d579-4cb9-81a8-75abb140405b",
+      "initialRevision": "0f58803d8c170f3c4bf47314a85d1dfbdb51dd0b4bfc7c0a6823ecd552dc84bd",
+      "originalMemoryIds": ["mem-1"],
+      "modelRoles": [
+        {
+          "role": "Planner",
+          "entrance": "Original north test entrance",
+          "ids": ["mem-1"]
+        },
+        {
+          "role": "Critic",
+          "entrance": "Original north test entrance",
+          "ids": ["mem-1"]
+        }
+      ],
+      "closedAt": "2026-10-22T23:09:52.227Z",
+      "writerClosed": true
+    },
+    {
+      "phase": "resume",
+      "pid": 22340,
+      "startedAt": "2026-10-22T23:09:53.401Z",
+      "mode": "offline_sample",
+      "generator": "deterministic sample substitute; no hosted call",
+      "testPlanTtlSeconds": 1800,
+      "missionId": "da47d866-d579-4cb9-81a8-75abb140405b",
+      "recallAfterProcessRestart": "Original north test entrance",
+      "recallIds": ["mem-1"],
+      "correctedIds": ["mem-2"],
+      "oldApprovalStatus": 409,
+      "correctedModelRoles": [
+        {
+          "role": "Planner",
+          "entrance": "Corrected south test entrance",
+          "ids": ["mem-2"]
+        },
+        {
+          "role": "Critic",
+          "entrance": "Corrected south test entrance",
+          "ids": ["mem-2"]
+        }
+      ],
+      "correctedTask": {
+        "id": "5e3624e9-fbc5-4c7e-b608-87a72b0433cd",
+        "entrance": "Corrected south test entrance",
+        "statusAfterTest": "cancelled"
+      },
+      "forgetStaleApprovalStatus": 409,
+      "forgottenModelRoles": [
+        {
+          "role": "Planner",
+          "entrance": null,
+          "ids": []
+        },
+        {
+          "role": "Critic",
+          "entrance": null,
+          "ids": []
+        }
+      ],
+      "forgottenTask": {
+        "id": "350578f2-9473-430a-b462-5f22a9af7286",
+        "entrance": null,
+        "statusAfterTest": "cancelled"
+      },
+      "crossUserStatuses": [404, 404, 404],
+      "closedAt": "2026-10-22T23:09:53.670Z",
+      "writerClosed": true
+    },
+    {
+      "phase": "verify",
+      "pid": 12912,
+      "startedAt": "2026-10-22T23:09:54.706Z",
+      "mode": "offline_sample",
+      "generator": "deterministic sample substitute; no hosted call",
+      "testPlanTtlSeconds": 1800,
+      "forgottenPreferenceAbsentAfterSecondRestart": true,
+      "otherVenueAndUserPreserved": true,
+      "retainedAudit": [
+        {
+          "id": "mem-1",
+          "actions": ["create", "read", "read", "read", "delete"]
+        },
+        {
+          "id": "mem-2",
+          "actions": [
+            "create",
+            "read",
+            "read",
+            "read",
+            "read",
+            "read",
+            "read",
+            "delete"
+          ]
+        }
+      ],
+      "activeTasks": 0,
+      "closedAt": "2026-10-22T23:09:54.800Z",
+      "writerClosed": true
+    }
+  ],
+  "scope": "Isolated temporary state only. Audit retains deleted text privately; public report contains only synthetic entrances, IDs and structured action names. No live sponsor inference or production preference mutation."
+}

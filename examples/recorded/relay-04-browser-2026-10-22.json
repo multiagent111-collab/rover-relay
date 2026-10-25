@@ -1,0 +1,125 @@
+{
+  "capturedAt": "2026-10-22T22:23:15.180Z",
+  "ticket": "RELAY-04",
+  "kind": "actual offline browser check; deterministic sample substitutes; no sponsor call",
+  "sampleUrl": "http://127.0.0.1:4183/",
+  "missionId": "79044714-2434-439c-92c5-0f1e91f36804",
+  "createdAt": "2026-10-22T19:56:12.863Z",
+  "deadlineAt": "2026-10-22T20:26:12.863Z",
+  "receiptCreatedAt": "2026-10-22T19:56:12.912Z",
+  "expiresAt": "2026-10-22T19:57:12.912Z",
+  "version": 1,
+  "digest": "210796180e4dca887743185161f276bb1305e8958992fc8a6b4a59376ba6e459",
+  "selectedId": "supplier-a:courier-1",
+  "request": {
+    "sku": "HDMI-USB-C",
+    "quantity": 2,
+    "destination": "auditorium",
+    "budgetCents": 3500,
+    "deadlineMinutes": 30
+  },
+  "review": {
+    "contractVersion": "proposal-2.0",
+    "terms": {
+      "sku": "HDMI-USB-C",
+      "quantity": 2,
+      "destination": "auditorium",
+      "budgetCents": 3500,
+      "deadlineMinutes": 30,
+      "entrance": null,
+      "totalCents": 3200,
+      "etaMinutes": 22
+    },
+    "commitment": "uncommitted",
+    "repairsUsed": 0
+  },
+  "summary": "2 HDMI-USB-C to auditorium; limit $35.00 including delivery within 30 minutes of the original request. Checked estimate: $32.00 including delivery, 22 minutes travel and handling. Inventory is not reserved; no delivery is booked.",
+  "steps": [
+    {
+      "role": "Planner",
+      "round": 1,
+      "decision": "propose_checked_terms",
+      "candidateId": "supplier-a:courier-1",
+      "provider": "deterministic sample substitute (no model call)",
+      "model": "sample-rules-v2",
+      "memoryIds": []
+    },
+    {
+      "role": "Critic",
+      "round": 1,
+      "decision": "approve_proposal",
+      "issues": [],
+      "feedback": [],
+      "candidateId": "supplier-a:courier-1",
+      "provider": "deterministic sample substitute (no model call)",
+      "model": "sample-rules-v2",
+      "memoryIds": []
+    },
+    {
+      "role": "Validator",
+      "round": 1,
+      "decision": "checks_passed",
+      "issues": [],
+      "feedback": [],
+      "candidateId": "supplier-a:courier-1",
+      "provider": "deterministic",
+      "memoryIds": []
+    }
+  ],
+  "coordination": {
+    "actions": [
+      {
+        "action": {
+          "type": "read_equipment_options",
+          "sku": "HDMI-USB-C",
+          "quantity": 2
+        },
+        "outcome": "observed",
+        "count": 3
+      },
+      {
+        "action": {
+          "type": "read_courier_availability",
+          "supplierIds": ["supplier-a", "supplier-b", "supplier-c"]
+        },
+        "outcome": "observed",
+        "count": 6
+      },
+      {
+        "action": {
+          "type": "read_route_edges",
+          "supplierIds": ["supplier-a", "supplier-b", "supplier-c"],
+          "destination": "auditorium"
+        },
+        "outcome": "observed",
+        "count": 9
+      },
+      {
+        "action": {
+          "type": "propose"
+        },
+        "outcome": "ready"
+      }
+    ],
+    "budget": {
+      "inferenceCalls": 2,
+      "extractionCalls": 0,
+      "selectionCalls": 0,
+      "plannerCriticCalls": 2,
+      "toolCalls": 3,
+      "backendSnapshotCalls": 1,
+      "inferenceLimit": 6,
+      "toolLimit": 6,
+      "deadlineMs": 180000,
+      "elapsedMs": 38
+    },
+    "policy": "observation-guided"
+  },
+  "taskId": null,
+  "browserAssertions": [
+    "Visible $35.00 limit, $32.00 checked estimate and 22-minute travel/handling estimate",
+    "Visible inventory-not-reserved and no-booking sentences",
+    "No dispatch approved"
+  ],
+  "scope": "Receipt expires normally; refresh before approval. Existing data and live services preserved. No hosted model/source call or new engine authorship is claimed."
+}

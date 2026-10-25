@@ -1,0 +1,206 @@
+{
+  "ticket": "RELAY-05",
+  "startedAt": "2026-10-22T22:35:33.305Z",
+  "kind": "actual Nightshift planning mission; live Zetaris reads; isolated SQLite and official H-MEM; no dispatch",
+  "requestedRoute": "meterless/auto",
+  "expectedModelLabel": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "modelPolicy": "explicitly accept Runtime-routed NVIDIA Nemotron family; exact picked models recorded",
+  "existingProviderPreserved": "nvidia",
+  "checks": [],
+  "discovery": {
+    "status": 200,
+    "configuredRouteFound": true
+  },
+  "missionElapsedMs": 16474,
+  "httpStatus": 201,
+  "missionId": "ea845887-8359-41a7-b0a7-3294b9b0faf1",
+  "status": "awaiting_approval",
+  "createdAt": "2026-10-22T22:35:33.660Z",
+  "deadlineAt": "2026-10-22T23:05:33.660Z",
+  "steps": [
+    {
+      "role": "Planner",
+      "round": 1,
+      "decision": "propose_checked_terms",
+      "candidateId": "supplier-b:courier-2",
+      "provider": "meterless-nightshift",
+      "model": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "requestId": "chatcmpl-c8bfb29e-d454-48f3-8e07-84320d21fbf4",
+      "routing": {
+        "source": "runtime_reported",
+        "responseId": "chatcmpl-c8bfb29e-d454-48f3-8e07-84320d21fbf4",
+        "receiptId": "rcpt_req_1szeotjo",
+        "requestedRoute": "meterless/auto",
+        "routedModel": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+        "provider": "nvidia",
+        "app": "rover-relay",
+        "requestedMode": "auto",
+        "effectiveMode": "auto",
+        "raceWidth": 6,
+        "fromCache": false
+      },
+      "memoryIds": ["mem-1"],
+      "planVersion": 1
+    },
+    {
+      "role": "Critic",
+      "round": 1,
+      "decision": "approve_proposal",
+      "issues": [],
+      "feedback": [],
+      "candidateId": "supplier-b:courier-2",
+      "provider": "meterless-nightshift",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "requestId": "chatcmpl-f92a505f-7c34-42fe-a6f0-df8ed1f26d07",
+      "routing": {
+        "source": "runtime_reported",
+        "responseId": "chatcmpl-f92a505f-7c34-42fe-a6f0-df8ed1f26d07",
+        "receiptId": "rcpt_req_wc0tswzs",
+        "requestedRoute": "meterless/auto",
+        "routedModel": "nvidia/nemotron-3-ultra-550b-a55b",
+        "provider": "nvidia",
+        "app": "rover-relay",
+        "requestedMode": "auto",
+        "effectiveMode": "auto",
+        "raceWidth": 6,
+        "fromCache": false
+      },
+      "memoryIds": ["mem-1"],
+      "planVersion": 1
+    },
+    {
+      "role": "Validator",
+      "round": 1,
+      "decision": "checks_passed",
+      "issues": [],
+      "feedback": [],
+      "candidateId": "supplier-b:courier-2",
+      "provider": "deterministic",
+      "memoryIds": ["mem-1"],
+      "planVersion": 1
+    }
+  ],
+  "budget": {
+    "inferenceCalls": 2,
+    "extractionCalls": 0,
+    "selectionCalls": 0,
+    "plannerCriticCalls": 2,
+    "toolCalls": 3,
+    "backendSnapshotCalls": 1,
+    "inferenceLimit": 6,
+    "toolLimit": 6,
+    "deadlineMs": 180000,
+    "elapsedMs": 16464
+  },
+  "tasksCreated": 0,
+  "receipt": {
+    "version": 1,
+    "digest": "df106c06d69a44b9f81d13dd8fd4cf1a1a515f185beeba3699edd3f6823d4c89",
+    "createdAt": "2026-10-22T22:35:50.124Z",
+    "expiresAt": "2026-10-22T22:36:50.124Z",
+    "selectedId": "supplier-b:courier-2",
+    "summary": "2 HDMI-USB-C to auditorium; limit $35.00 including delivery within 30 minutes of the original request. Checked estimate: $35.00 including delivery, 28 minutes travel and handling. Inventory is not reserved; no delivery is booked.",
+    "review": {
+      "contractVersion": "proposal-2.0",
+      "terms": {
+        "sku": "HDMI-USB-C",
+        "quantity": 2,
+        "destination": "auditorium",
+        "budgetCents": 3500,
+        "deadlineMinutes": 30,
+        "entrance": "North loading entrance",
+        "totalCents": 3500,
+        "etaMinutes": 28
+      },
+      "commitment": "uncommitted",
+      "repairsUsed": 0
+    },
+    "coordination": {
+      "actions": [
+        {
+          "action": {
+            "type": "read_equipment_options",
+            "sku": "HDMI-USB-C",
+            "quantity": 2
+          },
+          "outcome": "observed",
+          "count": 3
+        },
+        {
+          "action": {
+            "type": "read_courier_availability",
+            "supplierIds": ["supplier-a", "supplier-b", "supplier-c"]
+          },
+          "outcome": "observed",
+          "count": 6
+        },
+        {
+          "action": {
+            "type": "read_route_edges",
+            "supplierIds": ["supplier-a", "supplier-b", "supplier-c"],
+            "destination": "auditorium"
+          },
+          "outcome": "observed",
+          "count": 9
+        },
+        {
+          "action": {
+            "type": "propose"
+          },
+          "outcome": "ready"
+        }
+      ],
+      "budget": {
+        "inferenceCalls": 2,
+        "extractionCalls": 0,
+        "selectionCalls": 0,
+        "plannerCriticCalls": 2,
+        "toolCalls": 3,
+        "backendSnapshotCalls": 1,
+        "inferenceLimit": 6,
+        "toolLimit": 6,
+        "deadlineMs": 180000,
+        "elapsedMs": 16463
+      },
+      "policy": "observation-guided"
+    },
+    "memory": {
+      "engine": "Meterless H-MEM reference 1742dec56a66e58eef9dda2d2b865823758ca8cd",
+      "entrance": "North loading entrance",
+      "recordIds": ["mem-1"]
+    },
+    "sourceQueries": [
+      "6179455f-fcdb-4782-9af6-caf6c5fa107c",
+      "bb4180ef-f279-47de-9a16-15a6255f5c59"
+    ],
+    "evidenceCount": 18
+  },
+  "expectedModelLabelMatched": false,
+  "receiptCorrelations": [
+    {
+      "responseId": "chatcmpl-c8bfb29e-d454-48f3-8e07-84320d21fbf4",
+      "receiptId": "rcpt_req_1szeotjo",
+      "receiptLogMatched": true,
+      "routedModel": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "provider": "nvidia",
+      "fromCache": false,
+      "runtimeReceiptLatencyMs": 7469,
+      "signaturePresent": true
+    },
+    {
+      "responseId": "chatcmpl-f92a505f-7c34-42fe-a6f0-df8ed1f26d07",
+      "receiptId": "rcpt_req_wc0tswzs",
+      "receiptLogMatched": true,
+      "routedModel": "nvidia/nemotron-3-ultra-550b-a55b",
+      "provider": "nvidia",
+      "fromCache": false,
+      "runtimeReceiptLatencyMs": 1026,
+      "signaturePresent": true
+    }
+  ],
+  "result": "pass",
+  "scope": "Runtime-reported identities correlated with its persisted receipt log, not independent NVIDIA attestation or cryptographic signature verification. No real booking, dispatch approval or configuration change.",
+  "elapsedMs": 16846,
+  "completedAt": "2026-10-22T22:35:50.153Z",
+  "warmColdScope": "First full mission in this ticket, with Runtime already running; Runtime warm/cold state was not independently measured. Wall-clock mission timing and Runtime-reported per-response latency are distinguished."
+}

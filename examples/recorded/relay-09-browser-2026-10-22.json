@@ -1,0 +1,113 @@
+{
+  "ticket": "RELAY-09",
+  "tool": "Codex",
+  "recordedAt": "2026-10-23T00:33:18.048Z",
+  "actualStart": "2026-10-23T00:13:37.162Z",
+  "parentCommit": "fef3023ad820449c57321b01c88630c89ac9a620",
+  "mode": "offline browser fixtures plus a controlled authentication/dependency instance; no hosted calls",
+  "operations": "simulated",
+  "validation": {
+    "application": {
+      "passed": 102,
+      "failed": 0
+    },
+    "presentation": {
+      "passed": 5,
+      "failed": 0
+    },
+    "postgresql": {
+      "passed": 13,
+      "failed": 0
+    },
+    "productionBuild": "pass",
+    "officialHmem": "15 pinned source hashes; 13 upstream checks passed",
+    "baseline": "82 protected inventory files matched"
+  },
+  "postgresqlRuntime": {
+    "mode": "offline_sample",
+    "operations": "simulated",
+    "node": "v26.2.0",
+    "docker": "29.9.2",
+    "postgresql": "16.15",
+    "image": "postgres:16-alpine",
+    "container": "relay-pg-test-630184a5-112f-4a6e-885f-e31677fbb170",
+    "imageId": "sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea",
+    "storage": "disposable tmpfs",
+    "host": "127.0.0.1",
+    "port": 51507
+  },
+  "browserChecks": [
+    {
+      "name": "Draft clarification, explicit constraints and simulated task",
+      "result": "pass",
+      "details": "Two USB-C to HDMI adapters to auditorium; missing budget/deadline prompted; confirmed $35/30 minutes; checked $32 and 22 minutes; task a984b486 approved under plan1, declined, replacement plan2 explicitly approved as b1021066 then cancelled. IDs shown here are observed display prefixes."
+    },
+    {
+      "name": "Changed source requires approval",
+      "result": "pass",
+      "details": "Campus Tech stock depleted from sample control; old approval rejected; plan2 compared original $32/22m/E1-E4-E7 with $35/28m/E2-E5-E7 and required separate approval."
+    },
+    {
+      "name": "History and keyboard",
+      "result": "pass",
+      "details": "Ten matching missions; Show more exposed ten history buttons; search cancelled returned one match; Tab moved focus to mission-status."
+    },
+    {
+      "name": "Mobile",
+      "result": "pass",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "documentScrollWidth": 375,
+      "historyVisible": true,
+      "overrideReset": true
+    },
+    {
+      "name": "Authentication and accurate provider/map labels",
+      "result": "pass",
+      "details": "Unauthenticated page showed Connection unresolved, not Offline sample. Fixed non-secret fixture credential connected. Configured NVIDIA direct remained distinct from Runtime; no sample campus map appeared in live mode. Missing Zetaris config preserved a dependency-failed mission with explicit retry."
+    },
+    {
+      "name": "Stop waiting and explicit retry",
+      "result": "pass",
+      "missionId": "5dd135c5-13aa-48ba-bdc5-757ec43c18e7",
+      "details": "Delayed sample library planning stopped from browser. Saved failure remained inspectable; explicit retry produced an awaiting-approval receipt without a task.",
+      "originalDeadlineDisplayed": "10/22/2026, 5:58:09 PM America/Los_Angeles (browser display precision: seconds)",
+      "receiptVersion": 1,
+      "digest": "5e4e1ad44592397f06146e99d48c50ce9d27f5dfcdec6386bba7c58ca9f0e1f5",
+      "sourceFingerprint": "eea057789e5b86e775bca7c2ae378e67da0dbb381d223669e468137e926f6972"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "examples/recorded/relay-09-comparison.png",
+      "sha256": "8f2dbf8de55eb303a92a9897eeb0c64b376dc2755df1f746b8e0c1d165d40309",
+      "scope": "Sanitized disposable local browser fixture; no user credentials or saved user data"
+    },
+    {
+      "path": "examples/recorded/relay-09-mobile.png",
+      "sha256": "7ef18f2910c2672df0b62f5d84866ead72d551183d873fbaafce6312c9a499c9",
+      "scope": "Sanitized disposable local browser fixture; no user credentials or saved user data"
+    },
+    {
+      "path": "examples/recorded/relay-09-dependency.png",
+      "sha256": "d5da291c6966e9a30e31e2a4b89c9abeec205739d4c5c4ddba4d58a92d1079bb",
+      "scope": "Sanitized disposable local browser fixture; no user credentials or saved user data"
+    },
+    {
+      "path": "examples/recorded/relay-09-retry.png",
+      "sha256": "e8b453c84ea9382cad83d67a26a2dc6fecb7cbe5fab62231add8952166d02cc8",
+      "scope": "Sanitized disposable local browser fixture; no user credentials or saved user data"
+    }
+  ],
+  "cleanup": "Both disposable browser runs gracefully stopped and their verified temporary state removed; PostgreSQL test-owned container/storage removed; viewport override reset",
+  "sampleRefresh": "Managed Relay 4183 gracefully refreshed with persisted data retained; readiness confirmed 2026-10-23T00:34:23.994Z (October 22 Pacific). Read-only browser verification confirmed the new UI and accessible saved missions/drafts; no saved preference or source was changed.",
+  "reviewFindings": "Browser review corrected the historical courier label, approved-versus-proposed change message and incomplete-planning labels. A selector wait returned while a deliberately slow retry was pending; later visible receipt confirmed success. The initial cleanup request lacked a JSON body and was rejected; the proper JSON control request completed cleanup.",
+  "limits": [
+    "Browser checks used sample adapters and deliberately missing live dependencies, not a live sponsor success",
+    "Live map refresh requires new receipt observations; static node positions are illustrative",
+    "Stop waiting does not attest rollback of an already committed operation",
+    "No publication, Build changes or external execution"
+  ]
+}

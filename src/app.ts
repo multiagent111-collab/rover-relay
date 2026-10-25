@@ -1,4 +1,4 @@
-import Fastify from "fastify";
+import Fastify, { type FastifyRequest, type FastifyReply } from "fastify";
 import { timingSafeEqual } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { resolve, sep, extname } from "node:path";
@@ -11,35 +11,101 @@ import { RelayService } from "./service.ts";
 import { configuration, type Config } from "./config.ts";
 import { RelayError, type Identity, type Store } from "./types.ts";
 import { addEvent } from "./domain.ts";
+import { acquireWriterLock, installLocalControl } from "./lifecycle.ts";
+import { Readiness, configurationId } from "./readiness.ts";
+
+async function cancellable<T>(
+  request: FastifyRequest,
+  reply: FastifyReply,
+  operation: (signal: AbortSignal) => Promise<T>,
+) {
+  const controller = new AbortController();
+  const aborted = () => controller.abort();
+  const closed = () => {
+    if (!reply.raw.writableEnded) controller.abort();
+  };
+  request.raw.once("aborted", aborted);
+  reply.raw.once("close", closed);
+  try {
+    return await operation(controller.signal);
+  } finally {
+    request.raw.off("aborted", aborted);
+    reply.raw.off("close", closed);
+  }
+}
 
 export async function createApp(
   options: { config?: Config; store?: Store; clock?: () => number } = {},
 ) {
   const config = options.config ?? configuration();
   if (!config.sample && config.accessToken.length < 24)
-    throw new Error(
+    throw new RelayError(
+      503,
+      "missing_configuration",
       "Live mode requires a RELAY_ACCESS_TOKEN of at least 24 characters.",
     );
+  const readiness = new Readiness(config, options.clock);
+  const lock = acquireWriterLock(config.dataDir);
+  try {
+    const result = await buildApp(
+      { ...options, config },
+      readiness,
+      lock.instanceId,
+    );
+    result.app.addHook("onClose", async () => lock.release());
+    return { ...result, readiness };
+  } catch (error) {
+    lock.release();
+    throw error;
+  }
+}
+
+async function buildApp(
+  options: { config: Config; store?: Store; clock?: () => number },
+  readiness: Readiness,
+  instanceId: string,
+) {
+  const config = options.config ?? configuration();
   const clock = options.clock ?? Date.now;
   let store = options.store;
   if (!store) {
     if (config.databaseUrl) {
       const pg = new PostgresStore(config.databaseUrl);
-      await pg.initialize();
+      try {
+        await pg.initialize();
+      } catch {
+        await pg.close();
+        throw new RelayError(
+          503,
+          "storage_unavailable",
+          "PostgreSQL could not be initialized. Check the private database URL, authentication and local database status; no data was reset.",
+        );
+      }
       store = pg;
     } else store = new SqliteStore(resolve(config.dataDir, "relay.sqlite"));
   }
-  const memory = new MemoryAdapter(resolve(config.dataDir, "hmem"), clock);
-  const service = new RelayService(
-    store,
-    config.sample ? new SampleData(store, clock) : new ZetarisData(),
-    config.sample ? new SampleGenerator() : liveGenerator(),
-    memory,
-    config.sample ? "offline_sample" : "live_sponsors",
-    config.planTtlSeconds,
-    clock,
-  );
-  await service.drainOutbox();
+  let service: RelayService;
+  let memory: MemoryAdapter;
+  try {
+    memory = new MemoryAdapter(resolve(config.dataDir, "hmem"), clock);
+    service = new RelayService(
+      store,
+      readiness.data(
+        config.sample ? new SampleData(store, clock) : new ZetarisData(),
+      ),
+      readiness.generator(
+        config.sample ? new SampleGenerator() : liveGenerator(),
+      ),
+      memory,
+      config.sample ? "offline_sample" : "live_sponsors",
+      config.planTtlSeconds,
+      clock,
+    );
+    await service.drainOutbox();
+  } catch (error) {
+    await store.close();
+    throw error;
+  }
   const app = Fastify({
     logger: false,
     bodyLimit: 32768,
@@ -129,12 +195,24 @@ export async function createApp(
     operations: "simulated",
     storage: config.databaseUrl ? "postgresql" : "sqlite",
     sponsorCallsVerified: false,
+    sponsorCallsVerifiedDeprecated:
+      "Use /v1/readiness and recorded workflow evidence; this legacy field is not an attestation.",
+    readinessUrl: "/v1/readiness",
+    instanceId,
+    launchId: process.env.RELAY_LOCAL_LAUNCH_ID || null,
+    configurationId: configurationId(config),
+    startedAt: readiness.startedAt,
   }));
+  app.get("/v1/readiness", async () => readiness.snapshot());
+  installLocalControl(app, process.env.RELAY_LOCAL_CONTROL_TOKEN);
   app.get("/v1/bootstrap", async (request) => ({
     mode: service.mode,
     operations: "simulated",
     fixtures: (await store.read()).fixtures,
+    readiness: readiness.snapshot(),
+    capabilities: { taskSimulation: config.sample || config.demo },
     missions: await service.list(request.identity),
+    intakes: await service.listIntakes(request.identity),
     preferences: memory.recall(request.identity, "auditorium"),
     liveModel: {
       route: process.env.METERLESS_ROUTE || null,
@@ -144,9 +222,34 @@ export async function createApp(
     },
   }));
   app.post("/v1/missions", async (request, reply) => {
-    const mission = await service.create(request.identity, request.body);
+    const mission = await cancellable(request, reply, (signal) =>
+      service.create(request.identity, request.body, signal),
+    );
     return reply.code(201).send(mission);
   });
+  app.post("/v1/intakes", async (request, reply) =>
+    reply
+      .code(201)
+      .send(await service.createIntake(request.identity, request.body)),
+  );
+  app.get<{ Params: { id: string } }>("/v1/intakes/:id", (request) =>
+    service.getIntake(request.identity, request.params.id),
+  );
+  app.patch<{ Params: { id: string } }>("/v1/intakes/:id", (request) =>
+    service.updateIntake(request.identity, request.params.id, request.body),
+  );
+  app.post<{ Params: { id: string } }>(
+    "/v1/intakes/:id/confirm",
+    (request, reply) =>
+      cancellable(request, reply, (signal) =>
+        service.confirmIntake(
+          request.identity,
+          request.params.id,
+          request.body,
+          signal,
+        ),
+      ),
+  );
   app.get<{ Params: { id: string } }>("/v1/missions/:id", (request) =>
     service.get(request.identity, request.params.id),
   );
@@ -164,16 +267,21 @@ export async function createApp(
             .join("\n") + "\n",
         ),
   );
-  app.post<{ Params: { id: string } }>("/v1/missions/:id/replan", (request) =>
-    service.plan(
-      request.identity,
-      request.params.id,
-      "Coordinator requested a fresh plan.",
-    ),
+  app.post<{ Params: { id: string } }>(
+    "/v1/missions/:id/replan",
+    (request, reply) =>
+      cancellable(request, reply, (signal) =>
+        service.plan(
+          request.identity,
+          request.params.id,
+          "Coordinator requested a fresh plan.",
+          signal,
+        ),
+      ),
   );
   app.post<{ Params: { id: string } }>(
     "/v1/missions/:id/approve",
-    async (request) => {
+    async (request, reply) => {
       const body = z
         .object({
           version: z.number().int().positive(),
@@ -182,21 +290,32 @@ export async function createApp(
         })
         .strict()
         .parse(request.body);
-      return service.requestDispatch(
-        request.identity,
-        request.params.id,
-        body.version,
-        body.digest,
-        body.idempotencyKey,
+      return cancellable(request, reply, (signal) =>
+        service.requestDispatch(
+          request.identity,
+          request.params.id,
+          body.version,
+          body.digest,
+          body.idempotencyKey,
+          signal,
+        ),
       );
     },
   );
   app.get<{ Params: { id: string } }>("/v1/tasks/:id", (request) =>
     service.getTask(request.identity, request.params.id),
   );
-  app.post<{ Params: { id: string } }>("/v1/tasks/:id/cancel", (request) =>
-    service.cancelTask(request.identity, request.params.id),
-  );
+  app.post<{ Params: { id: string } }>("/v1/tasks/:id/cancel", (request) => {
+    const body = z
+      .object({ expectedRevision: z.number().int().min(0).optional() })
+      .strict()
+      .parse(request.body ?? {});
+    return service.cancelTask(
+      request.identity,
+      request.params.id,
+      body.expectedRevision,
+    );
+  });
   app.put("/v1/preferences/entrance", async (request) => {
     const body = z
       .object({
@@ -222,17 +341,22 @@ export async function createApp(
   });
   app.post<{ Params: { id: string } }>(
     "/demo/tasks/:id/response",
-    (request) => {
+    (request, reply) => {
       const body = z
         .object({
           status: z.enum(["accepted", "declined", "in_progress", "completed"]),
+          expectedRevision: z.number().int().min(0).optional(),
         })
         .strict()
         .parse(request.body);
-      return service.transition(
-        request.identity,
-        request.params.id,
-        body.status,
+      return cancellable(request, reply, (signal) =>
+        service.transition(
+          request.identity,
+          request.params.id,
+          body.status,
+          signal,
+          body.expectedRevision,
+        ),
       );
     },
   );
@@ -256,21 +380,30 @@ export async function createApp(
       ])
       .parse(request.body);
     return store.transact((state) => {
+      let before: Record<string, unknown>;
+      let after: Record<string, unknown>;
       if (body.type === "stock") {
         const supplier = state.fixtures.suppliers.find(
           (supplier) => supplier.id === body.supplierId,
         );
         if (!supplier)
           throw new RelayError(404, "not_found", "Supplier not found.");
+        if (supplier.stock === body.stock) return state.fixtures;
+        before = { ...supplier };
         supplier.stock = body.stock;
         supplier.version++;
+        after = { ...supplier };
       } else {
         const edge = state.fixtures.edges.find(
           (edge) => edge.id === body.edgeId,
         );
         if (!edge)
           throw new RelayError(404, "not_found", "Route edge not found.");
+        if (edge.closed === body.closed) return state.fixtures;
+        before = { ...edge };
         edge.closed = body.closed;
+        edge.version = (edge.version ?? state.fixtures.revision) + 1;
+        after = { ...edge };
       }
       state.fixtures.revision++;
       for (const mission of Object.values(state.missions).filter(
@@ -281,7 +414,7 @@ export async function createApp(
           mission.id,
           service.mode,
           "source_changed",
-          body,
+          { ...body, before, after, simulated: true },
           clock(),
         );
       return state.fixtures;

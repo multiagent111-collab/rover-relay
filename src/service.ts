@@ -1,3 +1,9 @@
+import {
+  activeExecutionStates as activeStates,
+  type ExecutionAdapter,
+} from "./execution.ts";
+import { SimulatorExecutor } from "./adapters/simulator.ts";
+import { parseExecutionIntent } from "./execution-contract.ts";
 import { randomUUID } from "node:crypto";
 import {
   addEvent,
@@ -9,6 +15,25 @@ import {
   sameOwner,
 } from "./domain.ts";
 import { reason, type Generator } from "./agents.ts";
+import { receiptSummary } from "./review.ts";
+import { describeChange } from "./changes.ts";
+import { newestFirst } from "./order.ts";
+import { PlanningBudget } from "./budget.ts";
+import {
+  coordinate,
+  observationPolicy,
+  type DecisionAdapter,
+  type ActionRecord,
+} from "./coordinator.ts";
+import {
+  clarify,
+  extractDraft,
+  intakeCreateSchema,
+  intakeUpdateSchema,
+  intakeConfirmSchema,
+  intakeFields,
+  type Intake,
+} from "./intake.ts";
 import { MemoryAdapter } from "./memory.ts";
 import {
   RelayError,
@@ -23,15 +48,13 @@ import {
   type Store,
   type Task,
   type TaskStatus,
+  type AgentStep,
 } from "./types.ts";
 
-const activeStates: TaskStatus[] = [
-  "queued",
-  "dispatch_requested",
-  "accepted",
-  "in_progress",
-];
 export class RelayService implements DispatchPort {
+  decision: DecisionAdapter = observationPolicy;
+  planningLimits = { inference: 6, tools: 6, timeoutMs: 180000 };
+  readonly execution: ExecutionAdapter;
   constructor(
     public store: Store,
     public data: DataPort,
@@ -40,8 +63,11 @@ export class RelayService implements DispatchPort {
     public mode: Mode,
     private ttlSeconds = 60,
     private clock = Date.now,
-  ) {}
-  async create(identity: Identity, input: unknown) {
+    execution?: ExecutionAdapter,
+  ) {
+    this.execution = execution ?? new SimulatorExecutor(store, mode, clock);
+  }
+  async create(identity: Identity, input: unknown, signal?: AbortSignal) {
     const request = requestSchema.parse(input);
     const now = this.clock();
     const mission: Mission = {
@@ -66,7 +92,206 @@ export class RelayService implements DispatchPort {
         now,
       );
     });
-    return this.plan(identity, mission.id);
+    return this.plan(identity, mission.id, null, signal);
+  }
+  private ownedIntake(state: State, id: string, identity: Identity): Intake {
+    const intake = state.intakes?.[id];
+    if (!intake || !sameOwner(intake.owner, identity))
+      throw new RelayError(404, "not_found", "Draft not found.");
+    return intake;
+  }
+  async getIntake(identity: Identity, id: string) {
+    return this.ownedIntake(await this.store.read(), id, identity);
+  }
+  async listIntakes(identity: Identity) {
+    return Object.values((await this.store.read()).intakes || {})
+      .filter((i) => sameOwner(i.owner, identity) && i.status === "needs_input")
+      .sort(newestFirst);
+  }
+  async createIntake(identity: Identity, input: unknown) {
+    const { text } = intakeCreateSchema.parse(input);
+    const extracted = extractDraft(text);
+    const now = this.clock(),
+      id = randomUUID();
+    const intake: Intake = {
+      schemaVersion: "intake-1.0",
+      id,
+      missionId: id,
+      owner: identity,
+      createdAt: new Date(now).toISOString(),
+      deadlineAt:
+        extracted.fields.deadlineMinutes === undefined
+          ? null
+          : new Date(
+              now + extracted.fields.deadlineMinutes * 60000,
+            ).toISOString(),
+      status: "needs_input",
+      revision: 1,
+      text,
+      ...extracted,
+    };
+    await this.store.transact((state) => {
+      (state.intakes ??= {})[id] = intake;
+      addEvent(
+        state,
+        id,
+        this.mode,
+        "intake_created",
+        {
+          revision: 1,
+          action: {
+            type: "ask_user",
+            fields: intake.questions.length
+              ? intake.questions.map((q) => q.field)
+              : [...intakeFields],
+          },
+          confirmationRequired: true,
+        },
+        now,
+      );
+    });
+    return intake;
+  }
+  async updateIntake(identity: Identity, id: string, input: unknown) {
+    const body = intakeUpdateSchema.parse(input);
+    return this.store.transact((state) => {
+      const intake = this.ownedIntake(state, id, identity);
+      if (intake.status !== "needs_input" || intake.revision !== body.revision)
+        throw new RelayError(
+          409,
+          "stale_draft",
+          "Reload the current draft revision before editing.",
+        );
+      const extracted =
+        body.text === undefined
+          ? { fields: {}, conflicts: [] as Intake["conflicts"] }
+          : extractDraft(body.text);
+      const fields = { ...intake.fields, ...extracted.fields, ...body.fields };
+      const resolved = new Set(
+        Object.keys({ ...extracted.fields, ...body.fields }),
+      );
+      const conflicts = [
+        ...new Set([
+          ...intake.conflicts.filter((field) => !resolved.has(field)),
+          ...extracted.conflicts.filter(
+            (field) => body.fields?.[field] === undefined,
+          ),
+        ]),
+      ];
+      for (const field of conflicts) delete fields[field];
+      const deadlineAt =
+        fields.deadlineMinutes === undefined
+          ? intake.deadlineAt
+          : new Date(
+              Date.parse(intake.createdAt) + fields.deadlineMinutes * 60000,
+            ).toISOString();
+      if (
+        intake.deadlineAt &&
+        deadlineAt &&
+        Date.parse(deadlineAt) > Date.parse(intake.deadlineAt)
+      )
+        throw new RelayError(
+          409,
+          "deadline_locked",
+          "The original deadline cannot be extended by waiting or editing. Start a new request for a later deadline.",
+        );
+      Object.assign(intake, {
+        fields,
+        conflicts,
+        questions: clarify(fields, conflicts),
+        deadlineAt,
+        revision: intake.revision + 1,
+        ...(body.text === undefined ? {} : { text: body.text }),
+      });
+      addEvent(
+        state,
+        id,
+        this.mode,
+        "intake_updated",
+        {
+          revision: intake.revision,
+          action: {
+            type: "ask_user",
+            fields: intake.questions.length
+              ? intake.questions.map((q) => q.field)
+              : [...intakeFields],
+          },
+          confirmationRequired: true,
+        },
+        this.clock(),
+      );
+      return intake;
+    });
+  }
+  async confirmIntake(
+    identity: Identity,
+    id: string,
+    input: unknown,
+    signal?: AbortSignal,
+  ) {
+    const body = intakeConfirmSchema.parse(input);
+    const fresh = await this.store.transact((state) => {
+      const intake = this.ownedIntake(state, id, identity);
+      if (intake.status === "confirmed") {
+        if (intake.confirmedRequestHash !== hash(body.request))
+          throw new RelayError(
+            409,
+            "confirmation_conflict",
+            "This draft was already confirmed with different terms.",
+          );
+        return false;
+      }
+      if (intake.revision !== body.revision)
+        throw new RelayError(
+          409,
+          "stale_draft",
+          "Confirm the displayed current draft revision.",
+        );
+      if (
+        intake.questions.length ||
+        hash(body.request) !== hash(requestSchema.parse(intake.fields))
+      )
+        throw new RelayError(
+          409,
+          "needs_input",
+          "Review and resolve every required field before confirming these exact constraints.",
+        );
+      if (!intake.deadlineAt || Date.parse(intake.deadlineAt) <= this.clock())
+        throw new RelayError(
+          409,
+          "deadline_elapsed",
+          "The original operational deadline has elapsed. Start a new request; waiting does not reset it.",
+        );
+      state.missions[id] = {
+        id,
+        owner: identity,
+        request: body.request,
+        createdAt: intake.createdAt,
+        deadlineAt: intake.deadlineAt,
+        status: "planning",
+        receipt: null,
+        taskId: null,
+        error: null,
+      };
+      intake.status = "confirmed";
+      intake.confirmedRequestHash = hash(body.request);
+      addEvent(
+        state,
+        id,
+        this.mode,
+        "mission_confirmed",
+        {
+          revision: intake.revision,
+          request: body.request,
+          originalDeadlineAt: intake.deadlineAt,
+        },
+        this.clock(),
+      );
+      return true;
+    });
+    return fresh
+      ? this.plan(identity, id, null, signal)
+      : this.get(identity, id);
   }
   async get(identity: Identity, id: string) {
     return ownedMission(await this.store.read(), id, identity);
@@ -74,20 +299,24 @@ export class RelayService implements DispatchPort {
   async list(identity: Identity) {
     return Object.values((await this.store.read()).missions)
       .filter((mission) => sameOwner(mission.owner, identity))
-      .reverse();
+      .sort(newestFirst);
   }
   async events(identity: Identity, id: string) {
     const state = await this.store.read();
     ownedMission(state, id, identity);
     return state.events.filter((event) => event.missionId === id);
   }
-  async plan(identity: Identity, id: string, change: string | null = null) {
-    const before = await this.get(identity, id);
+  async plan(
+    identity: Identity,
+    id: string,
+    change: string | null = null,
+    signal?: AbortSignal,
+  ) {
+    const planningState = await this.store.read();
+    const before = ownedMission(planningState, id, identity);
     if (
       before.taskId &&
-      activeStates.includes(
-        (await this.getTask(identity, before.taskId)).status,
-      )
+      activeStates.includes(planningState.tasks[before.taskId].status)
     )
       throw new RelayError(
         409,
@@ -95,27 +324,79 @@ export class RelayService implements DispatchPort {
         "Cancel the active simulated task before replanning.",
       );
     const expectedVersion = before.receipt?.version ?? 0;
-    const deadline = AbortSignal.timeout(180000);
+    const declined = new Set(
+      Object.values(planningState.tasks)
+        .filter(
+          (task) =>
+            task.missionId === id &&
+            sameOwner(task.owner, identity) &&
+            task.status === "declined" &&
+            !task.execution?.rejectionCode,
+        )
+        .map((task) => task.courierId),
+    );
+    const budget = new PlanningBudget(this.planningLimits, signal);
+    const actions: ActionRecord[] = [];
+    const reviewSteps: AgentStep[] = [];
+    const deadline = budget.signal;
     try {
-      let snapshot = await this.data.snapshot(identity, deadline);
+      let snapshot = await coordinate(
+        this.data,
+        identity,
+        before.request,
+        budget,
+        actions,
+        this.decision,
+      );
       const memory = this.memory.recall(identity, before.request.destination);
       const buildCandidates = () =>
         enumerateCandidates(
           snapshot.fixtures,
           before.request,
-          snapshot.evidence.map((evidence) => evidence.id),
+          snapshot.evidence,
           (Date.parse(before.deadlineAt) - this.clock()) / 60000,
-        );
+        ).map((candidate) => {
+          const check = {
+            code: "prior_decline",
+            passed: !declined.has(candidate.courier.id),
+            detail:
+              "A courier that declined this mission requires a different provider proposal.",
+          };
+          return {
+            ...candidate,
+            checks: [...candidate.checks, check],
+            feasible: candidate.feasible && check.passed,
+          };
+        });
       const result = await reason(
-        this.generator,
+        {
+          generate: (role, input) =>
+            budget.inference(() =>
+              this.generator.generate(role, input, deadline),
+            ),
+        },
         { request: before.request, candidates: buildCandidates(), memory },
         async () => {
-          snapshot = await this.data.snapshot(identity, deadline);
+          snapshot = await coordinate(
+            this.data,
+            identity,
+            before.request,
+            budget,
+            actions,
+            this.decision,
+          );
           return buildCandidates();
         },
         deadline,
+        (step) => reviewSteps.push(step),
       );
+      budget.check();
       const now = this.clock();
+      const suggestions = alternatives(
+        result.candidates,
+        before.request,
+        (Date.parse(before.deadlineAt) - now) / 60000,
+      );
       const receipt: Receipt = {
         schemaVersion: "1.0",
         version: expectedVersion + 1,
@@ -130,21 +411,48 @@ export class RelayService implements DispatchPort {
         memory,
         candidates: result.candidates,
         selectedId: result.proposal.candidateId,
-        alternatives: alternatives(
-          result.candidates,
-          before.request,
-          (Date.parse(before.deadlineAt) - now) / 60000,
-        ),
+        alternatives: suggestions,
         evidence: snapshot.evidence,
         steps: result.steps,
-        summary: result.proposal.summary,
+        summary:
+          receiptSummary(
+            before.request,
+            result.candidates.find((c) => c.id === result.proposal.candidateId),
+          ) +
+          (result.proposal.candidateId === null
+            ? ` ${suggestions.explanation}`
+            : ""),
+        review: {
+          contractVersion: result.proposal.contractVersion,
+          terms: result.proposal.terms,
+          commitment: result.proposal.commitment,
+          repairsUsed: Math.max(...result.steps.map((step) => step.round)) - 1,
+        },
         change,
+        coordination: {
+          actions,
+          budget: budget.usage(),
+          policy: "observation-guided",
+        },
       };
+      const previousTask = before.taskId
+        ? planningState.tasks[before.taskId]
+        : undefined;
+      receipt.changeDetails = describeChange(
+        before,
+        receipt,
+        now,
+        previousTask?.planVersion === before.receipt?.version
+          ? previousTask?.status
+          : undefined,
+      );
       receipt.digest = hash(receipt);
       return await this.store.transact((state) => {
+        budget.check();
         const mission = ownedMission(state, id, identity);
         if (
           (mission.receipt?.version ?? 0) !== expectedVersion ||
+          mission.taskId !== before.taskId ||
           (mission.taskId &&
             activeStates.includes(state.tasks[mission.taskId].status))
         )
@@ -158,12 +466,26 @@ export class RelayService implements DispatchPort {
           ? "awaiting_approval"
           : "infeasible";
         mission.error = null;
+        for (const entry of actions)
+          addEvent(
+            state,
+            id,
+            this.mode,
+            "coordinator_action",
+            { ...entry, planVersion: receipt.version },
+            now,
+          );
+        addEvent(state, id, this.mode, "planning_budget", budget.usage(), now);
         addEvent(
           state,
           id,
           this.mode,
           "memory_retrieved",
-          { records: memory.records, engine: memory.engine },
+          {
+            recordIds: memory.records.map((record) => record.id),
+            revision: memory.revision,
+            engine: memory.engine,
+          },
           now,
         );
         for (const step of receipt.steps)
@@ -186,6 +508,7 @@ export class RelayService implements DispatchPort {
             selectedId: receipt.selectedId,
             evidence: receipt.evidence,
             change,
+            changeDetails: receipt.changeDetails,
           },
           now,
         );
@@ -197,13 +520,32 @@ export class RelayService implements DispatchPort {
         const mission = ownedMission(state, id, identity);
         if (
           (mission.receipt?.version ?? 0) === expectedVersion &&
-          !mission.taskId
+          mission.taskId === before.taskId &&
+          (!mission.taskId ||
+            !activeStates.includes(state.tasks[mission.taskId].status))
         ) {
           mission.status = "dependency_unavailable";
           mission.error =
             error instanceof RelayError
               ? error.message
               : "Unable to validate dependency output.";
+          for (const entry of actions)
+            addEvent(
+              state,
+              id,
+              this.mode,
+              "coordinator_action",
+              { ...entry },
+              this.clock(),
+            );
+          addEvent(
+            state,
+            id,
+            this.mode,
+            "planning_budget",
+            budget.usage(),
+            this.clock(),
+          );
           addEvent(state, id, this.mode, "planning_failed", {
             code:
               error instanceof RelayError
@@ -211,6 +553,15 @@ export class RelayService implements DispatchPort {
                 : "invalid_dependency_output",
             message: mission.error,
           });
+          for (const step of reviewSteps)
+            addEvent(
+              state,
+              id,
+              this.mode,
+              "agent_step",
+              { ...step, failed: true },
+              this.clock(),
+            );
         }
       });
       throw error instanceof RelayError
@@ -220,6 +571,8 @@ export class RelayService implements DispatchPort {
             "invalid_dependency_output",
             "Unable to validate dependency output.",
           );
+    } finally {
+      budget.dispose();
     }
   }
   private replay(
@@ -244,6 +597,7 @@ export class RelayService implements DispatchPort {
     version: number,
     digest: string,
     idempotencyKey: string,
+    signal?: AbortSignal,
   ) {
     const signature = hash([missionId, version, digest]);
     const initial = await this.store.read();
@@ -275,12 +629,12 @@ export class RelayService implements DispatchPort {
         "invalid_state",
         "This mission has no approvable plan.",
       );
-    const snapshot = await this.data.snapshot(identity);
+    const snapshot = await this.data.snapshot(identity, signal);
     const memory = this.memory.recall(identity, mission.request.destination);
     const refreshed = enumerateCandidates(
       snapshot.fixtures,
       mission.request,
-      [],
+      snapshot.evidence,
       (Date.parse(mission.deadlineAt) - this.clock()) / 60000,
     ).find((candidate) => candidate.id === receipt.selectedId);
     if (
@@ -289,11 +643,31 @@ export class RelayService implements DispatchPort {
       memory.revision !== receipt.memoryRevision ||
       !refreshed?.feasible
     ) {
-      await this.plan(
-        identity,
-        missionId,
-        "The proposal expired or stock, route, courier availability, or entrance instructions changed. Fresh approval is required.",
-      );
+      try {
+        await this.plan(
+          identity,
+          missionId,
+          "The proposal expired or stock, route, courier availability, or entrance instructions changed. Fresh approval is required.",
+          signal,
+        );
+      } catch (error) {
+        // Another approval can commit between the initial read and the fresh
+        // snapshot. Its reservation changes the source fingerprint; replanning
+        // then refuses the active task. Resolve only this owner's exact key and
+        // original signature, rather than treating that successful retry as a
+        // stale plan or allocating a replacement task.
+        const latest = await this.store.read();
+        ownedMission(latest, missionId, identity);
+        const committed = this.replay(
+          latest,
+          identity,
+          idempotencyKey,
+          signature,
+        );
+        if (!committed) throw error;
+        await this.drainOutbox();
+        return this.getTask(identity, committed.id);
+      }
       throw new RelayError(
         409,
         "plan_replaced",
@@ -302,6 +676,12 @@ export class RelayService implements DispatchPort {
     }
     const now = this.clock();
     const task = await this.store.transact((state) => {
+      if (signal?.aborted)
+        throw new RelayError(
+          503,
+          "planning_cancelled",
+          "Approval was cancelled before dispatch was committed.",
+        );
       const current = ownedMission(state, missionId, identity);
       const existing = this.replay(state, identity, idempotencyKey, signature);
       if (existing) return existing;
@@ -333,32 +713,6 @@ export class RelayService implements DispatchPort {
           "source_changed",
           "Sources changed during approval; replan.",
         );
-      const courier = state.fixtures.couriers.find(
-        (courier) => courier.id === refreshed.courier.id,
-      );
-      // In live-sponsor mode the public simulator reserves a local shadow
-      // courier by source ID; it never writes to a real provider system.
-      if (this.mode === "live_sponsors" && !courier)
-        state.fixtures.couriers.push({ ...refreshed.courier });
-      const reservable = state.fixtures.couriers.find(
-        (courier) => courier.id === refreshed.courier.id,
-      )!;
-      if (
-        !reservable.available ||
-        Object.values(state.tasks).some(
-          (task) =>
-            task.courierId === reservable.id &&
-            activeStates.includes(task.status),
-        )
-      )
-        throw new RelayError(
-          409,
-          "courier_unavailable",
-          "Courier is already reserved in the simulator.",
-        );
-      reservable.available = false;
-      reservable.version++;
-      state.fixtures.revision++;
       const task: Task = {
         id: randomUUID(),
         missionId,
@@ -371,7 +725,50 @@ export class RelayService implements DispatchPort {
         createdAt: new Date(now).toISOString(),
         entrance: memory.entrance,
         idempotencyKey,
+        revision: 1,
       };
+      const intent = parseExecutionIntent({
+        contractVersion: "1.0",
+        intentId: randomUUID(),
+        taskId: task.id,
+        missionId,
+        request: {
+          revision: 1,
+          digest: hash(requestSchema.parse(current.request)),
+        },
+        approvedPlan: { version, digest },
+        approvedAt: task.createdAt,
+        expiresAt: current.receipt.expiresAt,
+        executionBackend: this.execution.backend,
+        selected: { supplierId: task.supplierId, courierId: task.courierId },
+        equipment: {
+          sku: current.request.sku,
+          quantity: current.request.quantity,
+        },
+        pickup: { locationId: refreshed.supplier.pickupNode },
+        destination: {
+          locationId: current.request.destination,
+          entrance: memory.entrance,
+        },
+        money: {
+          currency: "USD",
+          itemEstimateCents:
+            refreshed.supplier.unitPriceCents * current.request.quantity,
+          deliveryEstimateCents: refreshed.courier.deliveryCents,
+          explicitFeesCents: 0,
+          approvedTotalCents: refreshed.totalCents,
+        },
+        absoluteDeadlineAt: current.deadlineAt,
+        sourceFingerprint: receipt.sourceFingerprint,
+        memoryRevision: memory.revision,
+        evidenceIds: refreshed.evidenceIds,
+      });
+      task.execution = {
+        backend: this.execution.backend,
+        intentId: intent.intentId,
+      };
+      this.execution.stage(state, task, intent, refreshed);
+      (state.executionIntents ??= {})[task.id] = intent;
       state.tasks[task.id] = task;
       current.taskId = task.id;
       current.status = "queued";
@@ -393,7 +790,9 @@ export class RelayService implements DispatchPort {
           taskId: task.id,
           approvedVersion: version,
           planDigest: digest,
-          simulated: true,
+          backend: this.execution.backend,
+          intentId: intent.intentId,
+          simulated: this.execution.backend === "simulator",
         },
         now,
       );
@@ -403,83 +802,50 @@ export class RelayService implements DispatchPort {
     return this.getTask(identity, task.id);
   }
   async drainOutbox() {
-    await this.store.transact((state) => {
-      for (const message of state.outbox.filter(
-        (message) => !message.delivered,
-      )) {
-        const task = state.tasks[message.taskId];
-        if (task.status === "queued") {
-          task.status = "dispatch_requested";
-          state.missions[task.missionId].status = task.status;
-          addEvent(
-            state,
-            task.missionId,
-            this.mode,
-            "simulated_offer_sent",
-            { taskId: task.id, eventId: message.id },
-            this.clock(),
-          );
-        }
-        message.delivered = true;
-      }
-      return null;
-    });
+    await this.execution.drainOutbox();
   }
   async getTask(identity: Identity, taskId: string) {
     const task = (await this.store.read()).tasks[taskId];
     if (!task || !sameOwner(task.owner, identity))
       throw new RelayError(404, "not_found", "Task not found.");
+    if (this.execution.reconcile)
+      return this.execution.reconcile(identity, taskId);
     return task;
   }
-  async cancelTask(identity: Identity, taskId: string) {
-    return this.transition(identity, taskId, "cancelled");
+  async cancelTask(
+    identity: Identity,
+    taskId: string,
+    expectedRevision?: number,
+  ) {
+    return this.execution.cancelTask(identity, taskId, expectedRevision);
   }
-  async transition(identity: Identity, taskId: string, status: TaskStatus) {
-    const allowed: Partial<Record<TaskStatus, TaskStatus[]>> = {
-      queued: ["cancelled"],
-      dispatch_requested: ["accepted", "declined", "cancelled"],
-      accepted: ["in_progress", "cancelled"],
-      in_progress: ["completed", "cancelled"],
-    };
-    const task = await this.store.transact((state) => {
-      const task = state.tasks[taskId];
-      if (!task || !sameOwner(task.owner, identity))
-        throw new RelayError(404, "not_found", "Task not found.");
-      if (task.status === status) return task;
-      if (!allowed[task.status]?.includes(status))
-        throw new RelayError(
-          409,
-          "invalid_transition",
-          `Cannot change ${task.status} to ${status}.`,
-        );
-      task.status = status;
-      state.missions[task.missionId].status = status;
-      if (["completed", "declined", "cancelled"].includes(status)) {
-        const courier = state.fixtures.couriers.find(
-          (courier) => courier.id === task.courierId,
-        );
-        if (courier) {
-          courier.available = status !== "declined";
-          courier.version++;
-          state.fixtures.revision++;
-        }
-      }
-      addEvent(
-        state,
-        task.missionId,
-        this.mode,
-        `simulated_${status}`,
-        { taskId, status },
-        this.clock(),
+  async transition(
+    identity: Identity,
+    taskId: string,
+    status: TaskStatus,
+    signal?: AbortSignal,
+    expectedRevision?: number,
+  ) {
+    if (!this.execution.transition)
+      throw new RelayError(
+        409,
+        "execution_not_simulated",
+        "Only the selected execution backend can report provider transitions.",
       );
-      return task;
-    });
-    if (status === "declined")
+    const result = await this.execution.transition(
+      identity,
+      taskId,
+      status,
+      signal,
+      expectedRevision,
+    );
+    if (result.changed && status === "declined")
       await this.plan(
         identity,
-        task.missionId,
+        result.task.missionId,
         "The simulated courier declined. Review a fresh proposal before dispatching again.",
+        signal,
       );
-    return task;
+    return result.task;
   }
 }

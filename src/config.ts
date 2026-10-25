@@ -6,10 +6,20 @@ export function loadEnvironment() {
   if (existsSync(".env")) process.loadEnvFile(".env");
 }
 export function configuration() {
+  for (const key of ["SAMPLE_MODE", "DEMO_MODE"])
+    if (
+      process.env[key] !== undefined &&
+      !["true", "false"].includes(process.env[key]!)
+    )
+      throw new Error(`${key} must be true or false.`);
   const sample = process.env.SAMPLE_MODE !== "false";
   const number = (name: string, fallback: number) => {
     const value = Number(process.env[name] || fallback);
-    if (!Number.isInteger(value) || value <= 0)
+    if (
+      !Number.isInteger(value) ||
+      value <= 0 ||
+      (name === "PORT" && value > 65535)
+    )
       throw new Error(`Invalid ${name}`);
     return value;
   };

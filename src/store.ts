@@ -3,7 +3,7 @@ import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import pg from "pg";
 import { seedState } from "./fixtures.ts";
-import type { State, Store } from "./types.ts";
+import { RelayError, type State, type Store } from "./types.ts";
 
 // A single versioned aggregate keeps this small simulator's mission, task,
 // courier reservation and outbox changes atomic. Not a production job schema.
@@ -61,7 +61,14 @@ export class PostgresStore implements Store {
       connectionString: url,
       max: 5,
       connectionTimeoutMillis: 5000,
+      lock_timeout: 5000,
+      statement_timeout: 10000,
+      query_timeout: 15000,
+      idle_in_transaction_session_timeout: 10000,
     });
+    // pg removes failed idle clients. A later operation reports a safe error;
+    // an idle socket failure must not become an unhandled process exception.
+    this.pool.on("error", () => {});
   }
   async initialize() {
     await this.pool.query(
@@ -73,11 +80,31 @@ export class PostgresStore implements Store {
     );
   }
   async read(): Promise<State> {
-    return (await this.pool.query("SELECT value FROM relay_state WHERE id=1"))
-      .rows[0].value;
+    try {
+      return (await this.pool.query("SELECT value FROM relay_state WHERE id=1"))
+        .rows[0].value;
+    } catch {
+      throw new RelayError(
+        503,
+        "storage_unavailable",
+        "PostgreSQL is unavailable. Retry the original request with the same approval key and terms.",
+      );
+    }
   }
   async transact<T>(fn: (state: State) => T): Promise<T> {
-    const client = await this.pool.connect();
+    const client = await this.pool.connect().catch(() => {
+      throw new RelayError(
+        503,
+        "storage_unavailable",
+        "PostgreSQL is unavailable. Retry the original request with the same approval key and terms.",
+      );
+    });
+    let committing = false;
+    let discard = false;
+    const disconnected = () => {
+      discard = true;
+    };
+    client.on("error", disconnected);
     try {
       await client.query("BEGIN");
       const state: State = (
@@ -89,13 +116,29 @@ export class PostgresStore implements Store {
       await client.query("UPDATE relay_state SET value=$1::jsonb WHERE id=1", [
         JSON.stringify(state),
       ]);
+      committing = true;
       await client.query("COMMIT");
+      committing = false;
       return structuredClone(result);
     } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
+      // Never replay a callback: it can allocate IDs and touch H-MEM. After an
+      // uncertain COMMIT only the original owner/key/payload may resolve it.
+      try {
+        await client.query("ROLLBACK");
+      } catch {
+        discard = true;
+      }
+      if (error instanceof RelayError) throw error;
+      throw new RelayError(
+        503,
+        committing ? "storage_outcome_unknown" : "storage_unavailable",
+        committing
+          ? "The commit outcome is unknown. Retry the original approval with the same key and terms."
+          : "The transaction could not complete. Retry the original request with the same approval key and terms.",
+      );
     } finally {
-      client.release();
+      client.release(discard);
+      client.off("error", disconnected);
     }
   }
   async close() {

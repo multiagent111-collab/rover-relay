@@ -1,0 +1,131 @@
+{
+  "ticket": "RELAY-06",
+  "capturedAt": "2026-10-22T23:09:56.453Z",
+  "kind": "controlled corruption/I-O failure regressions in isolated temporary stores; no production files modified",
+  "cases": [
+    {
+      "case": "syntax",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "malformed_shape",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "missing_state",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "missing_ledger",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "missing_checkpoint",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "missing_scope_index",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "malformed_ledger",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "corrupt_checkpoint",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "stale_checkpoint",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "non_file",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "pending_checkpoint",
+      "approvalStatus": 503,
+      "planningStatus": 503,
+      "errorCode": "memory_unavailable",
+      "modelCalls": 0,
+      "tasksCreated": 0,
+      "filesPreserved": true,
+      "reopenBlocked": true
+    },
+    {
+      "case": "injected_read_failure",
+      "errorCode": "memory_unavailable",
+      "filesPreservedAfterFailure": true,
+      "cachedPreferenceBlocked": true,
+      "reopenBlocked": false
+    },
+    {
+      "case": "injected_write_failure",
+      "errorCode": "memory_unavailable",
+      "filesPreservedAfterFailure": true,
+      "cachedPreferenceBlocked": true,
+      "reopenBlocked": true
+    }
+  ]
+}

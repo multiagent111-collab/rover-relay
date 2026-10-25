@@ -7,8 +7,10 @@ import { NightshiftGenerator } from "../src/agents.ts";
 import { ZetarisData, boundedJson } from "../src/adapters/data.ts";
 import { enumerateCandidates } from "../src/domain.ts";
 import { seedFixtures } from "../src/fixtures.ts";
+import { sampleEvidence } from "../src/evidence.ts";
 import { configuration } from "../src/config.ts";
 import { createApp } from "../src/app.ts";
+import { proposalFor } from "../src/review.ts";
 
 function environment(values: Record<string, string>) {
   const before = Object.fromEntries(
@@ -32,7 +34,11 @@ const request = {
 };
 const agentInput = {
   request,
-  candidates: enumerateCandidates(seedFixtures(), request, ["e1"]),
+  candidates: enumerateCandidates(
+    seedFixtures(),
+    request,
+    sampleEvidence(seedFixtures(), new Date().toISOString()),
+  ),
   memory: {
     records: [],
     context: "",
@@ -66,17 +72,22 @@ test("Nightshift adapter sends the real provider contract and preserves reported
       assert.equal(headers.get("meterless-scope"), "user");
       const payload = JSON.parse(options?.body as string);
       assert.equal(payload.model, "meterless/fast");
+      assert.deepEqual(payload.response_format, { type: "json_object" });
+      assert.match(payload.messages[0].content, /proposal-2\.0/);
+      assert.equal(payload.tools, undefined);
       return Response.json({
         id: "runtime-request-1",
         model: "reported-model",
         choices: [
           {
             message: {
-              content: JSON.stringify({
-                candidateId: null,
-                evidenceIds: [],
-                summary: "Test output",
-              }),
+              content: JSON.stringify(
+                proposalFor(
+                  agentInput.request,
+                  agentInput.memory,
+                  agentInput.candidates,
+                ),
+              ),
             },
           },
         ],
@@ -128,9 +139,49 @@ test("Nightshift unauthorized and malformed output remain distinct controlled fa
   }
 });
 
+test("an output-limit response cannot become an accepted proposal even when its prefix is valid JSON", async () => {
+  const restore = environment({
+    METERLESS_BASE_URL: "http://runtime.invalid",
+    METERLESS_RUNTIME_TOKEN: "test-placeholder",
+    METERLESS_ROUTE: "meterless/fast",
+  });
+  const original = globalThis.fetch;
+  try {
+    globalThis.fetch = async () =>
+      Response.json({
+        choices: [
+          {
+            finish_reason: "length",
+            message: {
+              content: JSON.stringify(
+                proposalFor(
+                  agentInput.request,
+                  agentInput.memory,
+                  agentInput.candidates,
+                ),
+              ),
+            },
+          },
+        ],
+      });
+    await assert.rejects(
+      new NightshiftGenerator().generate(
+        "Planner",
+        agentInput,
+        AbortSignal.timeout(1000),
+      ),
+      { code: "invalid_model_output" },
+    );
+  } finally {
+    globalThis.fetch = original;
+    restore();
+  }
+});
+
 function candidateRows(observedAt = new Date().toISOString()) {
   return [
     {
+      tenant_id: "relay-demo",
       supplier_id: "supplier-a",
       supplier_name: "Campus Tech",
       sku: "HDMI-USB-C",
@@ -153,6 +204,39 @@ function candidateRows(observedAt = new Date().toISOString()) {
     },
   ];
 }
+test("malformed model identity is rejected without inventing or echoing metadata", async () => {
+  const restore = environment({
+    METERLESS_BASE_URL: "http://runtime.invalid",
+    METERLESS_RUNTIME_TOKEN: "test-placeholder",
+    METERLESS_ROUTE: "meterless/fast",
+  });
+  const original = globalThis.fetch;
+  try {
+    for (const identity of [
+      { model: { private: "invalid" } },
+      { model: "x".repeat(201) },
+      { id: "bad\nrequest" },
+    ]) {
+      globalThis.fetch = async () =>
+        Response.json({
+          ...identity,
+          choices: [{ message: { content: "{}" } }],
+        });
+      await assert.rejects(
+        new NightshiftGenerator().generate(
+          "Planner",
+          agentInput,
+          AbortSignal.timeout(1000),
+        ),
+        { code: "invalid_model_output" },
+      );
+    }
+  } finally {
+    globalThis.fetch = original;
+    restore();
+  }
+});
+
 test("Zetaris adapter uses fixed queries, numeric conversion, source versions, and fresh evidence", async () => {
   const restore = environment({
     ZETARIS_REST_URL: "http://zetaris.invalid/api/v1.0",
@@ -177,6 +261,7 @@ test("Zetaris adapter uses fixed queries, numeric conversion, source versions, a
       return Response.json({
         data: payload.sql.includes("relay_route_edges")
           ? seedFixtures().edges.map((edge) => ({
+              tenant_id: "relay-demo",
               id: edge.id,
               from_node: edge.from,
               to_node: edge.to,

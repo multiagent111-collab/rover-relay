@@ -1,6 +1,19 @@
 import { writeFile, mkdir } from "node:fs/promises";
 import { z } from "zod";
-import { requestSchema } from "../src/types.ts";
+import { requestSchema, evidenceSchema } from "../src/types.ts";
+import {
+  intakeCreateSchema,
+  intakeUpdateSchema,
+  intakeConfirmSchema,
+} from "../src/intake.ts";
+import { actionSchema } from "../src/coordinator.ts";
+import {
+  executionIntentSchema,
+  executionTaskSchema,
+  executionEventSchema,
+  executionConflictSchema,
+  executionCancelSchema,
+} from "../src/execution-contract.ts";
 
 const identity = [{ RelayBearer: [] }];
 const objectResponse = {
@@ -21,6 +34,45 @@ const idParameter = {
   schema: { type: "string", format: "uuid" },
 };
 const routes: Record<string, unknown> = {
+  "/v1/intakes": {
+    post: {
+      summary:
+        "Save a bounded text draft; always needs explicit review/confirmation",
+      requestBody: body({ $ref: "#/components/schemas/IntakeCreate" }),
+      responses: { "201": objectResponse, "400": errorResponse },
+    },
+  },
+  "/v1/intakes/{id}": {
+    parameters: [idParameter],
+    get: {
+      summary: "Resume an owner-scoped persisted draft",
+      responses: { "200": objectResponse, "404": errorResponse },
+    },
+    patch: {
+      summary:
+        "Review fields at the current revision without resetting the original deadline",
+      requestBody: body({ $ref: "#/components/schemas/IntakeUpdate" }),
+      responses: {
+        "200": objectResponse,
+        "400": errorResponse,
+        "409": errorResponse,
+      },
+    },
+  },
+  "/v1/intakes/{id}/confirm": {
+    parameters: [idParameter],
+    post: {
+      summary:
+        "Explicitly confirm exact reviewed constraints and plan the same mission ID",
+      requestBody: body({ $ref: "#/components/schemas/IntakeConfirm" }),
+      responses: {
+        "200": objectResponse,
+        "400": errorResponse,
+        "409": errorResponse,
+        "503": errorResponse,
+      },
+    },
+  },
   "/v1/health": {
     get: {
       summary:
@@ -32,6 +84,13 @@ const routes: Record<string, unknown> = {
   "/v1/bootstrap": {
     get: {
       summary: "Read synthetic campus data and caller-owned missions",
+      responses: { "200": objectResponse, "401": errorResponse },
+    },
+  },
+  "/v1/readiness": {
+    get: {
+      summary:
+        "Read passive per-process configuration and actual adapter observations; never calls a sponsor",
       responses: { "200": objectResponse, "401": errorResponse },
     },
   },
@@ -125,6 +184,14 @@ const routes: Record<string, unknown> = {
     parameters: [idParameter],
     post: {
       summary: "Cancel a simulated task and release its courier reservation",
+      requestBody: {
+        ...body({
+          type: "object",
+          additionalProperties: false,
+          properties: { expectedRevision: { type: "integer", minimum: 0 } },
+        }),
+        required: false,
+      },
       responses: { "200": objectResponse, "409": errorResponse },
     },
   },
@@ -177,6 +244,7 @@ const routes: Record<string, unknown> = {
           status: {
             enum: ["accepted", "declined", "in_progress", "completed"],
           },
+          expectedRevision: { type: "integer", minimum: 0 },
         },
       }),
       responses: {
@@ -219,6 +287,109 @@ const routes: Record<string, unknown> = {
 };
 await mkdir("contracts", { recursive: true });
 const schema = z.toJSONSchema(requestSchema);
+const executionSchemas = {
+  ApprovedExecutionIntent: z.toJSONSchema(executionIntentSchema),
+  ExecutionTaskState: z.toJSONSchema(executionTaskSchema),
+  ExecutionEvent: z.toJSONSchema(executionEventSchema),
+  ExecutionConflict: z.toJSONSchema(executionConflictSchema),
+  ExecutionCancel: z.toJSONSchema(executionCancelSchema),
+};
+for (const [name, value] of Object.entries(executionSchemas))
+  await writeFile(
+    `contracts/${name}.schema.json`,
+    JSON.stringify(value, null, 2) + "\n",
+  );
+const executionResponse = (
+  name: keyof typeof executionSchemas,
+  description: string,
+) => ({
+  description,
+  content: {
+    "application/json": { schema: { $ref: `#/components/schemas/${name}` } },
+  },
+});
+const taskResponse = executionResponse(
+  "ExecutionTaskState",
+  "Authoritative task; request does not imply provider acceptance",
+);
+const conflictResponse = executionResponse(
+  "ExecutionConflict",
+  "Typed conflict. Definitive new-intent conflicts guarantee no job was committed; unknown outcomes use 503 and retain the same intent.",
+);
+await writeFile(
+  "contracts/execution.openapi.json",
+  JSON.stringify(
+    {
+      openapi: "3.1.0",
+      info: {
+        title: "Relay execution gateway contract",
+        version: "1.0",
+        description:
+          "Proposed public contract, exercised only by controlled fixtures. These internal routes are NOT served by the Relay app. Requires separately verified identity and trusted stored approval; digest is not authorization. No production gateway activation.",
+      },
+      security: [{ VerifiedInternalAssertion: [] }],
+      paths: {
+        "/internal/relay/v1/execution-intents": {
+          post: {
+            summary:
+              "Verify owner and exact trusted approval; replay before expiry check; atomically reserve selected provider and persist one job/outbox",
+            requestBody: body({
+              $ref: "#/components/schemas/ApprovedExecutionIntent",
+            }),
+            responses: {
+              "200": taskResponse,
+              "400": conflictResponse,
+              "401": conflictResponse,
+              "409": conflictResponse,
+              "503": conflictResponse,
+            },
+          },
+        },
+        "/internal/relay/v1/tasks/{id}": {
+          parameters: [idParameter],
+          get: {
+            summary:
+              "Read the verified owner's authoritative execution mapping",
+            responses: {
+              "200": taskResponse,
+              "401": conflictResponse,
+              "409": conflictResponse,
+              "503": conflictResponse,
+            },
+          },
+        },
+        "/internal/relay/v1/tasks/{id}/cancel": {
+          parameters: [idParameter],
+          post: {
+            summary:
+              "Stable idempotent cancellation request; cancel_requested retains capacity until confirmed",
+            requestBody: body({ $ref: "#/components/schemas/ExecutionCancel" }),
+            responses: {
+              "200": taskResponse,
+              "400": conflictResponse,
+              "401": conflictResponse,
+              "409": conflictResponse,
+              "503": conflictResponse,
+            },
+          },
+        },
+      },
+      components: {
+        securitySchemes: {
+          VerifiedInternalAssertion: {
+            type: "http",
+            scheme: "bearer",
+            description:
+              "Short-lived signed assertion binding verified tenant/subject, method/path, body digest, expiry and replay ID. Demo tokens/unsigned identity headers are invalid. Fixture-only HMAC protocol is not a production credential deployment.",
+          },
+        },
+        schemas: executionSchemas,
+      },
+    },
+    null,
+    2,
+  ) + "\n",
+);
 await writeFile(
   "contracts/mission-request.schema.json",
   JSON.stringify(schema, null, 2) + "\n",
@@ -239,11 +410,23 @@ await writeFile(
       paths: routes,
       components: {
         securitySchemes: { RelayBearer: { type: "http", scheme: "bearer" } },
-        schemas: { MissionRequest: schema },
+        schemas: {
+          MissionRequest: schema,
+          SourceEvidence: z.toJSONSchema(evidenceSchema, {
+            target: "draft-2020-12",
+          }),
+          IntakeCreate: z.toJSONSchema(intakeCreateSchema),
+          IntakeUpdate: z.toJSONSchema(intakeUpdateSchema),
+          IntakeConfirm: z.toJSONSchema(intakeConfirmSchema),
+          CoordinatorAction: z.toJSONSchema(actionSchema),
+          ...executionSchemas,
+        },
       },
     },
     null,
     2,
   ) + "\n",
 );
-console.log("Generated request JSON Schema and OpenAPI 3.1 entry points.");
+console.log(
+  "Generated public API and execution 1.0 schemas/OpenAPI (gateway routes remain a contract only).",
+);

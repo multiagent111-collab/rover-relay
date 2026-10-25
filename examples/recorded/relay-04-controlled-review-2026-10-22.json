@@ -1,0 +1,117 @@
+{
+  "capturedAt": "2026-10-22T19:56:41.613Z",
+  "ticket": "RELAY-04",
+  "kind": "controlled regression; no sponsor inference or dispatch",
+  "scenario": "Independent sample Critic rejects an actually infeasible candidate; Planner repairs once",
+  "initialCandidateId": "supplier-a:courier-4",
+  "failedChecks": ["courier", "budget"],
+  "selectedId": "supplier-a:courier-1",
+  "terms": {
+    "sku": "HDMI-USB-C",
+    "quantity": 2,
+    "destination": "auditorium",
+    "budgetCents": 3500,
+    "deadlineMinutes": 30,
+    "entrance": "west service entrance",
+    "totalCents": 3200,
+    "etaMinutes": 22
+  },
+  "summary": "2 HDMI-USB-C to auditorium; limit $35.00 including delivery within 30 minutes of the original request. Checked estimate: $32.00 including delivery, 22 minutes travel and handling. Inventory is not reserved; no delivery is booked.",
+  "steps": [
+    {
+      "role": "Planner",
+      "round": 1,
+      "decision": "propose_checked_terms",
+      "candidateId": "supplier-a:courier-4",
+      "provider": "controlled regression (no sponsor call)",
+      "model": "controlled-review-v2",
+      "memoryIds": []
+    },
+    {
+      "role": "Critic",
+      "round": 1,
+      "decision": "revise_proposal",
+      "issues": [
+        {
+          "code": "candidate_infeasible",
+          "field": "candidateId",
+          "repair": "Choose a candidate whose required checks all pass, or report null."
+        }
+      ],
+      "feedback": [
+        "candidate_infeasible: Choose a candidate whose required checks all pass, or report null."
+      ],
+      "candidateId": "supplier-a:courier-4",
+      "provider": "deterministic sample substitute (no model call)",
+      "model": "sample-rules-v2",
+      "memoryIds": []
+    },
+    {
+      "role": "Validator",
+      "round": 1,
+      "decision": "rejected",
+      "issues": [
+        {
+          "code": "candidate_infeasible",
+          "field": "candidateId",
+          "repair": "Choose a candidate whose required checks all pass, or report null."
+        },
+        {
+          "code": "candidate_infeasible",
+          "field": "candidateId",
+          "repair": "Choose a candidate whose required checks all pass, or report null."
+        }
+      ],
+      "feedback": [
+        "candidate_infeasible (candidateId): Choose a candidate whose required checks all pass, or report null.",
+        "candidate_infeasible (candidateId): Choose a candidate whose required checks all pass, or report null."
+      ],
+      "candidateId": "supplier-a:courier-4",
+      "provider": "deterministic",
+      "memoryIds": []
+    },
+    {
+      "role": "Planner",
+      "round": 2,
+      "decision": "propose_checked_terms",
+      "candidateId": "supplier-a:courier-1",
+      "provider": "controlled regression (no sponsor call)",
+      "model": "controlled-review-v2",
+      "memoryIds": []
+    },
+    {
+      "role": "Critic",
+      "round": 2,
+      "decision": "approve_proposal",
+      "issues": [],
+      "feedback": [],
+      "candidateId": "supplier-a:courier-1",
+      "provider": "deterministic sample substitute (no model call)",
+      "model": "sample-rules-v2",
+      "memoryIds": []
+    },
+    {
+      "role": "Validator",
+      "round": 2,
+      "decision": "checks_passed",
+      "issues": [],
+      "feedback": [],
+      "candidateId": "supplier-a:courier-1",
+      "provider": "deterministic",
+      "memoryIds": []
+    }
+  ],
+  "budget": {
+    "inferenceCalls": 4,
+    "extractionCalls": 0,
+    "selectionCalls": 0,
+    "plannerCriticCalls": 4,
+    "toolCalls": 0,
+    "backendSnapshotCalls": 0,
+    "inferenceLimit": 6,
+    "toolLimit": 6,
+    "deadlineMs": 180000,
+    "elapsedMs": 30
+  },
+  "tasksCreated": 0
+}

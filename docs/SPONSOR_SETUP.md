@@ -1,5 +1,17 @@
 # Sponsor service setup
 
+## RELAY-12 setup and current evidence
+
+For a new user, start with [judge quickstart](JUDGE_QUICKSTART.md) and the CPU sample. Live service installation, accounts, source registration and credentials belong to your own supported vendor setup. No platform binary/model weight is redistributed. Public SQL registration, restricted-reader and federation templates are linked in [source evidence](SOURCE_EVIDENCE.md). The local lifecycle helper starts/reuses existing services; it does not provision vendor platforms or create PostgreSQL containers automatically.
+
+The current complete live planning proof is RELAY-11: 39,917 ms through real Zetaris and Nightshift, Planner Nemotron Super VL/Critic Ultra, no dispatch. See [evaluation](EVALUATION.md). Exact Lightning pinning remains unverified. RELAY-05 below remains a dated earlier success, not the latest timing. Supply your own Relay token, distinct Runtime token, Zetaris credentials and route. Keep .env private; its placeholder template is not a configured installation. No new sponsor call was made by RELAY-12.
+
+## October 22 RELAY-05 current Nightshift verification
+
+An isolated full Relay planning mission now passed through Nightshift 1.2.1 with real Zetaris observations and official H-MEM in 16.5 seconds. Runtime receipts correlate Planner to NVIDIA Nemotron Super VL and Critic to Nemotron Ultra, both cache misses. This verifies actual meterless/auto routing, not exact Lightning pinning. Existing private .env and running services retain NVIDIA-direct; there is no automatic fallback or server switch. Use [NIGHTSHIFT_VERIFICATION.md](NIGHTSHIFT_VERIFICATION.md) for the explicit quota-consuming check and actual evidence. Historical October 21 records below remain as originally observed.
+
+RELAY-02: see [source evidence and reproducible federation](SOURCE_EVIDENCE.md) for the current candidate-specific contract, restricted reader, reviewed source templates and actual isolated-source proof. Earlier iteration status below is historical. Plain preflight is always offline; intentional service checks use `preflight:live`.
+
 Start with [LIVE_CONNECTIONS.md](LIVE_CONNECTIONS.md) for current download links, credential acquisition and independent connection checks. The October 21 Zetaris bundle replaces the old Freemium Docker Hub installation recipe for this route.
 
 The runnable default is offline sample mode. The live HTTP adapters are implemented and tested against controlled responses, but actual sponsor access was not available during iteration one. Do not claim live integration success until preflight and a complete mission both succeed with your services.
@@ -23,7 +35,7 @@ Nightshift remains the default. `RELAY_INFERENCE_PROVIDER=nvidia` explicitly sel
 3. Take the real Runtime URL and access token from its Console; put them in the server's private `.env` as `METERLESS_BASE_URL` and `METERLESS_RUNTIME_TOKEN`.
 4. Set `METERLESS_ROUTE` to an actual discovered `meterless/*` route backed by that lane. Set `NEMOTRON_MODEL` as the expected model label for your evidence record. The label itself does not configure the lane.
 5. Set a separate `RELAY_ACCESS_TOKEN` of at least 24 characters for access to Relay's live API. This is not a Nightshift token or an NVIDIA key. The browser's connection form uses only the Relay token.
-6. Run `npm run preflight` in live mode. Discovery alone is insufficient: the script also requests actual inference.
+6. Run `npm.cmd run preflight:live -- --component=inference --json` explicitly. It consumes provider quota. Plain `preflight` always stays offline. Discovery alone is insufficient; use the full isolated mission check in NIGHTSHIFT_VERIFICATION.md after provisioning.
 
 Relay sends bearer authorization, `meterless-app: rover-relay`, and `meterless-scope: user` on chat. It accepts the normal base URL forms without duplicating `/v1`, sets timeouts, limits output bytes, and parses JSON through application schemas. Bad authentication, network failures, invalid output, and missing configuration remain distinct errors.
 
@@ -84,7 +96,7 @@ docker compose -f compose.live.yaml up --build
 
 In this configuration the application container reaches Windows-host services through `host.docker.internal`, not its own `127.0.0.1`. Set the actual Runtime and Zetaris URLs accordingly. An organizer-hosted Zetaris instance needs a separately reachable supplier endpoint.
 
-The PostgreSQL adapter and container image are supplied but not execution-tested here because the Docker Linux daemon was not running. Contract/behavior tests executed with SQLite; validate PostgreSQL transactions, image startup, network paths, connector setup, and real sponsor calls before using the live profile for judging.
+Historical iteration-one result: PostgreSQL and container execution were not tested while the daemon was unavailable. Current RELAY-07 through RELAY-11 subsequently passed actual PostgreSQL row-lock/concurrency/OS-process crash checks; RELAY-11 passed 14 PostgreSQL checks. Actual source federation and Nightshift missions are also recorded. This does not establish that the optional full Compose application image/network profile has been execution-tested. Provision and verify that separate profile in your own environment before relying on it.
 
 ## Cursor
 

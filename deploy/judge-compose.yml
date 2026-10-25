@@ -1,0 +1,43 @@
+name: relay-judge
+services:
+  relay:
+    build:
+      context: ..
+    image: relay-judge:${RELAY_REVISION:?Set the reviewed candidate revision}
+    init: true
+    restart: "on-failure:3"
+    stop_grace_period: 45s
+    environment:
+      HOST: 0.0.0.0
+      PORT: "4173"
+      SAMPLE_MODE: "true"
+      DEMO_MODE: "true"
+      DATA_DIR: /app/.data
+    volumes:
+      - relay_state:/app/.data
+    networks: [private, ingress]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:4173/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  edge:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      JUDGE_HOSTNAME: ${JUDGE_HOSTNAME:?Set a real DNS hostname}
+      JUDGE_PASSWORD_HASH: ${JUDGE_PASSWORD_HASH:?Supply a Caddy password hash outside Git}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [ingress]
+networks:
+  private:
+    internal: true
+  ingress: {}
+volumes:
+  relay_state: {}
+  caddy_data: {}
+  caddy_config: {}

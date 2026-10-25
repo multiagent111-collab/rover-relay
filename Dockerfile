@@ -12,4 +12,4 @@ RUN npm run build && mkdir -p /app/.data && chown -R node:node /app/.data
 USER node
 ENV HOST=0.0.0.0 PORT=4173 SAMPLE_MODE=true DATA_DIR=/app/.data
 EXPOSE 4173
-CMD ["npm", "start"]
+CMD ["node", "--import", "tsx", "src/server.ts"]

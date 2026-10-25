@@ -8,11 +8,22 @@ import { seedFixtures } from "./fixtures.ts";
 import { enumerateCandidates } from "./domain.ts";
 import { inferenceProvider, requireEnvironment } from "./config.ts";
 import { RelayError } from "./types.ts";
+import { failureObservation, safeModel } from "./readiness.ts";
+import { sampleEvidence } from "./evidence.ts";
+import { nemotronRoute, type RuntimeRoute } from "./runtime-proof.ts";
 
 export type Probe = {
   status: "PASS" | "FAIL" | "UNVERIFIED";
   name: string;
   detail: string;
+  checkedAt: string;
+  configured: boolean | null;
+  reachable: boolean | null;
+  authenticated: boolean | null;
+  lastExercisedAt: string | null;
+  provider: string | null;
+  reportedModels: string[];
+  runtimeRoutes?: RuntimeRoute[];
 };
 export type Component = "all" | "memory" | "inference" | "zetaris";
 
@@ -21,8 +32,27 @@ export async function runPreflight(options: {
   component?: Component;
 }): Promise<Probe[]> {
   const results: Probe[] = [];
-  const report = (status: Probe["status"], name: string, detail: string) =>
-    results.push({ status, name, detail });
+  const report = (
+    status: Probe["status"],
+    name: string,
+    detail: string,
+    observed: Partial<Probe> = {},
+  ) => {
+    const checkedAt = new Date().toISOString();
+    results.push({
+      status,
+      name,
+      detail: detail.slice(0, 500),
+      checkedAt,
+      configured: null,
+      reachable: null,
+      authenticated: null,
+      lastExercisedAt: null,
+      provider: null,
+      reportedModels: [],
+      ...observed,
+    });
+  };
   // Never print arbitrary upstream errors, model text, or credential values.
   const attempt = async (name: string, action: () => Promise<void>) => {
     try {
@@ -34,6 +64,22 @@ export async function runPreflight(options: {
         error instanceof RelayError
           ? `${error.code}: ${error.message}`
           : "Check failed; no upstream response or credentials have been logged.",
+        {
+          ...failureObservation(error),
+          provider:
+            name === "Inference"
+              ? process.env.RELAY_INFERENCE_PROVIDER === "nvidia"
+                ? "nvidia-direct"
+                : process.env.RELAY_INFERENCE_PROVIDER &&
+                    process.env.RELAY_INFERENCE_PROVIDER !== "nightshift"
+                  ? "invalid"
+                  : "meterless-nightshift"
+              : name.startsWith("Zetaris")
+                ? "zetaris"
+                : name === "H-MEM"
+                  ? "Meterless H-MEM"
+                  : null,
+        },
       );
     }
   };
@@ -72,6 +118,12 @@ export async function runPreflight(options: {
           "PASS",
           "H-MEM persistence, correction and forgetting",
           HMEM_REVISION,
+          {
+            configured: true,
+            reachable: true,
+            lastExercisedAt: new Date().toISOString(),
+            provider: "Meterless H-MEM",
+          },
         );
       } finally {
         await rm(directory, { recursive: true, force: true });
@@ -146,6 +198,13 @@ export async function runPreflight(options: {
           "PASS",
           "Nightshift route discovery",
           "Configured route exists; this does not establish the underlying model.",
+          {
+            configured: true,
+            reachable: true,
+            authenticated: true,
+            lastExercisedAt: new Date().toISOString(),
+            provider: "meterless-nightshift",
+          },
         );
       }
       const request = {
@@ -155,9 +214,11 @@ export async function runPreflight(options: {
         budgetCents: 3500,
         deadlineMinutes: 30,
       };
-      const candidates = enumerateCandidates(seedFixtures(), request, [
-        "preflight-synthetic-data",
-      ]);
+      const candidates = enumerateCandidates(
+        seedFixtures(),
+        request,
+        sampleEvidence(seedFixtures(), new Date().toISOString()),
+      );
       const input = {
         request,
         candidates,
@@ -173,22 +234,68 @@ export async function runPreflight(options: {
         liveGenerator(),
         input,
         async () => candidates,
-        AbortSignal.timeout(120000),
+        AbortSignal.timeout(180000),
       );
       const calls = result.steps.filter((step) => step.role !== "Validator");
       report(
         "PASS",
         `${provider} Planner/Critic inference`,
         `Validated proposal from ${calls.length} actual model calls over synthetic preflight data; no dispatch created.`,
+        {
+          configured: true,
+          reachable: true,
+          authenticated: true,
+          lastExercisedAt: new Date().toISOString(),
+          provider:
+            provider === "nvidia" ? "nvidia-direct" : "meterless-nightshift",
+          reportedModels: [
+            ...new Set(
+              calls
+                .map((call) => safeModel(call.model))
+                .filter((model): model is string => model !== null),
+            ),
+          ],
+        },
       );
       const attributed =
         calls.length > 0 && calls.every((call) => call.model === model);
+      if (provider === "nightshift")
+        report(
+          calls.length > 0 && calls.every((call) => nemotronRoute(call.routing))
+            ? "PASS"
+            : "UNVERIFIED",
+          "Nightshift Runtime routing evidence",
+          "Runtime-reported model/provider and receipt/request IDs must agree for every response. This is not signature verification or independent NVIDIA attestation. Expected-model equality is checked separately.",
+          {
+            provider: "meterless-nightshift",
+            reachable: true,
+            authenticated: true,
+            runtimeRoutes: calls.flatMap((call) =>
+              call.routing ? [call.routing] : [],
+            ),
+          },
+        );
       report(
         attributed ? "PASS" : "UNVERIFIED",
         "Nemotron response identity",
         attributed
           ? "Every Planner/Critic response reports the configured Nemotron model."
           : "Response identity does not establish the expected Nemotron model. Correlate Nightshift receipts with the underlying provider before claiming verification.",
+        {
+          configured: true,
+          reachable: true,
+          authenticated: true,
+          lastExercisedAt: new Date().toISOString(),
+          provider:
+            provider === "nvidia" ? "nvidia-direct" : "meterless-nightshift",
+          reportedModels: [
+            ...new Set(
+              calls
+                .map((call) => safeModel(call.model))
+                .filter((model): model is string => model !== null),
+            ),
+          ],
+        },
       );
     });
   // Check SQL access independently from model credentials and operational views.
@@ -212,6 +319,13 @@ export async function runPreflight(options: {
         "PASS",
         "Zetaris authenticated SQL",
         `SELECT 1 succeeded; query ${result.queryId}.`,
+        {
+          configured: true,
+          reachable: true,
+          authenticated: true,
+          lastExercisedAt: new Date().toISOString(),
+          provider: "zetaris",
+        },
       );
     });
     await attempt("Zetaris operational views", async () => {
@@ -230,6 +344,13 @@ export async function runPreflight(options: {
         "PASS",
         "Zetaris operational views",
         `${snapshot.evidence.length} evidence records. Preserve connector/query evidence to demonstrate federation.`,
+        {
+          configured: true,
+          reachable: true,
+          authenticated: true,
+          lastExercisedAt: new Date().toISOString(),
+          provider: "zetaris",
+        },
       );
     });
   }

@@ -8,20 +8,25 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "evaluate": "node --import tsx scripts/evaluate.ts",
     "dev": "node --import tsx --watch src/server.ts",
     "dev:ui": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
     "start": "node --import tsx src/server.ts",
-    "test": "node --import tsx --test tests/*.test.ts",
+    "test": "node --import tsx --test tests/*.test.ts tests/*.test.tsx",
+    "test:postgres": "node --import tsx scripts/postgres.ts",
     "preflight": "node --import tsx scripts/preflight.ts",
     "preflight:live": "node --import tsx scripts/preflight.ts --live",
+    "verify:nightshift": "node --import tsx scripts/nightshift.ts",
     "verify:hmem": "node scripts/verify-hmem.mjs",
     "verify:baseline": "node scripts/baseline-manifest.mjs",
     "check:public": "node scripts/check-public-source.mjs",
     "examples": "node --import tsx scripts/examples.ts",
     "contracts": "node --import tsx scripts/contracts.ts",
     "setup:hmem": "node scripts/vendor-hmem.mjs",
-    "supplier": "node --import tsx supplier-fixtures/server.ts"
+    "supplier": "node --import tsx supplier-fixtures/server.ts",
+    "local": "node --import tsx scripts/local.ts",
+    "verify:setup": "node --import tsx scripts/judge-setup.ts"
   },
   "dependencies": {
     "fastify": "5.12.7",

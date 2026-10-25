@@ -1,0 +1,167 @@
+{
+  "ticket": "RELAY-03",
+  "tool": "Codex",
+  "startedAt": "2026-10-22T19:10:07.581Z",
+  "capturedAt": "2026-10-22T19:39:09.581Z",
+  "startingCommit": "3add02eb3a07d35b9adfb98eacf09fa5e6a0c53b",
+  "status": "implemented_awaiting_user_test",
+  "scope": "Public Relay optional intake/coordinator only; Build deferred",
+  "protectedBaseline": "1b19c528d639134691289d9c0db38d82e9f277ff",
+  "checks": [
+    {
+      "command": "npm.cmd test",
+      "status": "PASS",
+      "tests": 69,
+      "failed": 0,
+      "detail": "Existing 58 regressions plus 11 new isolated intake/coordinator/budget/cancellation tests"
+    },
+    {
+      "command": "node --import tsx --test tests/intake.test.ts",
+      "status": "PASS",
+      "tests": 11,
+      "detail": "Final targeted rerun after conservative alternative-quantity and delivery-only budget clarification guards"
+    },
+    {
+      "command": "npm.cmd run build",
+      "status": "PASS",
+      "detail": "Final TypeScript/Vite production build; UI capability-gated for preserved older backend"
+    },
+    {
+      "command": "npm.cmd run contracts",
+      "status": "PASS",
+      "detail": "Versioned additive intake bodies and typed coordinator actions"
+    },
+    {
+      "check": "Actual local browser clarification/save/reload/resume/confirmation",
+      "status": "awaiting_approval",
+      "checkedAt": "2026-10-22T19:31:30.385Z",
+      "mode": "offline_sample",
+      "demo": "Actual local browser save/reload/resume/confirmation; deterministic extraction/selection and Planner/Critic substitutes; no hosted inference",
+      "browserFlow": [
+        "incomplete text produced four clarification questions",
+        "filled fields and saved without planning",
+        "reloaded browser and resumed persisted fields",
+        "explicit confirmation returned a checked plan on the same assigned mission ID",
+        "inspected read decisions and shared budget; did not approve dispatch"
+      ],
+      "missionId": "29ee6332-a52b-45dd-a5a1-759dc6c34703",
+      "intakeId": "29ee6332-a52b-45dd-a5a1-759dc6c34703",
+      "originalCreatedAt": "2026-10-22T19:26:22.868Z",
+      "originalDeadlineAt": "2026-10-22T19:56:22.868Z",
+      "confirmedMissionDeadlineAt": "2026-10-22T19:56:22.868Z",
+      "receiptCreatedAt": "2026-10-22T19:27:02.479Z",
+      "approvalExpiresAt": "2026-10-22T19:28:02.479Z",
+      "approvalExpiredAtCapture": true,
+      "taskCreated": false,
+      "coordination": {
+        "actions": [
+          {
+            "action": {
+              "type": "read_equipment_options",
+              "sku": "HDMI-USB-C",
+              "quantity": 2
+            },
+            "outcome": "observed",
+            "count": 3
+          },
+          {
+            "action": {
+              "type": "read_courier_availability",
+              "supplierIds": [
+                "supplier-a",
+                "supplier-b",
+                "supplier-c"
+              ]
+            },
+            "outcome": "observed",
+            "count": 6
+          },
+          {
+            "action": {
+              "type": "read_route_edges",
+              "supplierIds": [
+                "supplier-a",
+                "supplier-b",
+                "supplier-c"
+              ],
+              "destination": "auditorium"
+            },
+            "outcome": "observed",
+            "count": 9
+          },
+          {
+            "action": {
+              "type": "propose"
+            },
+            "outcome": "ready"
+          }
+        ],
+        "budget": {
+          "inferenceCalls": 2,
+          "extractionCalls": 0,
+          "selectionCalls": 0,
+          "plannerCriticCalls": 2,
+          "toolCalls": 3,
+          "backendSnapshotCalls": 1,
+          "inferenceLimit": 6,
+          "toolLimit": 6,
+          "deadlineMs": 180000,
+          "elapsedMs": 32
+        },
+        "policy": "observation-guided"
+      },
+      "pendingTestDrafts": 1,
+      "backendCompatibility": {
+        "sampleOffersIntake": true,
+        "legacyLiveOffersIntake": false,
+        "legacyLiveMode": "live_sponsors",
+        "note": "Draft UI is shown only when backend offers intakes. Older live service was preserved."
+      }
+    }
+  ],
+  "controlledBranchChecks": [
+    {
+      "observation": "No supplier has sufficient stock",
+      "nextAction": "finish_infeasible:no_stock",
+      "logicalReads": 1,
+      "backendSnapshots": 1
+    },
+    {
+      "observation": "Stock exists but no capable courier is available",
+      "nextAction": "finish_infeasible:no_courier",
+      "logicalReads": 2,
+      "backendSnapshots": 1
+    },
+    {
+      "observation": "Stock/courier/open path exist",
+      "nextAction": "propose",
+      "logicalReads": 3,
+      "backendSnapshots": 1
+    },
+    {
+      "observation": "Repeated controlled Critic refresh requests",
+      "outcome": "tool_budget_exhausted",
+      "logicalReads": 6,
+      "generatorCalls": 4,
+      "tasksCreated": 0
+    },
+    {
+      "observation": "Controlled injected selector declares inference use",
+      "selectionCalls": 4,
+      "plannerCriticCalls": 2,
+      "totalInferenceSlots": 6,
+      "tasksCreated": 0
+    }
+  ],
+  "limits": [
+    "Text extraction and default tool selection are deterministic bounded policies, not general-language or LLM tool-selection claims.",
+    "Logical reads reuse a full existing snapshot; skipped logical stages do not attest avoided backend SQL queries.",
+    "Budget counters charge attempted generator/selection slots; offline substitutes are not actual hosted model calls.",
+    "No hosted inference, Zetaris/source DDL, provider changes or live dispatch occurred in RELAY-03. Full Nightshift workflow remains RELAY-05.",
+    "The browser-created receipt was deliberately not dispatched and had expired by later evidence capture; a fresh approval requires refresh.",
+    "Existing live processes/private settings/source definitions remain preserved; the sample was gracefully refreshed without deleting drafts or H-MEM.",
+    "Official H-MEM remains inherited and unmodified; existing real feature tests pass.",
+    "No Build changes, push, deployment or publication."
+  ],
+  "nextGate": "User tests RELAY-03 before RELAY-04 starts"
+}

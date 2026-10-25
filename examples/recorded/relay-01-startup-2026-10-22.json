@@ -1,0 +1,75 @@
+{
+  "ticket": "RELAY-01",
+  "tool": "Codex",
+  "capturedAt": "2026-10-22T18:35:15.478Z",
+  "startedAt": "2026-10-22T18:16:37.483Z",
+  "startingCommit": "db6bfcc02496de5ee489b91b5741c46a35cd42c8",
+  "status": "implemented_awaiting_user_test",
+  "scope": "Public Relay only; Build and private ROVER packages deferred",
+  "protectedBaseline": "1b19c528d639134691289d9c0db38d82e9f277ff",
+  "checks": [
+    {
+      "command": "npm.cmd test",
+      "status": "PASS",
+      "tests": 38,
+      "failed": 0,
+      "detail": "Real isolated H-MEM feature and startup/restart checks; controlled sponsor adapter responses are not live verification."
+    },
+    {
+      "command": "npm.cmd run build",
+      "status": "PASS",
+      "detail": "TypeScript and Vite production assets"
+    },
+    {
+      "command": "npm.cmd run preflight -- --json",
+      "status": "PASS",
+      "live": false,
+      "memory": "Actual official H-MEM persistence/correction/forgetting in isolated temporary storage",
+      "sponsors": "UNVERIFIED; no calls"
+    },
+    {
+      "command": "npm.cmd run local -- status",
+      "status": "PASS",
+      "observedAt": "2026-10-22T18:32:16.105Z",
+      "postgres": {
+        "configured": true,
+        "reachable": true,
+        "authenticated": true,
+        "operation": "SELECT 1"
+      },
+      "relay": {
+        "reachable": true,
+        "legacy": true,
+        "managed": false
+      },
+      "supplier": {
+        "reachable": true,
+        "legacy": true,
+        "managed": false
+      }
+    },
+    {
+      "command": "npm.cmd run local -- start --sample --port=4183 --supplier-port=4184",
+      "status": "PASS",
+      "observedAt": "2026-10-22T18:33:56.979Z",
+      "mode": "offline_sample",
+      "executionBackend": "simulator",
+      "dataDirectory": ".data/sample",
+      "bothServicesManaged": true
+    }
+  ],
+  "failuresCorrected": [
+    "Initial TypeScript fixture typing error",
+    "Memory variable scope regression during startup resource cleanup",
+    "Existing outbox recovery test opened a concurrent writer; now closes first and retains deduplication assertions"
+  ],
+  "limits": [
+    "Existing live application/supplier processes were retained and need an intentional later restart to load the new backend.",
+    "No complete Nightshift-backed Relay workflow verified; remains RELAY-05.",
+    "Readiness records per-process adapter observations, not underlying model provenance or a complete workflow.",
+    "No provider/credential/container/source configuration changed; private rollback references retained.",
+    "Official H-MEM feature is inherited functionality, revalidated rather than newly authored here.",
+    "No deployment, publication or Build edits."
+  ],
+  "nextGate": "User tests RELAY-01 before RELAY-02 starts"
+}

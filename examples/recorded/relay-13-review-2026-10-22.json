@@ -1,0 +1,2700 @@
+{
+  "schemaVersion": "submission-review-1.0",
+  "ticket": "RELAY-13",
+  "tool": "Codex",
+  "capturedAt": "2026-10-23T04:53:36.782Z",
+  "scope": "Current working tree and all locally reachable Git refs. Audit capture precedes this report and final evidence-only note packaging. It does not assert remote publication or submission.",
+  "inputHead": "3661743f581ba5c9fc973b576f740ac8f0153d3b",
+  "baseline": {
+    "tag": "rover-relay-pre-event-2026-10-21",
+    "commit": "1b19c528d639134691289d9c0db38d82e9f277ff",
+    "preserved": true
+  },
+  "branch": "codex/relay-hackathon-2026",
+  "commits": [
+    {
+      "hash": "db6bfcc02496de5ee489b91b5741c46a35cd42c8",
+      "authorDate": "2026-10-22T11:10:46-07:00",
+      "commitDate": "2026-10-22T11:10:46-07:00",
+      "subject": "docs(relay): establish event workflow and checkpoint [RELAY-00]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "3a4c550ecd8ce2eeabd40210bfedc8afa53379b1",
+      "authorDate": "2026-10-22T11:38:41-07:00",
+      "commitDate": "2026-10-22T11:38:41-07:00",
+      "subject": "feat(relay): add safe local lifecycle and truthful readiness [RELAY-01]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "3add02eb3a07d35b9adfb98eacf09fa5e6a0c53b",
+      "authorDate": "2026-10-22T12:06:43-07:00",
+      "commitDate": "2026-10-22T12:06:43-07:00",
+      "subject": "feat(relay): scope candidate evidence and verify federation [RELAY-02]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "fb2195c8fb9b318b7ad4213cbc2a79277d39fbd9",
+      "authorDate": "2026-10-22T12:41:36-07:00",
+      "commitDate": "2026-10-22T12:41:36-07:00",
+      "subject": "feat(relay): clarify drafts and bound read coordination [RELAY-03]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "713f66bbdb1b16eb098cc99a33157b90045150aa",
+      "authorDate": "2026-10-22T15:24:29-07:00",
+      "commitDate": "2026-10-22T15:24:29-07:00",
+      "subject": "feat(relay): validate checked terms and bound semantic repair [RELAY-04]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "c8e012111ab41a2774bb627d2abd73c5c3563716",
+      "authorDate": "2026-10-22T15:44:36-07:00",
+      "commitDate": "2026-10-22T15:44:36-07:00",
+      "subject": "feat(relay): correlate Nightshift routing and verify live missions [RELAY-05]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "a9f1b2dd71036664d3693e721f1d7ac24fb65e0c",
+      "authorDate": "2026-10-22T16:17:03-07:00",
+      "commitDate": "2026-10-22T16:17:03-07:00",
+      "subject": "feat(relay): verify memory persistence and preference influence [RELAY-06]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "ddc2d53bab8ae2dff10185121af644577a0fc3f8",
+      "authorDate": "2026-10-22T16:51:44-07:00",
+      "commitDate": "2026-10-22T16:51:44-07:00",
+      "subject": "RELAY-07 verify atomic PostgreSQL approval and crash recovery",
+      "tool": "Codex"
+    },
+    {
+      "hash": "fef3023ad820449c57321b01c88630c89ac9a620",
+      "authorDate": "2026-10-22T17:11:07-07:00",
+      "commitDate": "2026-10-22T17:11:07-07:00",
+      "subject": "RELAY-08 harden disruptions and simulated task lifecycle",
+      "tool": "Codex"
+    },
+    {
+      "hash": "e48a0f7d532744483f546147d38a4c87304b227a",
+      "authorDate": "2026-10-22T17:36:08-07:00",
+      "commitDate": "2026-10-22T17:36:08-07:00",
+      "subject": "RELAY-09 make browser workflow and provenance accurate",
+      "tool": "Codex"
+    },
+    {
+      "hash": "d139f571a0bf48a4a2bec1501e7923e6e66c38e6",
+      "authorDate": "2026-10-22T18:11:12-07:00",
+      "commitDate": "2026-10-22T18:11:12-07:00",
+      "subject": "feat(relay): version approved intents and isolate execution [RELAY-10]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "1fff46cf6c406fb9099a8143a597161375210328",
+      "authorDate": "2026-10-22T21:08:51-07:00",
+      "commitDate": "2026-10-22T21:08:51-07:00",
+      "subject": "test(relay): measure public acceptance and sponsor evidence [RELAY-11]",
+      "tool": "Codex"
+    },
+    {
+      "hash": "3661743f581ba5c9fc973b576f740ac8f0153d3b",
+      "authorDate": "2026-10-22T21:36:56-07:00",
+      "commitDate": "2026-10-22T21:36:56-07:00",
+      "subject": "docs(relay): prepare reproducible judge setup and evidence [RELAY-12]",
+      "tool": "Codex"
+    }
+  ],
+  "committedDeltaThroughInputHead": "128 files changed, 42354 insertions(+), 807 deletions(-)",
+  "workingTree": {
+    "status": [
+      "M  README.md",
+      " M compose.live.yaml",
+      "A  docs/DEPENDENCIES.md",
+      "MM docs/DEVELOPMENT_LOG.md",
+      "AM docs/FINAL_REVIEW.md",
+      "M  docs/HACKATHON_REQUIREMENTS.md",
+      " M docs/LIVE_CONNECTIONS.md",
+      "A  docs/SUBMISSION_PACKET.md",
+      "MM docs/VERIFICATION.md",
+      "A  examples/recorded/relay-13-offline-evaluation-2026-10-22.json",
+      "A  examples/recorded/relay-13-review-2026-10-22.json",
+      "?? examples/recorded/live-verification-2026-10-21.json"
+    ],
+    "retainedInheritedPaths": [
+      "compose.live.yaml",
+      "docs/DEVELOPMENT_LOG.md",
+      "docs/LIVE_CONNECTIONS.md",
+      "docs/VERIFICATION.md",
+      "examples/recorded/live-verification-2026-10-21.json"
+    ],
+    "scope": "Four inherited modified tracked files plus an inherited untracked evidence file; this ticket does not stage or discard them. RELAY-13 edits, if already applied, are separately bounded by this ticket review.",
+    "interpretation": "Committed history alone omits working-tree content. New event code is not inferred from commit date or dirty status."
+  },
+  "sourceReview": {
+    "result": "pass",
+    "tracked": 185,
+    "untracked": 1,
+    "candidates": 186,
+    "scope": "Tracked and nonignored untracked candidates; ignored private configuration/runtime state is not read. Binary files are hashed, not credential-scanned; pattern scanning is not exhaustive secret detection.",
+    "findings": []
+  },
+  "sourceFiles": [
+    {
+      "path": ".cursor/rules/relay-boundaries.mdc",
+      "bytes": 721,
+      "sha256": "88ccd1697361ecc2eaac9f7a0ad6e7415a03788c108773e77bee6cac6a2ca9dc"
+    },
+    {
+      "path": ".cursor/rules/relay-event.mdc",
+      "bytes": 2479,
+      "sha256": "7ff37493a7fca74c85d63f48a5748c15bda2b413871ae9ea6fca49941cde0bb4"
+    },
+    {
+      "path": ".dockerignore",
+      "bytes": 69,
+      "sha256": "02aa0c55eeaa2fdee4b9b86af5da67999adbe3fd43bc2fa97db5c331c1008239"
+    },
+    {
+      "path": ".env.example",
+      "bytes": 1022,
+      "sha256": "0a36f00d03bbffbd7a15a6ced289a5384870ca41827b003c4b1e87c7f05f7675"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 72,
+      "sha256": "cc70f12c14a1bfdfa21e3939b688926e06ee329de1839b2505f703e26112ff30"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 628,
+      "sha256": "a586b085336dfb25d4bfd5c61ecb787ffe832c5401589eac1129b3b96d41997e"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 117,
+      "sha256": "7655c42cd3c081ab77113b562c303c89faf8a0ebafeebe5d3b288652f38322c3"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 1171,
+      "sha256": "3faa2a4af312eba357b9cb20bbe91a568bdf18a396d50e6a5f36f61ea0e16921"
+    },
+    {
+      "path": "Dockerfile",
+      "bytes": 444,
+      "sha256": "444618ba0c745604d95414f16f8e1bd1d7f78a2ba6c8bbef5fb7b1822aad0594"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8803,
+      "sha256": "03ee8d2c3f03a453f9095f5b4ae7beabc8bde16da2b807273252f6281208e34a"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 1459,
+      "sha256": "ad69c3495ae1a5501afeddf2479e24ca433866929ebf3907ebb3972386d151a4"
+    },
+    {
+      "path": "compose.live.yaml",
+      "bytes": 1024,
+      "sha256": "e724a8f6fe248f574316739373f309004353b271cc2aa7c0105f056abe279b7b"
+    },
+    {
+      "path": "compose.yaml",
+      "bytes": 219,
+      "sha256": "4c32159874844a123ea29207b617ce5294f218f20ebd5e9c81a34ebd4d4aba1a"
+    },
+    {
+      "path": "contracts/ApprovedExecutionIntent.schema.json",
+      "bytes": 6181,
+      "sha256": "20c8c7f418839d9aef02bda63acf45e029cf719e4d8209333e68864bbf25182e"
+    },
+    {
+      "path": "contracts/ExecutionCancel.schema.json",
+      "bytes": 798,
+      "sha256": "1ff107dd2ea1fa73387688623ac20ab52604c97630f2d7f9cd18906a12522df6"
+    },
+    {
+      "path": "contracts/ExecutionConflict.schema.json",
+      "bytes": 826,
+      "sha256": "a245e841636986faf5ae07340bec099956521962016f4eddeb9e43e2b979db2f"
+    },
+    {
+      "path": "contracts/ExecutionEvent.schema.json",
+      "bytes": 5870,
+      "sha256": "ffa9053d533376912dd1ed2d50d135f884802de9b9a9aca2170c846033eedb49"
+    },
+    {
+      "path": "contracts/ExecutionTaskState.schema.json",
+      "bytes": 4567,
+      "sha256": "584f88503f96a83d9f2e11a714b5aa9f4e7635a8929f1617cf3f9693e41b7d50"
+    },
+    {
+      "path": "contracts/README.md",
+      "bytes": 5085,
+      "sha256": "cbde0f2b2e100ece73df90553f1473d25c1b7194dea34d18cf758aff6b20492f"
+    },
+    {
+      "path": "contracts/execution.openapi.json",
+      "bytes": 29889,
+      "sha256": "a383df7677d66ae0af4e4e964003c0a7acb7e90fa12fc7c8d9e4c6d0bc0e3a2d"
+    },
+    {
+      "path": "contracts/mission-request.schema.json",
+      "bytes": 729,
+      "sha256": "39136cdf5dd433ceecad0a3c2f198c74566f61d9a8e85e0b6546e9002df223e5"
+    },
+    {
+      "path": "contracts/openapi.json",
+      "bytes": 52338,
+      "sha256": "c2fe04515b4ddeb9412a44096e3a1d825e7777c5358f00cfbf5cac6607cec6da"
+    },
+    {
+      "path": "db/source-reader.example.sql",
+      "bytes": 1445,
+      "sha256": "d45a353bffdc454204736cd0b6d961c601bd8fd792bcb37f3015e2e98f745471"
+    },
+    {
+      "path": "db/source-views.sql",
+      "bytes": 1793,
+      "sha256": "e6319ff68eed7ff1b7aead7e4cd533fb8b64b287b5584d9e67d0263ff6574e4e"
+    },
+    {
+      "path": "db/zetaris-sources.example.sql",
+      "bytes": 1392,
+      "sha256": "39df1bbc1b555499f3a1ab2026126b842c4850da0864c20b7d64cae408bdc800"
+    },
+    {
+      "path": "db/zetaris-views.sql",
+      "bytes": 1507,
+      "sha256": "94b3215ddf13128059789e5c04657d558f2335481708013ef1174bb1c0700c16"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 4614,
+      "sha256": "7e32f6b2bd19e11b0cb89f95c6a1f2ce4ca386174b59d66e877f0aa0f2f87a76"
+    },
+    {
+      "path": "docs/BASELINE.md",
+      "bytes": 2815,
+      "sha256": "fca5f2a5eadd6935d6474f0a0aacb2148f11048643c381ddd1985f0a9bc3ce30"
+    },
+    {
+      "path": "docs/BROWSER_EXPERIENCE.md",
+      "bytes": 6554,
+      "sha256": "598bb215bfc79741f559120a63ab62221908ff040d988d229677b26cf1406643"
+    },
+    {
+      "path": "docs/DEMO.md",
+      "bytes": 10251,
+      "sha256": "c8f83418666471a574e229b13aea682f047bd9b7a3c147bc31d25b3c8e657246"
+    },
+    {
+      "path": "docs/DEPENDENCIES.md",
+      "bytes": 3067,
+      "sha256": "7cc5ca407c4d185fa9c9776f797b2416ae90d7a9f965fa4939ac0a40b5cd6097"
+    },
+    {
+      "path": "docs/EVALUATION.md",
+      "bytes": 12751,
+      "sha256": "775e46a228d3c7d256f424ed09018387c6f8528c59cb893b872bf938747143c6"
+    },
+    {
+      "path": "docs/EVENT_WORKFLOW.md",
+      "bytes": 5600,
+      "sha256": "359f7e2a96b825f9fd0671d3499d2698d469eee6d1d098f46f20374218902790"
+    },
+    {
+      "path": "docs/EXECUTION_CONTRACT.md",
+      "bytes": 12356,
+      "sha256": "16d7d82b54d1dca641e14524364ea025c155e016a94740beb76467abfa4594eb"
+    },
+    {
+      "path": "docs/FINAL_REVIEW.md",
+      "bytes": 11661,
+      "sha256": "9e86d32834378d5a92e98c340002da4dd6b6a33d0ee2b08c78e06a21078be26d"
+    },
+    {
+      "path": "docs/HACKATHON_REQUIREMENTS.md",
+      "bytes": 8985,
+      "sha256": "47d91e14c93a5424709151107d42dcdf1974afe57d0ba9f0458563a042cd5bf9"
+    },
+    {
+      "path": "docs/INTAKE_AND_COORDINATION.md",
+      "bytes": 8256,
+      "sha256": "8bc5ef99cf802fc65e170b8eb4a47560f070fb84c567d19a1c91401bed5f0145"
+    },
+    {
+      "path": "docs/JUDGE_QUICKSTART.md",
+      "bytes": 6203,
+      "sha256": "37e91faa9a27d8f1a8e4d51adf8703dc92fb338b5b721e2f9ff25a4e9bfeb950"
+    },
+    {
+      "path": "docs/LIFECYCLE.md",
+      "bytes": 7550,
+      "sha256": "e6c13d0ce01abbd4d4bd769384ee5a8cf134e6c8aa21140e0f57c5e5038b53e3"
+    },
+    {
+      "path": "docs/LIVE_CONNECTIONS.md",
+      "bytes": 8237,
+      "sha256": "ee0659b367d4454b6615a8fec0c5b578f9f916d5d30eeb56c0cd28ca71a8ac92"
+    },
+    {
+      "path": "docs/LOCAL_SERVICES.md",
+      "bytes": 8997,
+      "sha256": "369e6f194fe25e0642807a30028b6b655bde231160922828a3b6d81d5a6188e2"
+    },
+    {
+      "path": "docs/MEMORY_SAFETY.md",
+      "bytes": 8529,
+      "sha256": "d13588a8ff439a6b3c526d0b0890b5ea70be3e9bbb5ce2504792cfe35ffbce0f"
+    },
+    {
+      "path": "docs/NIGHTSHIFT_VERIFICATION.md",
+      "bytes": 6169,
+      "sha256": "ab9567efdc7e3869cf535270aa12de808a7d002d8d338cb8fdb7f3928b93554b"
+    },
+    {
+      "path": "docs/PLANNER_CRITIC_REVIEW.md",
+      "bytes": 5979,
+      "sha256": "0efa4f2bb400ce1c72df07dda9fbd4772bfbe2d5d425ea02b41257fb5af04c90"
+    },
+    {
+      "path": "docs/POSTGRES_SAFETY.md",
+      "bytes": 6171,
+      "sha256": "0dbaa144f7b352c82e243a20d445152902f5ce15a62851418eaf69e142a9bfab"
+    },
+    {
+      "path": "docs/PRIOR_WORK.md",
+      "bytes": 1889,
+      "sha256": "6364defc484a9c7883fac506302f0d40fa098ef1cc7c68de53b0bff3e1e4fb35"
+    },
+    {
+      "path": "docs/SOURCE_EVIDENCE.md",
+      "bytes": 9145,
+      "sha256": "59de53c272f2e81e8c1558be7085893b2f93937bb747a14f95926aa6b57df2af"
+    },
+    {
+      "path": "docs/SOURCE_MANIFEST.json",
+      "bytes": 11447,
+      "sha256": "65a01d69a10b75e2e4f30dfa933fc3146f3a6718c24ae2ffcc26f3587448eaf1"
+    },
+    {
+      "path": "docs/SPONSOR_SETUP.md",
+      "bytes": 11880,
+      "sha256": "5d33589cb5e429a3d927b12924806714cbe70cce2fc90bbaf3aeda1a16a61cb7"
+    },
+    {
+      "path": "docs/SUBMISSION_PACKET.md",
+      "bytes": 15824,
+      "sha256": "2f7bbe7a4f05fc9896f0f8f20818619298accd39a61311f7bd5e0d012175f956"
+    },
+    {
+      "path": "docs/demo/relay-12-deck.pptx",
+      "bytes": 113349,
+      "sha256": "70fddf3b349ba3fd46d9758b60b5597c7ff5437c316fe4104bab3dcaf677298a"
+    },
+    {
+      "path": "docs/demo/relay-12-preview.png",
+      "bytes": 213171,
+      "sha256": "6700fd8f7cf0eac3a7a737aefcc70dc804c189898f5974f81e2cdc2ef72e4c57"
+    },
+    {
+      "path": "docs/screenshots/iteration-one.png",
+      "bytes": 134692,
+      "sha256": "d4998a9916e92a81187c508d96ebc4f3834fe8617c9b1fb42d5e029b3669dedc"
+    },
+    {
+      "path": "docs/screenshots/preview.png",
+      "bytes": 65996,
+      "sha256": "227456143607d1f7f55052f30a8071fe00d5f637b860f05ddf45275139d6e37e"
+    },
+    {
+      "path": "examples/recorded/disruption.json",
+      "bytes": 41262,
+      "sha256": "c3de1f8fd1c98170538b3c3ef67039c13956f58961309944ad9efcf07a0999b0"
+    },
+    {
+      "path": "examples/recorded/disruption.jsonl",
+      "bytes": 9121,
+      "sha256": "1f373ea2a1f93f2eaf43f25d92f20f311374597b0ed67c16860991f264322764"
+    },
+    {
+      "path": "examples/recorded/feasible.json",
+      "bytes": 20038,
+      "sha256": "3500d236b387109db76cae19dcb3ad912429cd69df2ac919ada2b1ece85d7ab4"
+    },
+    {
+      "path": "examples/recorded/feasible.jsonl",
+      "bytes": 3858,
+      "sha256": "31743d914f5b86f95f80f6b7756eb551b49b491503281ecb8039f7ad8a7300ea"
+    },
+    {
+      "path": "examples/recorded/infeasible.json",
+      "bytes": 21106,
+      "sha256": "c30f657024728186e358e4d90509b80ab57a4e1cc576fe891492b3c493d70a29"
+    },
+    {
+      "path": "examples/recorded/infeasible.jsonl",
+      "bytes": 5160,
+      "sha256": "2af1d25712cbf1068e687244f46b420934d10cd02e1c1ddf1f504830e5b4f52d"
+    },
+    {
+      "path": "examples/recorded/live-verification-2026-10-21.json",
+      "bytes": 7249,
+      "sha256": "39e0ed51249a6c221f00c9d966619f528dbbbb21ac5ab012d395dea3ee276787"
+    },
+    {
+      "path": "examples/recorded/relay-00-checkpoint-2026-10-22.json",
+      "bytes": 2860,
+      "sha256": "b97dda6290e5f4cc6f777e60a9d35fb8a0833b88ffa79a3c0bd9900b9a5599cf"
+    },
+    {
+      "path": "examples/recorded/relay-01-startup-2026-10-22.json",
+      "bytes": 2770,
+      "sha256": "f46a433054189eb8bc0129418be6f47401648cebf9e781a2ff2567e32983af5e"
+    },
+    {
+      "path": "examples/recorded/relay-02-federation-2026-10-22.json",
+      "bytes": 6889,
+      "sha256": "e60efb689e5ff14504842cb9eab6a8bd78819106237b0e5da9388916f53d700d"
+    },
+    {
+      "path": "examples/recorded/relay-03-intake-2026-10-22.json",
+      "bytes": 6172,
+      "sha256": "de7a788efeb99c7e9e0e7af1d4aa602fa176a35c0a6609863d5589f4ca7152e5"
+    },
+    {
+      "path": "examples/recorded/relay-04-browser-2026-10-22.json",
+      "bytes": 3676,
+      "sha256": "b707be5e89d647521d942700cf931c7e718d997f51343e4d4e2765a7bb229b44"
+    },
+    {
+      "path": "examples/recorded/relay-04-controlled-review-2026-10-22.json",
+      "bytes": 3678,
+      "sha256": "a8469b663fc48b1fc6a312597f90842fb95530884c1b44f1e059699e95887401"
+    },
+    {
+      "path": "examples/recorded/relay-05-nightshift-discovery-2026-10-22.json",
+      "bytes": 2400,
+      "sha256": "8c7609570a8572ffe2552021035c9f35e218c4cb20082f7b7ba29a5e213e4eb7"
+    },
+    {
+      "path": "examples/recorded/relay-05-nightshift-mission-2026-10-22.json",
+      "bytes": 6750,
+      "sha256": "df41b4a4ae2e9109b882355d7a9fa27c98e5ab50cfcbe12acac7f5179708b131"
+    },
+    {
+      "path": "examples/recorded/relay-06-memory-2026-10-22.json",
+      "bytes": 3639,
+      "sha256": "a3ab28eb1a78194db16626e2ba8ec9bea3d5ae635d71e13b3d3fad50975058c4"
+    },
+    {
+      "path": "examples/recorded/relay-06-memory-failures-2026-10-22.json",
+      "bytes": 3369,
+      "sha256": "80f85a40dac674fb7f00985ee5af8f61b9fc06d1bcd843c1f18018bd37724291"
+    },
+    {
+      "path": "examples/recorded/relay-07-postgres-2026-10-22.json",
+      "bytes": 4279,
+      "sha256": "776d50828a7f4f4b4304e60d1804cd8ee887eff5b1fd634c1b18954f97a6d531"
+    },
+    {
+      "path": "examples/recorded/relay-08-lifecycle-2026-10-22.json",
+      "bytes": 16977,
+      "sha256": "cc02662a3f54305ead5a50a5f9f6061920f494cd5b4af9c8c62d6d159f71c768"
+    },
+    {
+      "path": "examples/recorded/relay-09-browser-2026-10-22.json",
+      "bytes": 5652,
+      "sha256": "614b8aa942269db0cc16decd39e311aad6920d6ed20bf1a2059358c114fc1b11"
+    },
+    {
+      "path": "examples/recorded/relay-09-comparison.png",
+      "bytes": 70833,
+      "sha256": "8f2dbf8de55eb303a92a9897eeb0c64b376dc2755df1f746b8e0c1d165d40309"
+    },
+    {
+      "path": "examples/recorded/relay-09-dependency.png",
+      "bytes": 70888,
+      "sha256": "d5da291c6966e9a30e31e2a4b89c9abeec205739d4c5c4ddba4d58a92d1079bb"
+    },
+    {
+      "path": "examples/recorded/relay-09-mobile.png",
+      "bytes": 33085,
+      "sha256": "7ef18f2910c2672df0b62f5d84866ead72d551183d873fbaafce6312c9a499c9"
+    },
+    {
+      "path": "examples/recorded/relay-09-retry.png",
+      "bytes": 63383,
+      "sha256": "e8b453c84ea9382cad83d67a26a2dc6fecb7cbe5fab62231add8952166d02cc8"
+    },
+    {
+      "path": "examples/recorded/relay-10-execution-2026-10-22.json",
+      "bytes": 7759,
+      "sha256": "ff931136aecd1e9b32683ce6dbe90f233f91c9598a361a2a80aeb47de7bfb3bb"
+    },
+    {
+      "path": "examples/recorded/relay-11-acceptance-2026-10-22.json",
+      "bytes": 7247,
+      "sha256": "3ba810a33bbabac8b24794bcf06459e86100e4ca1390da67349d960713825e24"
+    },
+    {
+      "path": "examples/recorded/relay-11-browser-2026-10-22.json",
+      "bytes": 4358,
+      "sha256": "6bb8a5433cca58a8fcf452fda77534f85fd8ca007829f8632850ae93ac1ac434"
+    },
+    {
+      "path": "examples/recorded/relay-11-browser-comparison.jpg",
+      "bytes": 72372,
+      "sha256": "1b913726ba9d14ee69e68582f3d66c7633dbd5d390714764170a8bb30415ac10"
+    },
+    {
+      "path": "examples/recorded/relay-11-browser-failure.jpg",
+      "bytes": 71650,
+      "sha256": "65e4daa98211763bff82b71929e043b7a5d9a6d4d924bd674242475f0bcf6670"
+    },
+    {
+      "path": "examples/recorded/relay-11-browser-history.jpg",
+      "bytes": 58645,
+      "sha256": "3d72091d48d8db799e8b2c30ce6213f940c58bc2255fe2537f704c7f3fbf4ec5"
+    },
+    {
+      "path": "examples/recorded/relay-11-live-evaluation-2026-10-22.json",
+      "bytes": 316678,
+      "sha256": "8849a4303f575ebbeaa163197b6512500b8658ac125df19e336ec3b8af3f318e"
+    },
+    {
+      "path": "examples/recorded/relay-11-offline-evaluation-2026-10-22.json",
+      "bytes": 307182,
+      "sha256": "f1bbd727c7982db00011ec7934b6c1ac7a99c075c8cfdd14b3dfea80341ecd90"
+    },
+    {
+      "path": "examples/recorded/relay-12-setup-2026-10-22.json",
+      "bytes": 270857,
+      "sha256": "f9eeecedb6297ecde89cbc69987c3d0f5db9db6c2fedf45f70000d45d4c15465"
+    },
+    {
+      "path": "examples/recorded/relay-13-offline-evaluation-2026-10-22.json",
+      "bytes": 314343,
+      "sha256": "548d62ed249288573be6c745a359f8e590186c9afc7004e937f3d349edbf257b"
+    },
+    {
+      "path": "metadata.json",
+      "bytes": 1302,
+      "sha256": "53eeec8dcb538cfeba82b719eac91762868a322c66507d40fcae5213c28598b8"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 83997,
+      "sha256": "2d3ac468c37f1b4566d6efe931cb9c58c296c0ae6d3930f89eebb3f9275abd33"
+    },
+    {
+      "path": "package.json",
+      "bytes": 1715,
+      "sha256": "3a88311d9ada2934270558b64d5c70fbe17907ed92d15c1e9c83aa51ce5f8717"
+    },
+    {
+      "path": "scripts/baseline-manifest.mjs",
+      "bytes": 1692,
+      "sha256": "960279a6459bf848eae5fb310a10211a1d003153d67f772b902ae191bbcd5dac"
+    },
+    {
+      "path": "scripts/check-public-source.mjs",
+      "bytes": 378,
+      "sha256": "59f9355e9223e2365fd8fae376079401952e85d58fd1ea79580e8899be2b0c22"
+    },
+    {
+      "path": "scripts/contracts.ts",
+      "bytes": 13368,
+      "sha256": "a314b78ae453f6eac40313d454502586332cefd996d4cb9b5c146698c3260171"
+    },
+    {
+      "path": "scripts/evaluate.ts",
+      "bytes": 15054,
+      "sha256": "579581b10962edf87fece0df8f83b2ce4b46f5f3c984f06b648d76eae86cbe95"
+    },
+    {
+      "path": "scripts/evaluation/fetch-metrics.mjs",
+      "bytes": 2378,
+      "sha256": "c593a152e95bcf1702e1afa8a4e3a2a74c88dccc8d2697968f6e55848d502630"
+    },
+    {
+      "path": "scripts/evaluation/matrix.ts",
+      "bytes": 7120,
+      "sha256": "d2820e99b7316ce7a451d34f66bc0e44fb9d2ee5d06474bac4f7ddc4577af1fa"
+    },
+    {
+      "path": "scripts/evaluation/reporter.mjs",
+      "bytes": 1848,
+      "sha256": "ad096ab6d43c07bd47d5f6ee543ab75296f77b95f9c129398fa03efd2f1adf51"
+    },
+    {
+      "path": "scripts/evaluation/sample.ts",
+      "bytes": 10109,
+      "sha256": "f5d963a203d65e40a7516c5bbbd68434e90146f16de4731270ea285d33fef80a"
+    },
+    {
+      "path": "scripts/examples.ts",
+      "bytes": 2979,
+      "sha256": "1d1c516612a874b524f5fad2c6ea59677ecd5edb2da01214ff283caf7017858b"
+    },
+    {
+      "path": "scripts/judge-setup.ts",
+      "bytes": 8108,
+      "sha256": "5733a984569c840569f84580257d3f6e2aa73c54bff85d272b3aaf3251b9f965"
+    },
+    {
+      "path": "scripts/judge-smoke.ts",
+      "bytes": 3913,
+      "sha256": "a0afbc5e350b24bea4df54bd62d3f64cc576546961aa3cfa28cc80b23b0e0f71"
+    },
+    {
+      "path": "scripts/local.ts",
+      "bytes": 15458,
+      "sha256": "1fcf718b2002f9ea5ca0d8a62b891e0ea2462059c867cd12f713665e52f77144"
+    },
+    {
+      "path": "scripts/nightshift.ts",
+      "bytes": 9384,
+      "sha256": "00138f76ddef66277e97310fdddac533da9f1afc396dfc4cd839c77e314cb853"
+    },
+    {
+      "path": "scripts/postgres.ts",
+      "bytes": 5109,
+      "sha256": "804704b18c75944d7104e57187d6b9d381b7bae729b21dfa5191d6d1044f7502"
+    },
+    {
+      "path": "scripts/preflight.ts",
+      "bytes": 1227,
+      "sha256": "e55cb1cd15d8f526ececeaa56cf5cdfccb308806ce92cd742dbfa10005386478"
+    },
+    {
+      "path": "scripts/public-review.ts",
+      "bytes": 4044,
+      "sha256": "e8e96c44f643a5a0cb64ae59f7bfb3646b28bf97ffc42b0c2e82c5704fd6cc57"
+    },
+    {
+      "path": "scripts/vendor-hmem.mjs",
+      "bytes": 1725,
+      "sha256": "8d8e6858f43060343f1cd0cfff5dcac4cfafd0d0abdedc4a7e84ee7891d15c31"
+    },
+    {
+      "path": "scripts/verify-hmem.mjs",
+      "bytes": 1648,
+      "sha256": "be8fc6df33f8dbbae30b66434f540dc4814565b2778d3094be1a9901404071d0"
+    },
+    {
+      "path": "src/adapters/data.ts",
+      "bytes": 13947,
+      "sha256": "a77b4c3af192be78839fd3ee8808e18496f7d0f664d00a98b9b433729528809c"
+    },
+    {
+      "path": "src/adapters/http-executor.ts",
+      "bytes": 14297,
+      "sha256": "1dd24b351da832d595f9b8bb6a097f2cab65d0b69e170cf4fc7bfbd11b6121b6"
+    },
+    {
+      "path": "src/adapters/simulator.ts",
+      "bytes": 7378,
+      "sha256": "dc5489ada34c08d7ece8650bb9ab143cee35f80d78abae088df10a595dc37e39"
+    },
+    {
+      "path": "src/agents.ts",
+      "bytes": 15178,
+      "sha256": "e061511a46f658305e0f959ae3227315df29e3377c5b4a9860568c5e50578c85"
+    },
+    {
+      "path": "src/app.ts",
+      "bytes": 15427,
+      "sha256": "f15a3ada3666cdbf5e57ddb2d9755884ae73055c9b453c950ed0dbab86c3a045"
+    },
+    {
+      "path": "src/budget.ts",
+      "bytes": 3273,
+      "sha256": "23fe4b0cdb9290daac4e1944fdcc3ee86640de0e26693f693aa243935d27b847"
+    },
+    {
+      "path": "src/changes.ts",
+      "bytes": 4823,
+      "sha256": "ff019193f621bdf5262b9de82388320be4cc7fff829e627cc134b7806cea4d6e"
+    },
+    {
+      "path": "src/config.ts",
+      "bytes": 1868,
+      "sha256": "4db6d2a34a43eb86a74aeea51e08a41c04d4f693b2cc8763ad2c8d7e939abeec"
+    },
+    {
+      "path": "src/coordinator.ts",
+      "bytes": 6908,
+      "sha256": "574b421b43542cec0cab2669d0f28a3b77424374a9ff38d305d2124e8887c23b"
+    },
+    {
+      "path": "src/domain.ts",
+      "bytes": 9813,
+      "sha256": "27537b4abc12114480a19a709b66020dfe9ec5d480586a65430f4aae516ed4c9"
+    },
+    {
+      "path": "src/evidence.ts",
+      "bytes": 2810,
+      "sha256": "01f43d8740a19ee42d757e2f950f0f2a33ac50f522ff86657cc1d9c50568aa72"
+    },
+    {
+      "path": "src/execution-contract.ts",
+      "bytes": 7010,
+      "sha256": "24f6bc46803bc3426c08537408d5c944150029423a3d4ed71df43bca37ea374e"
+    },
+    {
+      "path": "src/execution.ts",
+      "bytes": 1994,
+      "sha256": "a36d419fc428663ca496cfa71ee40b6e1c63bde03ed5d4b2fb27c344ea668220"
+    },
+    {
+      "path": "src/fixtures.ts",
+      "bytes": 3801,
+      "sha256": "f8e6adf35f4a7d1fa030bebb20a76f4250a2d7c1ce641291f961c979bb41cde1"
+    },
+    {
+      "path": "src/intake.ts",
+      "bytes": 5094,
+      "sha256": "3a62992be6447d9972e999cbb69744dc98fe0f123798b74c92976de1cdeb141f"
+    },
+    {
+      "path": "src/lifecycle.ts",
+      "bytes": 3643,
+      "sha256": "79a371e0910b1ee6a3f022d1cd858543ae11b135674f346183957794aa56492c"
+    },
+    {
+      "path": "src/memory-storage.ts",
+      "bytes": 11563,
+      "sha256": "bf7a86d64bd07f344cc16e276120b2894e4b94d671829008529f48e53be60717"
+    },
+    {
+      "path": "src/memory.ts",
+      "bytes": 4227,
+      "sha256": "47a3fba687f7ec6320b86222d90231e452d97b3b091010570eefc2afcb809c15"
+    },
+    {
+      "path": "src/order.ts",
+      "bytes": 270,
+      "sha256": "6cea4f482e0c7b0a2472e8635987e1be701f07691d4186b6765c6c1de662a75d"
+    },
+    {
+      "path": "src/preflight.ts",
+      "bytes": 11981,
+      "sha256": "978651103601ab7a4fa3befc85a7d31c1c7a1e36541dd90e0e9c3a4e26bf29b1"
+    },
+    {
+      "path": "src/readiness.ts",
+      "bytes": 6522,
+      "sha256": "82f6ea031cfae1dc166199ecbd7507bd27be48d9c68ff7fb6090301e22c369ec"
+    },
+    {
+      "path": "src/review.ts",
+      "bytes": 7358,
+      "sha256": "6dedca2d79f6b35bb2bd3488abfcbb7a02d930c0871c6b4c6bf6a90f38af46c2"
+    },
+    {
+      "path": "src/runtime-proof.ts",
+      "bytes": 3605,
+      "sha256": "bcf7979476c49612b1c11a61236163fc6d75b724673614e4dc85c4e5ebd56390"
+    },
+    {
+      "path": "src/server.ts",
+      "bytes": 1133,
+      "sha256": "34b54df241a26e9909797a98da65e4e3438a5d113c0f75177c543f021773209d"
+    },
+    {
+      "path": "src/service.ts",
+      "bytes": 26293,
+      "sha256": "e6c25baf056b4a3fe3bbe753914bff09a91b293eb5ac0b74d59553a95d3483fb"
+    },
+    {
+      "path": "src/store.ts",
+      "bytes": 4765,
+      "sha256": "c528ba3b22bf96dd8ca9641f9ba4fcf1edfa2a6e514265c31327ef5255d40d2f"
+    },
+    {
+      "path": "src/types.ts",
+      "bytes": 6932,
+      "sha256": "8b270c458d00b2c1d455ab4e63fd47070b7dc438f8858439c822a150be252932"
+    },
+    {
+      "path": "supplier-fixtures/server.ts",
+      "bytes": 3904,
+      "sha256": "2fc9f355f8a3c24fdcfad38f1c720e6a6902db9a9637fcd7ecc3fc31fb180a0d"
+    },
+    {
+      "path": "tests/adapters.test.ts",
+      "bytes": 11510,
+      "sha256": "6bc799fb2b1eba8476098588e5874ff721da021dd759decce60a43b9a3380c69"
+    },
+    {
+      "path": "tests/evaluation.test.ts",
+      "bytes": 6380,
+      "sha256": "354b96ab98bab701a12a522baa7f89324c5795321662bce78ee3639ec853e838"
+    },
+    {
+      "path": "tests/evidence.test.ts",
+      "bytes": 12631,
+      "sha256": "ca1de9f9cb8a07d13235d94472df4a9e4a25146e58e2d205c85e5b33a41d127a"
+    },
+    {
+      "path": "tests/execution.test.ts",
+      "bytes": 17527,
+      "sha256": "7185a6a2f63bb545c3fc5cca32cc7dfb052287ce22850b96cc40c2c055769a9a"
+    },
+    {
+      "path": "tests/helpers/browser-server.ts",
+      "bytes": 3373,
+      "sha256": "bad326a7c9a40b551d452f0ef6c9befcdb2dcb3129e71d9e4aab8622f7af3b06"
+    },
+    {
+      "path": "tests/helpers/gateway-fixture.ts",
+      "bytes": 12347,
+      "sha256": "a0ef4482a251a3dcdf3b49e978a37247310e0db884cca0782a5f0ae1d849e6fa"
+    },
+    {
+      "path": "tests/helpers/memory-worker.ts",
+      "bytes": 8650,
+      "sha256": "c0c15d823f03a4a701ff3748b0c69fd37e91cbed0146feceb25fc3e363d456f1"
+    },
+    {
+      "path": "tests/helpers/postgres-crash-worker.ts",
+      "bytes": 1559,
+      "sha256": "b2b7fdf316016f2e1a31a31fea9e6330b4e3f646db7e373ed6578ecdb4a109a9"
+    },
+    {
+      "path": "tests/inference.test.ts",
+      "bytes": 7614,
+      "sha256": "002074c3965f0eaf159f81bc9f1940ae6ff61b6f8eb4b97d5dcfb15970a16dc9"
+    },
+    {
+      "path": "tests/intake.test.ts",
+      "bytes": 17240,
+      "sha256": "0e6095b333197634ca7cd255a15ff01acf36b9d9e2c53fc7d8ba1891cdcd696b"
+    },
+    {
+      "path": "tests/lifecycle.test.ts",
+      "bytes": 24926,
+      "sha256": "4cf62b8434ca8912f650f1bd33e45ffb733421b4cf2ab340a2183234a89c5009"
+    },
+    {
+      "path": "tests/memory.test.ts",
+      "bytes": 13976,
+      "sha256": "adb6524b5171945268991d490851e0adc5365e84a41c69062d3a4dcac8eac1c3"
+    },
+    {
+      "path": "tests/nightshift.test.ts",
+      "bytes": 9369,
+      "sha256": "01c73b48a58c95305827431bffc1afe870d91481dad22c331386603dcdb52efd"
+    },
+    {
+      "path": "tests/postgres.integration.ts",
+      "bytes": 29583,
+      "sha256": "52b8201faaab3bdd965bbda438c5dac4958a09017c5b67b74be311d3e1f242c6"
+    },
+    {
+      "path": "tests/presentation.test.tsx",
+      "bytes": 6536,
+      "sha256": "ec93798199459e043021daba04e3f4c525962c471948431f72544f6cbd178d37"
+    },
+    {
+      "path": "tests/review.test.ts",
+      "bytes": 12753,
+      "sha256": "9e97d03c14ae2839929c9e534c90f22d5ef5a486db460fb3e71013c415fe5cfc"
+    },
+    {
+      "path": "tests/startup.test.ts",
+      "bytes": 14282,
+      "sha256": "07675a8707e28950d8508a31515a8f61c151af277b20e2dd3253fd2c1ccd95f8"
+    },
+    {
+      "path": "tests/workflow.test.ts",
+      "bytes": 15629,
+      "sha256": "f3e20bb9468c081d75499c0bc4357b5bdbf11c08437a4ff6c25b0a4a8aa2a038"
+    },
+    {
+      "path": "tsconfig.json",
+      "bytes": 463,
+      "sha256": "93fb1b374b0ce169d0e432004cee62c51b10a5b50faf6d6656ad1f5d5b92d373"
+    },
+    {
+      "path": "ui/env.d.ts",
+      "bytes": 38,
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    },
+    {
+      "path": "ui/index.html",
+      "bytes": 586,
+      "sha256": "cb91c2df5ab78895c055e07cdf45ce7cbdf6fc4bba1fb7b4b918c18c6f3b6b63"
+    },
+    {
+      "path": "ui/intake.tsx",
+      "bytes": 9235,
+      "sha256": "136db6b677afcf4d957615eeba265228b4d33010d8b4ef27f54c81d51f575070"
+    },
+    {
+      "path": "ui/main.tsx",
+      "bytes": 62550,
+      "sha256": "0add374b8447ee8651b160ded8eae4dd658bdf8634e83ad0fce03da8e1be2c82"
+    },
+    {
+      "path": "ui/presentation.ts",
+      "bytes": 3359,
+      "sha256": "0f2d7ebc040289098930a4f056424063e112de74a4391b7ee237d0c3565c3fb0"
+    },
+    {
+      "path": "ui/public/relay.svg",
+      "bytes": 308,
+      "sha256": "4e15cf6963efc3b5f52c7f692ca578f3ffb9ac32a6f2d978fbcc0d11acd3c3ae"
+    },
+    {
+      "path": "ui/receipt-details.tsx",
+      "bytes": 4275,
+      "sha256": "092cc5c9e4fa6f9684354893280adb5c75a97a55ffca9ac3a6e01bcb968ae0ca"
+    },
+    {
+      "path": "ui/request.ts",
+      "bytes": 2064,
+      "sha256": "8274c28316336433893d3cbda960b61c3bfd93363bd2dcb178574bbe9642a041"
+    },
+    {
+      "path": "ui/style.css",
+      "bytes": 24830,
+      "sha256": "6aba74c45490a64368e1b253d046c06b49eb21dcaa4c2d663c3b0fd2f0828dc6"
+    },
+    {
+      "path": "vendor/hmem/INTEGRITY.json",
+      "bytes": 1828,
+      "sha256": "680cd7aafabc0b1d43e93851f5e80cfa55211a2896ffd390999f24a00afdb6c1"
+    },
+    {
+      "path": "vendor/hmem/LICENSE",
+      "bytes": 11339,
+      "sha256": "63e29fc8231b53757a77fbc371071c91d768621efa1e68b1d9ff8d1bb7c4a0ef"
+    },
+    {
+      "path": "vendor/hmem/UPSTREAM.json",
+      "bytes": 202,
+      "sha256": "257eb80e0aa8c4b4bbe3b8313b97e616f55e89fd92d785893e5e023398baae6d"
+    },
+    {
+      "path": "vendor/hmem/conformance/README.md",
+      "bytes": 1190,
+      "sha256": "cf44fd4d3c9a8af0c46157bb015dead8d4ccb2d000c2358e7da1e4cecfbc4c39"
+    },
+    {
+      "path": "vendor/hmem/conformance/runner.ts",
+      "bytes": 9740,
+      "sha256": "d6724860761c4846a0bce3080d25115bcb0ba1d9d0d2e933438f5683a7a9b7c5"
+    },
+    {
+      "path": "vendor/hmem/conformance/vectors/vectors.json",
+      "bytes": 3918,
+      "sha256": "10afb5a07233466576ba6feb0d88408488909ba2721ee9157fdb932132917029"
+    },
+    {
+      "path": "vendor/hmem/package.json",
+      "bytes": 409,
+      "sha256": "982b032b671667f6c3c2f857ab0791a8f78f9574957410dcd1d0a65119cde18d"
+    },
+    {
+      "path": "vendor/hmem/src/conflictDetection.ts",
+      "bytes": 4672,
+      "sha256": "432e8b86ed0b5883d435e5ab4a12160d1f40d194cbdb4c119d3b710cbb0301a3"
+    },
+    {
+      "path": "vendor/hmem/src/dreaming.ts",
+      "bytes": 5503,
+      "sha256": "d12594d667ec068690c6b81e020cd62ade91671316a1ab9b529259304aceb009"
+    },
+    {
+      "path": "vendor/hmem/src/embeddings.ts",
+      "bytes": 1599,
+      "sha256": "89433327ee1075a8049bc8518cdf5cabf51ad67802e192266841cdee727b6d10"
+    },
+    {
+      "path": "vendor/hmem/src/index.ts",
+      "bytes": 2907,
+      "sha256": "9c481889afcdd70086d3bb3470842fa2330215e4d7760d826d103accdf8c1cdf"
+    },
+    {
+      "path": "vendor/hmem/src/memoryMining.ts",
+      "bytes": 3481,
+      "sha256": "6072693d654ea1c34a9adbf6ce80101eeb1eeb56273d264f6ceb4859ffde6562"
+    },
+    {
+      "path": "vendor/hmem/src/memoryRetrieval.ts",
+      "bytes": 5818,
+      "sha256": "4fe120b1b64fe7225b9b28fda59514c114de9e885d22c5bf0aa035788b6d629d"
+    },
+    {
+      "path": "vendor/hmem/src/memoryStore.ts",
+      "bytes": 7771,
+      "sha256": "a1eac8de8c0fde0e503e1212f3cb98295a661c2a8bad93ad82e51985885e6fd0"
+    },
+    {
+      "path": "vendor/hmem/src/sleepCycle.ts",
+      "bytes": 5127,
+      "sha256": "3ce0d4f3233d0ad7c133a2cbaf39b6122467022e0aa378a160a0d463e2264cef"
+    },
+    {
+      "path": "vendor/hmem/src/trustLedger.ts",
+      "bytes": 1630,
+      "sha256": "263253dd3342c488ce773d7e728d77aec983c1833873602b59ce1a6c7999e20e"
+    },
+    {
+      "path": "vendor/hmem/src/types.ts",
+      "bytes": 4070,
+      "sha256": "becb504870a67646a20a421ffe04d8732db63418393423d2186c074b182f54c7"
+    },
+    {
+      "path": "vite.config.ts",
+      "bytes": 253,
+      "sha256": "989f0912ef66546580431b616ab8e30196c052999696ffde749b82f95c83fa1a"
+    }
+  ],
+  "sourceExclusions": [
+    "Development/verification logs receive final evidence notes after capture; final local commit and external source-bundle inventory cover their exact delivered bytes.",
+    "This audit report cannot hash itself. The final external bundle inventory covers it."
+  ],
+  "historyReview": {
+    "reachableObjects": 437,
+    "blobs": 296,
+    "textBlobs": 285,
+    "findings": [],
+    "scope": "Recognized credential/private-key patterns in all reachable non-NUL Git blobs. Binary blobs are not text-scanned; no exhaustive secret-absence or reflog claim."
+  },
+  "links": {
+    "localTargetsChecked": 160,
+    "missing": [],
+    "externalScope": "Official event expanded rules and signed-out repository/default commit/all-branches UI read during RELAY-13. No authenticated HackOS form or unpublished event asset URLs verified."
+  },
+  "dependencies": {
+    "lockfileVersion": 3,
+    "direct": [
+      {
+        "name": "fastify",
+        "kind": "runtime",
+        "declared": "5.12.7",
+        "locked": "5.12.7",
+        "license": "MIT"
+      },
+      {
+        "name": "pg",
+        "kind": "runtime",
+        "declared": "8.23.1",
+        "locked": "8.23.1",
+        "license": "MIT"
+      },
+      {
+        "name": "react",
+        "kind": "runtime",
+        "declared": "19.3.1",
+        "locked": "19.3.1",
+        "license": "MIT"
+      },
+      {
+        "name": "react-dom",
+        "kind": "runtime",
+        "declared": "19.3.1",
+        "locked": "19.3.1",
+        "license": "MIT"
+      },
+      {
+        "name": "tsx",
+        "kind": "runtime",
+        "declared": "4.23.15",
+        "locked": "4.23.15",
+        "license": "MIT"
+      },
+      {
+        "name": "zod",
+        "kind": "runtime",
+        "declared": "4.6.7",
+        "locked": "4.6.7",
+        "license": "MIT"
+      },
+      {
+        "name": "@types/node",
+        "kind": "development",
+        "declared": "^24.0.0",
+        "locked": "24.19.2",
+        "license": "MIT"
+      },
+      {
+        "name": "@types/pg",
+        "kind": "development",
+        "declared": "^8.15.0",
+        "locked": "8.23.1",
+        "license": "MIT"
+      },
+      {
+        "name": "@types/react",
+        "kind": "development",
+        "declared": "^19.0.0",
+        "locked": "19.3.0",
+        "license": "MIT"
+      },
+      {
+        "name": "@types/react-dom",
+        "kind": "development",
+        "declared": "^19.0.0",
+        "locked": "19.3.0",
+        "license": "MIT"
+      },
+      {
+        "name": "prettier",
+        "kind": "development",
+        "declared": "3.9.10",
+        "locked": "3.9.10",
+        "license": "MIT"
+      },
+      {
+        "name": "typescript",
+        "kind": "development",
+        "declared": "7.0.2",
+        "locked": "7.0.2",
+        "license": "Apache-2.0"
+      },
+      {
+        "name": "vite",
+        "kind": "development",
+        "declared": "8.3.4",
+        "locked": "8.3.4",
+        "license": "MIT"
+      }
+    ],
+    "lockedPackages": 161,
+    "missingLicenseMetadata": [],
+    "withoutRegistryIntegrity": [],
+    "packages": [
+      {
+        "path": "node_modules/@esbuild/aix-ppc64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/android-arm",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/android-arm64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/android-x64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/darwin-arm64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/darwin-x64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/freebsd-arm64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/freebsd-x64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-arm",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-arm64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-ia32",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-loong64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-mips64el",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-ppc64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-riscv64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-s390x",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/linux-x64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/netbsd-arm64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/netbsd-x64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/openbsd-arm64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/openbsd-x64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/openharmony-arm64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/sunos-x64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/win32-arm64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/win32-ia32",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@esbuild/win32-x64",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@fastify/ajv-compiler",
+        "version": "4.0.7",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@fastify/deepmerge",
+        "version": "3.2.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@fastify/error",
+        "version": "4.2.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@fastify/fast-json-stringify-compiler",
+        "version": "5.1.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@fastify/forwarded",
+        "version": "3.1.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@fastify/merge-json-schemas",
+        "version": "0.2.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@fastify/proxy-addr",
+        "version": "5.1.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@oxc-project/types",
+        "version": "0.154.0",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@pinojs/redact",
+        "version": "0.4.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-android-arm-eabi",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-android-arm64",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-darwin-arm64",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-darwin-x64",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-freebsd-x64",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-linux-arm-gnueabihf",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-linux-arm64-gnu",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-linux-arm64-musl",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-linux-ppc64-gnu",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-linux-s390x-gnu",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-linux-x64-gnu",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-linux-x64-musl",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-openharmony-arm64",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-win32-arm64-msvc",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/binding-win32-x64-msvc",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@rolldown/pluginutils",
+        "version": "1.0.1",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@types/node",
+        "version": "24.19.2",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@types/pg",
+        "version": "8.23.1",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@types/react",
+        "version": "19.3.0",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@types/react-dom",
+        "version": "19.3.0",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-aix-ppc64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-darwin-arm64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-darwin-x64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-freebsd-arm64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-freebsd-x64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-linux-arm",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-linux-arm64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-linux-loong64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-linux-mips64el",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-linux-ppc64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-linux-riscv64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-linux-s390x",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-linux-x64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-netbsd-arm64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-netbsd-x64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-openbsd-arm64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-openbsd-x64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-sunos-x64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-win32-arm64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/@typescript/typescript-win32-x64",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/abstract-logging",
+        "version": "2.0.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/ajv",
+        "version": "8.20.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/ajv-formats",
+        "version": "3.0.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/ajv/node_modules/fast-uri",
+        "version": "3.1.9",
+        "license": "BSD-3-Clause",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/atomic-sleep",
+        "version": "1.0.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/avvio",
+        "version": "9.3.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/cookie",
+        "version": "2.0.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/csstype",
+        "version": "3.2.3",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/dequal",
+        "version": "2.0.3",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/detect-libc",
+        "version": "2.1.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/esbuild",
+        "version": "0.28.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fast-decode-uri-component",
+        "version": "1.0.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fast-deep-equal",
+        "version": "3.1.3",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fast-json-stringify",
+        "version": "7.1.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fast-querystring",
+        "version": "1.1.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fast-uri",
+        "version": "4.2.3",
+        "license": "BSD-3-Clause",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fastify",
+        "version": "5.12.7",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fastq",
+        "version": "1.20.3",
+        "license": "ISC",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fdir",
+        "version": "6.5.0",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/find-my-way",
+        "version": "9.10.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/fsevents",
+        "version": "2.3.3",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/ipaddr.js",
+        "version": "2.5.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/json-schema-ref-resolver",
+        "version": "3.0.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/json-schema-traverse",
+        "version": "1.0.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/light-my-request",
+        "version": "6.8.0",
+        "license": "BSD-3-Clause",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-android-arm64",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-darwin-arm64",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-darwin-x64",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-freebsd-x64",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-linux-arm-gnueabihf",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-linux-arm64-gnu",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-linux-arm64-musl",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-linux-x64-gnu",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-linux-x64-musl",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-win32-arm64-msvc",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/lightningcss-win32-x64-msvc",
+        "version": "1.33.0",
+        "license": "MPL-2.0",
+        "dev": true,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/nanoid",
+        "version": "3.3.20",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/on-exit-leak-free",
+        "version": "2.1.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pg",
+        "version": "8.23.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pg-cloudflare",
+        "version": "1.4.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": true,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pg-connection-string",
+        "version": "2.14.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pg-int8",
+        "version": "1.0.1",
+        "license": "ISC",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pg-pool",
+        "version": "3.14.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pg-protocol",
+        "version": "1.16.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pg-types",
+        "version": "2.2.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pgpass",
+        "version": "1.0.5",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/picocolors",
+        "version": "1.1.1",
+        "license": "ISC",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/picomatch",
+        "version": "4.0.7",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pino",
+        "version": "10.4.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pino-abstract-transport",
+        "version": "3.0.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/pino-std-serializers",
+        "version": "7.1.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/postcss",
+        "version": "8.5.31",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/postgres-array",
+        "version": "2.0.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/postgres-bytea",
+        "version": "1.0.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/postgres-date",
+        "version": "1.0.7",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/postgres-interval",
+        "version": "1.2.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/prettier",
+        "version": "3.9.10",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/process-warning",
+        "version": "5.1.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/quick-format-unescaped",
+        "version": "4.0.4",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/react",
+        "version": "19.3.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/react-dom",
+        "version": "19.3.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/real-require",
+        "version": "1.0.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/require-from-string",
+        "version": "2.0.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/ret",
+        "version": "0.5.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/reusify",
+        "version": "1.1.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/rfdc",
+        "version": "1.4.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/rolldown",
+        "version": "1.2.14",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/safe-regex2",
+        "version": "5.1.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/safe-stable-stringify",
+        "version": "2.5.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/scheduler",
+        "version": "0.28.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/secure-json-parse",
+        "version": "4.1.1",
+        "license": "BSD-3-Clause",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/semver",
+        "version": "7.8.5",
+        "license": "ISC",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/set-cookie-parser",
+        "version": "3.1.4",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/sonic-boom",
+        "version": "4.2.1",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/source-map-js",
+        "version": "1.2.2",
+        "license": "BSD-3-Clause",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/split2",
+        "version": "4.2.0",
+        "license": "ISC",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/thread-stream",
+        "version": "4.2.0",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/tinyglobby",
+        "version": "0.2.17",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/toad-cache",
+        "version": "3.7.4",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/tsx",
+        "version": "4.23.15",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/typescript",
+        "version": "7.0.2",
+        "license": "Apache-2.0",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/undici-types",
+        "version": "7.24.6",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/vite",
+        "version": "8.3.4",
+        "license": "MIT",
+        "dev": true,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/xtend",
+        "version": "4.0.2",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      },
+      {
+        "path": "node_modules/zod",
+        "version": "4.6.7",
+        "license": "MIT",
+        "dev": false,
+        "optional": false,
+        "integrityPresent": true,
+        "resolvedToRegistry": true
+      }
+    ],
+    "applicationLicense": "Owner selection pending. No application license assigned by this task."
+  },
+  "evidence": [
+    {
+      "path": "examples/recorded/relay-11-live-evaluation-2026-10-22.json",
+      "sha256": "8849a4303f575ebbeaa163197b6512500b8658ac125df19e336ec3b8af3f318e",
+      "verification": "matches RELAY-11 acceptance summary"
+    },
+    {
+      "path": "examples/recorded/relay-11-offline-evaluation-2026-10-22.json",
+      "sha256": "f1bbd727c7982db00011ec7934b6c1ac7a99c075c8cfdd14b3dfea80341ecd90",
+      "verification": "matches RELAY-11 acceptance summary"
+    },
+    {
+      "path": "examples/recorded/relay-11-browser-2026-10-22.json",
+      "sha256": "6bb8a5433cca58a8fcf452fda77534f85fd8ca007829f8632850ae93ac1ac434",
+      "verification": "matches RELAY-11 acceptance summary"
+    },
+    {
+      "path": "examples/recorded/relay-12-setup-2026-10-22.json",
+      "sha256": "f9eeecedb6297ecde89cbc69987c3d0f5db9db6c2fedf45f70000d45d4c15465",
+      "verification": "current local bytes"
+    },
+    {
+      "path": "docs/demo/relay-12-deck.pptx",
+      "sha256": "70fddf3b349ba3fd46d9758b60b5597c7ff5437c316fe4104bab3dcaf677298a",
+      "verification": "current local bytes"
+    },
+    {
+      "path": "docs/demo/relay-12-preview.png",
+      "sha256": "6700fd8f7cf0eac3a7a737aefcc70dc804c189898f5974f81e2cdc2ef72e4c57",
+      "verification": "current local bytes"
+    },
+    {
+      "path": "vendor/hmem/UPSTREAM.json",
+      "sha256": "257eb80e0aa8c4b4bbe3b8313b97e616f55e89fd92d785893e5e023398baae6d",
+      "verification": "current local bytes"
+    },
+    {
+      "path": "vendor/hmem/LICENSE",
+      "sha256": "63e29fc8231b53757a77fbc371071c91d768621efa1e68b1d9ff8d1bb7c4a0ef",
+      "verification": "current local bytes"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "2d3ac468c37f1b4566d6efe931cb9c58c296c0ae6d3930f89eebb3f9275abd33",
+      "verification": "current local bytes"
+    }
+  ],
+  "participant": {
+    "team": "Autonomous Multi-Agents for Real-time GPS Services",
+    "primaryTrack": "Wildcard",
+    "confirmation": "Direct user reply during RELAY-13, not independently authenticated account selection",
+    "roster": "Not reverified"
+  },
+  "externalObservations": {
+    "checkedDuring": "RELAY-13 October 22 PDT / October 23 UTC",
+    "eventUrl": "https://hackathon.genai.works/event/open-agent-hackathon-2026",
+    "deadlineUtc": "2026-10-27T23:45:00Z",
+    "publicRulesConflict": "Cursor wording persists; participant any-agent update followed with actual Codex attribution",
+    "repositoryUrl": "https://github.com/multiagent111-collab/rover-relay",
+    "visibleDefaultCommit": "1b19c528d639134691289d9c0db38d82e9f277ff",
+    "visibleBranches": [
+      "main"
+    ],
+    "eventCandidatePublished": false
+  },
+  "submissionReady": false,
+  "pending": [
+    "Final 1–4 minute recorded video and accessible link",
+    "Review retained inherited delta and authorize exact public event-source publication; recheck public clone and asset links afterward",
+    "Owner application-license decision",
+    "Participant current roster/form/limits/lock review and organizer coding-agent update retention",
+    "Participant final terms review and submission/receipt"
+  ],
+  "privateRover": "Deferred; no Build source, schema, runtime or jobs accessed or changed",
+  "sponsorCallsThisTicket": 0
+}

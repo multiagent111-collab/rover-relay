@@ -1,0 +1,114 @@
+{
+  "ticket": "RELAY-07",
+  "tool": "Codex",
+  "recordedAt": "2026-10-22T23:45:17.776Z",
+  "actualStart": "2026-10-22T23:24:15.662Z",
+  "parentCommit": "a9f1b2dd71036664d3693e721f1d7ac24fb65e0c",
+  "mode": "offline_sample",
+  "operations": "simulated",
+  "storage": "actual isolated PostgreSQL; no SQLite fallback",
+  "runtime": {
+    "mode": "offline_sample",
+    "operations": "simulated",
+    "node": "v26.2.0",
+    "docker": "29.9.2",
+    "postgresql": "16.15",
+    "image": "postgres:16-alpine",
+    "container": "relay-pg-test-24c040c2-1426-4df2-835f-26f361bef67c",
+    "imageId": "sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea",
+    "storage": "disposable tmpfs",
+    "host": "127.0.0.1",
+    "port": 63623
+  },
+  "proofs": [
+    {
+      "proof": "overlapping_approvals",
+      "requests": 8,
+      "observedRowLockWaitersAtLeast": 2,
+      "taskId": "f86d6d33-e33b-4bda-8b69-7477660a862e",
+      "tasks": 1,
+      "outboxMessages": 1,
+      "dispatchEvents": 1,
+      "offerEvents": 1
+    },
+    {
+      "proof": "crash_recovery",
+      "taskId": "d0d4c0ed-fcb6-434d-973f-425a13a038b3",
+      "outboxId": "b972bc9a-ccd4-4143-bae2-cc2a4ccbabcc",
+      "dispatchEventId": "b8f15bee-10d7-4c5a-a2d7-0e077608841a",
+      "offerEventId": "7a92bb3d-5c7d-4dbf-b211-646ba433d6ea",
+      "digest": "62ca97c95ef6321258d861261245f3afc76b7eab1cc4f32e57865762ac7ee3f8",
+      "version": 1,
+      "deadlineAt": "2026-10-23T00:08:45.995Z",
+      "entrance": "Confirmed PostgreSQL test entrance",
+      "queuedBeforeRecovery": true,
+      "originalTaskAndEventIdsPreserved": true,
+      "retriesAndDrainsAddedEvents": 0
+    }
+  ],
+  "checks": [
+    {
+      "name": "PostgreSQL: eight approvals overlap at the row lock and replay one committed task",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: a duplicate whose source read finishes after the first COMMIT returns the original task",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: competing keys and competing missions cannot double reserve one courier",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: crash after approval COMMIT and after outbox COMMIT preserves IDs and terms on restart/retry",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: original key conflicts on changed payload, is owner scoped and denies cross-owner replay",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: expiry while waiting on the lock and replanning preserve the absolute deadline",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: row-lock timeout rolls back, returns safe 503, then original approval succeeds",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: memory, source and cancellation changes during lock waits block approval",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: a deferred COMMIT failure is uncertain to the caller and exact-key retry creates one task",
+      "result": "pass"
+    },
+    {
+      "name": "PostgreSQL: real backend termination rolls back aggregate changes and the pool recovers",
+      "result": "pass"
+    }
+  ],
+  "validation": {
+    "postgresql": {
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    "application": {
+      "passed": 87,
+      "failed": 0,
+      "skipped": 0
+    },
+    "productionBuild": "pass",
+    "officialHmem": "15 pinned source hashes and 13 conformance checks passed",
+    "baseline": "82 protected inventory files matched"
+  },
+  "cleanup": "Exact labelled test container and verified temporary storage/H-MEM directories removed",
+  "sampleRefresh": "Managed Relay 4183 gracefully restarted with persisted data retained; readiness confirmed 2026-10-22T23:50:11.674Z. Existing live services were preserved.",
+  "scope": "No live database reset, external model/data calls, real offers, provider notifications, Build changes or publication. Two child process crashes after real commits; controlled deferred SQLSTATE 40001 and backend termination are explicitly injected failures.",
+  "limitations": [
+    "Atomic outbox simulator event only; no external exactly-once claim",
+    "No database-host power loss, HA failover or scale benchmark",
+    "Individual database operation timeouts; not one total request deadline"
+  ]
+}

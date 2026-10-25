@@ -258,6 +258,29 @@ select:focus {
 .equipment-field select {
   padding-left: 36px;
 }
+.intake-panel textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 100px;
+  padding: 10px;
+  border: 1px solid #dfe6dc;
+  border-radius: 5px;
+  font: inherit;
+  background: #fbfcfa;
+}
+.draft-questions {
+  padding-left: 20px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.draft-pending {
+  margin-top: 15px;
+  border-top: 1px solid #dfe6dc;
+}
+.draft-pending button {
+  display: block;
+  text-align: left;
+}
 .field-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1293,5 +1316,186 @@ footer {
   * {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+.runtime-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 12px;
+  font-size: 13px;
+}
+.runtime-strip strong,
+.runtime-strip span {
+  display: block;
+}
+.runtime-strip strong {
+  margin-bottom: 6px;
+}
+.runtime-strip p {
+  grid-column: 1 / -1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.connection-card {
+  margin-bottom: 22px;
+}
+.connection-card summary,
+details summary {
+  cursor: pointer;
+  line-height: 1.6;
+}
+.map-source {
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 0 10px;
+}
+.change-comparison {
+  padding: 15px;
+  margin: 20px 0;
+  background: #fdf3e7;
+  border: 1px solid #e9d0b1;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.change-comparison caption {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.change-comparison td,
+.change-comparison th {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  min-width: 110px;
+  padding: 10px;
+  text-align: left;
+}
+.approval-terms {
+  margin: 18px 0;
+  font-size: 12px;
+}
+.approval-terms dt {
+  font-weight: 700;
+  margin-top: 10px;
+}
+.approval-terms dd {
+  margin: 4px 0 12px;
+  overflow-wrap: anywhere;
+}
+.recent label {
+  display: block;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.recent input,
+.recent select {
+  width: 100%;
+  min-height: 40px;
+  margin: 6px 0;
+}
+.recent button {
+  width: 100%;
+  text-align: left;
+}
+.recent small {
+  display: block;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.event-history {
+  padding-left: 20px;
+  font-size: 12px;
+}
+.event-history li {
+  padding: 8px 0;
+  overflow-wrap: anywhere;
+}
+.event-history time {
+  display: block;
+  margin: 5px 0;
+}
+.activity details,
+.agent-step small {
+  overflow-wrap: anywhere;
+}
+pre {
+  max-width: 100%;
+  overflow: auto;
+}
+.left-column,
+.center-column,
+.right-column,
+.runtime-strip > div {
+  min-width: 0;
+}
+.working-indicator button {
+  margin-left: 12px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  padding: 8px;
+  border-radius: 5px;
+}
+.message {
+  flex-wrap: wrap;
+}
+@media (max-width: 760px) {
+  .runtime-strip {
+    grid-template-columns: 1fr;
+    font-size: 13px;
+  }
+  .recent {
+    display: block;
+  }
+  .right-column {
+    display: block;
+  }
+  .right-column > section {
+    margin-bottom: 20px;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+  .small,
+  .muted.small,
+  .plan-route p,
+  .receipt-foot,
+  .simulation-note,
+  .agent-step small {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .table-scroll table,
+  .tabs button,
+  .message {
+    font-size: 12px;
+  }
+  .section-label,
+  .simulation-label,
+  .map-caption {
+    font-size: 10px;
+  }
+  .tabs {
+    flex-wrap: wrap;
+  }
+  .working-indicator {
+    flex-wrap: wrap;
+    bottom: 12px;
+  }
+  .mode-badge {
+    font-size: 11px;
+    flex-wrap: wrap;
+    line-height: 1.7;
+  }
+  .message strong {
+    white-space: normal;
   }
 }

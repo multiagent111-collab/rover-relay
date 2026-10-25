@@ -16,6 +16,145 @@
     }
   ],
   "paths": {
+    "/v1/intakes": {
+      "post": {
+        "summary": "Save a bounded text draft; always needs explicit review/confirmation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntakeCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/intakes/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Resume an owner-scoped persisted draft",
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Review fields at the current revision without resetting the original deadline",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntakeUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error with error code and message"
+          },
+          "409": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/intakes/{id}/confirm": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "post": {
+        "summary": "Explicitly confirm exact reviewed constraints and plan the same mission ID",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntakeConfirm"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Controlled error with error code and message"
+          },
+          "409": {
+            "description": "Controlled error with error code and message"
+          },
+          "503": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
     "/v1/health": {
       "get": {
         "summary": "Read mode and local server health; not proof of sponsor connectivity",
@@ -37,6 +176,26 @@
     "/v1/bootstrap": {
       "get": {
         "summary": "Read synthetic campus data and caller-owned missions",
+        "responses": {
+          "200": {
+            "description": "Structured result; see the domain types in src/types.ts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Controlled error with error code and message"
+          }
+        }
+      }
+    },
+    "/v1/readiness": {
+      "get": {
+        "summary": "Read passive per-process configuration and actual adapter observations; never calls a sponsor",
         "responses": {
           "200": {
             "description": "Structured result; see the domain types in src/types.ts",
@@ -320,6 +479,23 @@
       ],
       "post": {
         "summary": "Cancel a simulated task and release its courier reservation",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "expectedRevision": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Structured result; see the domain types in src/types.ts",
@@ -461,6 +637,10 @@
                 "properties": {
                   "status": {
                     "enum": ["accepted", "declined", "in_progress", "completed"]
+                  },
+                  "expectedRevision": {
+                    "type": "integer",
+                    "minimum": 0
                   }
                 }
               }
@@ -596,6 +776,932 @@
           "destination",
           "budgetCents",
           "deadlineMinutes"
+        ],
+        "additionalProperties": false
+      },
+      "SourceEvidence": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "recordId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "sourceVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "fetchedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["offline_sample", "live_sponsors"]
+          },
+          "queryId": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["supplier", "courier", "route_edge"]
+          },
+          "contentHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "facts": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            }
+          },
+          "provenance": {
+            "type": "string",
+            "const": "application_projection"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "recordId",
+          "sourceVersion",
+          "fetchedAt",
+          "mode"
+        ],
+        "additionalProperties": false
+      },
+      "IntakeCreate": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": ["text"],
+        "additionalProperties": false
+      },
+      "IntakeUpdate": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "fields": {
+            "type": "object",
+            "properties": {
+              "sku": {
+                "type": "string",
+                "enum": ["HDMI-USB-C"]
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              "destination": {
+                "type": "string",
+                "enum": ["auditorium", "library"]
+              },
+              "budgetCents": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000
+              },
+              "deadlineMinutes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 240
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": ["revision"],
+        "additionalProperties": false
+      },
+      "IntakeConfirm": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "confirmed": {
+            "type": "boolean",
+            "const": true
+          },
+          "request": {
+            "type": "object",
+            "properties": {
+              "sku": {
+                "default": "HDMI-USB-C",
+                "type": "string",
+                "enum": ["HDMI-USB-C"]
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              "destination": {
+                "type": "string",
+                "enum": ["auditorium", "library"]
+              },
+              "budgetCents": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000
+              },
+              "deadlineMinutes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 240
+              }
+            },
+            "required": [
+              "sku",
+              "quantity",
+              "destination",
+              "budgetCents",
+              "deadlineMinutes"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["revision", "confirmed", "request"],
+        "additionalProperties": false
+      },
+      "CoordinatorAction": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "ask_user"
+              },
+              "fields": {
+                "minItems": 1,
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "quantity",
+                    "destination",
+                    "budgetCents",
+                    "deadlineMinutes"
+                  ]
+                }
+              }
+            },
+            "required": ["type", "fields"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "read_equipment_options"
+              },
+              "sku": {
+                "type": "string",
+                "enum": ["HDMI-USB-C"]
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              }
+            },
+            "required": ["type", "sku", "quantity"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "read_courier_availability"
+              },
+              "supplierIds": {
+                "minItems": 1,
+                "maxItems": 99,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9_-]{1,100}$"
+                }
+              }
+            },
+            "required": ["type", "supplierIds"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "read_route_edges"
+              },
+              "supplierIds": {
+                "minItems": 1,
+                "maxItems": 99,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9_-]{1,100}$"
+                }
+              },
+              "destination": {
+                "type": "string",
+                "enum": ["auditorium", "library"]
+              }
+            },
+            "required": ["type", "supplierIds", "destination"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "propose"
+              }
+            },
+            "required": ["type"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "finish_infeasible"
+              },
+              "reason": {
+                "type": "string",
+                "enum": ["no_stock", "no_courier", "no_route"]
+              }
+            },
+            "required": ["type", "reason"],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "ApprovedExecutionIntent": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "type": "string",
+            "const": "1.0"
+          },
+          "intentId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "taskId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "missionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "request": {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "number",
+                "const": 1
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": ["revision", "digest"],
+            "additionalProperties": false
+          },
+          "approvedPlan": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": ["version", "digest"],
+            "additionalProperties": false
+          },
+          "approvedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "executionBackend": {
+            "type": "string",
+            "enum": ["simulator", "http_gateway"]
+          },
+          "selected": {
+            "type": "object",
+            "properties": {
+              "supplierId": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+              },
+              "courierId": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+              }
+            },
+            "required": ["supplierId", "courierId"],
+            "additionalProperties": false
+          },
+          "equipment": {
+            "type": "object",
+            "properties": {
+              "sku": {
+                "type": "string",
+                "const": "HDMI-USB-C"
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              }
+            },
+            "required": ["sku", "quantity"],
+            "additionalProperties": false
+          },
+          "pickup": {
+            "type": "object",
+            "properties": {
+              "locationId": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+              }
+            },
+            "required": ["locationId"],
+            "additionalProperties": false
+          },
+          "destination": {
+            "type": "object",
+            "properties": {
+              "locationId": {
+                "type": "string",
+                "enum": ["auditorium", "library"]
+              },
+              "entrance": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 120
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": ["locationId", "entrance"],
+            "additionalProperties": false
+          },
+          "money": {
+            "type": "object",
+            "properties": {
+              "currency": {
+                "type": "string",
+                "const": "USD"
+              },
+              "itemEstimateCents": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000
+              },
+              "deliveryEstimateCents": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000
+              },
+              "explicitFeesCents": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000
+              },
+              "approvedTotalCents": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1000000
+              }
+            },
+            "required": [
+              "currency",
+              "itemEstimateCents",
+              "deliveryEstimateCents",
+              "explicitFeesCents",
+              "approvedTotalCents"
+            ],
+            "additionalProperties": false
+          },
+          "absoluteDeadlineAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "sourceFingerprint": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "memoryRevision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "evidenceIds": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        },
+        "required": [
+          "contractVersion",
+          "intentId",
+          "taskId",
+          "missionId",
+          "request",
+          "approvedPlan",
+          "approvedAt",
+          "expiresAt",
+          "executionBackend",
+          "selected",
+          "equipment",
+          "pickup",
+          "destination",
+          "money",
+          "absoluteDeadlineAt",
+          "sourceFingerprint",
+          "memoryRevision",
+          "evidenceIds"
+        ],
+        "additionalProperties": false
+      },
+      "ExecutionTaskState": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "type": "string",
+            "const": "1.0"
+          },
+          "taskId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "intentId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "missionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "executionBackend": {
+            "type": "string",
+            "enum": ["simulator", "http_gateway"]
+          },
+          "request": {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "number",
+                "const": 1
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": ["revision", "digest"],
+            "additionalProperties": false
+          },
+          "approvedPlan": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": ["version", "digest"],
+            "additionalProperties": false
+          },
+          "selected": {
+            "type": "object",
+            "properties": {
+              "supplierId": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+              },
+              "courierId": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+              }
+            },
+            "required": ["supplierId", "courierId"],
+            "additionalProperties": false
+          },
+          "jobId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "dispatch_requested",
+              "accepted",
+              "in_progress",
+              "completed",
+              "declined",
+              "cancel_requested",
+              "cancelled"
+            ]
+          },
+          "revision": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "cancellation": {
+            "type": "object",
+            "properties": {
+              "requestedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "confirmedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": ["requestedAt", "confirmedAt"],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "contractVersion",
+          "taskId",
+          "intentId",
+          "missionId",
+          "executionBackend",
+          "request",
+          "approvedPlan",
+          "selected",
+          "jobId",
+          "status",
+          "revision",
+          "updatedAt"
+        ],
+        "additionalProperties": false
+      },
+      "ExecutionEvent": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "type": "string",
+            "const": "1.0"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "dispatch_requested",
+              "accepted",
+              "in_progress",
+              "completed",
+              "declined",
+              "cancel_requested",
+              "cancelled"
+            ]
+          },
+          "task": {
+            "type": "object",
+            "properties": {
+              "contractVersion": {
+                "type": "string",
+                "const": "1.0"
+              },
+              "taskId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "intentId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "missionId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "executionBackend": {
+                "type": "string",
+                "enum": ["simulator", "http_gateway"]
+              },
+              "request": {
+                "type": "object",
+                "properties": {
+                  "revision": {
+                    "type": "number",
+                    "const": 1
+                  },
+                  "digest": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                },
+                "required": ["revision", "digest"],
+                "additionalProperties": false
+              },
+              "approvedPlan": {
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "digest": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                },
+                "required": ["version", "digest"],
+                "additionalProperties": false
+              },
+              "selected": {
+                "type": "object",
+                "properties": {
+                  "supplierId": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+                  },
+                  "courierId": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+                  }
+                },
+                "required": ["supplierId", "courierId"],
+                "additionalProperties": false
+              },
+              "jobId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "queued",
+                  "dispatch_requested",
+                  "accepted",
+                  "in_progress",
+                  "completed",
+                  "declined",
+                  "cancel_requested",
+                  "cancelled"
+                ]
+              },
+              "revision": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "cancellation": {
+                "type": "object",
+                "properties": {
+                  "requestedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  },
+                  "confirmedAt": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": ["requestedAt", "confirmedAt"],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "contractVersion",
+              "taskId",
+              "intentId",
+              "missionId",
+              "executionBackend",
+              "request",
+              "approvedPlan",
+              "selected",
+              "jobId",
+              "status",
+              "revision",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": ["contractVersion", "eventId", "type", "task"],
+        "additionalProperties": false
+      },
+      "ExecutionConflict": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "type": "string",
+            "const": "1.0"
+          },
+          "error": {
+            "type": "string",
+            "enum": [
+              "identity_mismatch",
+              "unapproved_plan",
+              "plan_changed",
+              "intent_expired",
+              "provider_unavailable",
+              "quote_changed",
+              "mapping_missing",
+              "idempotency_conflict",
+              "job_already_active",
+              "dependency_unavailable",
+              "unsupported_contract_version",
+              "invalid_execution_intent",
+              "stale_task_revision"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": ["contractVersion", "error", "message"],
+        "additionalProperties": false
+      },
+      "ExecutionCancel": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "contractVersion": {
+            "type": "string",
+            "const": "1.0"
+          },
+          "intentId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "pattern": "^[a-f0-9-]{36}:cancel$"
+          },
+          "expectedRevision": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "contractVersion",
+          "intentId",
+          "idempotencyKey",
+          "expectedRevision"
         ],
         "additionalProperties": false
       }

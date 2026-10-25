@@ -1,0 +1,74 @@
+{
+  "ticket": "RELAY-00",
+  "tool": "Codex",
+  "capturedAt": "2026-10-22T18:10:14.646Z",
+  "status": "implemented_awaiting_user_test",
+  "scope": "public Relay workflow and checkpoint only; Build changes deferred",
+  "startedAt": "2026-10-22T18:02:31.514Z",
+  "startingBranch": "main",
+  "eventBranch": "codex/relay-hackathon-2026",
+  "protectedBaseline": {
+    "tag": "rover-relay-pre-event-2026-10-21",
+    "commit": "1b19c528d639134691289d9c0db38d82e9f277ff",
+    "filesVerified": 82
+  },
+  "inheritedAtStart": {
+    "modifiedTrackedPaths": 8,
+    "untrackedCandidateFiles": 3,
+    "coveredSourceDocHashes": 61,
+    "unchangedCoveredFiles": 58,
+    "amendedHistoricalDocuments": 3
+  },
+  "checks": [
+    {
+      "command": "npm.cmd run verify:baseline",
+      "status": "PASS",
+      "detail": "82 tagged files match their committed SHA-256 inventory"
+    },
+    {
+      "command": "npm.cmd run check:public",
+      "status": "PASS",
+      "detail": "83 tracked files; candidate tracked/untracked source additionally reviewed"
+    },
+    {
+      "command": "node --import tsx --test --test-name-pattern 'confirmed H-MEM preference' tests/workflow.test.ts",
+      "status": "PASS",
+      "tests": 1,
+      "detail": "Isolated real H-MEM entrance persistence/reload, injection, changed approval terms and forgetting"
+    },
+    {
+      "command": "npm.cmd run verify:hmem",
+      "status": "PASS",
+      "sourceFiles": 15,
+      "conformanceChecks": 13,
+      "revision": "1742dec56a66e58eef9dda2d2b865823758ca8cd"
+    },
+    {
+      "check": "Inherited source bytes and historical document preservation",
+      "status": "PASS",
+      "unchangedCoveredFiles": 58
+    },
+    {
+      "check": "Tracked and untracked candidate source review",
+      "status": "PASS",
+      "detail": "No excluded runtime/configuration paths, recognized credential formats or private source imports found"
+    },
+    {
+      "check": "Handoff package, ledger and snapshot integrity/tamper checks",
+      "status": "PASS",
+      "workPackages": 18
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "limits": [
+    "H-MEM is inherited product functionality, revalidated here; RELAY-00 adds no new engine behavior.",
+    "No application behavior changed; production build and full application suite were not rerun for documentation-only work.",
+    "No live model, source mutation, application restart, provider switch, deployment or publication in RELAY-00.",
+    "Nightshift complete Relay integration remains pending RELAY-05; local health and small requests are insufficient evidence.",
+    "Only new RELAY-00 rule/document/evidence paths are eligible for the focused local commit; inherited integration remains unstaged."
+  ],
+  "nextGate": "Pause for user testing; RELAY-01 is next in the supplied order. ROVER packages remain deferred."
+}

@@ -1,0 +1,19 @@
+---
+description: Relay event work, reliable agent behavior and public ROVER boundary
+alwaysApply: true
+---
+
+Read AGENTS.md and preserve existing rules. Read the user's full Relay event handoff before new work.
+Extend the existing application; do not overwrite it with a new scaffold.
+The pre-event tag rover-relay-pre-event-2026-10-21 is immutable prior work. Event opening: 2026-10-22T00:00:00Z, October 21 at 5 PM PDT. Never backdate or infer authorship from a later commit.
+Record actual per-ticket start/finish, tool, source checkpoint, validation and evidence. Do not label inherited Codex work as Cursor implementation.
+Keep public Relay independent of private ROVER. No private code, schema, assets, credentials, Git history or package dependencies from Build in this repository.
+Use versioned public contracts for future private integration. Real ROVER identity, provider acceptance, jobs and payments remain authoritative in the private gateway.
+Maintain explicit data/inference/execution modes. Current verified inference is NVIDIA-direct; Nightshift discovery alone is not full inference success. No silent fallback.
+Use actual pinned official H-MEM; preserve attribution and one writer per data directory. Confirm durable preferences; refresh operational facts.
+Implement bounded clarification, typed read-tool decisions, separate Planner/Critic and structured repair. Models cannot execute SQL, fetch arbitrary URLs or create jobs.
+Use deterministic money, routing, checks and execution. Validate all output and relevant evidence. Preserve current-owner, version/digest, expiry, source/memory revalidation, reservation, idempotency and outbox safeguards.
+Never equate observed stock with a reservation or a requested task with accepted/real delivery. Keep supplier acquisition costs separate from delivery fare.
+Preserve unrelated changes and live state. Run meaningful checks for affected behavior; record actual results and remaining gates. No bulk staging, public push, deployment or real job activation inferred from local coding instructions.
+
+Current user instructions (October 22, 2026): any coding agent is permitted; use actual Codex attribution for this session. Complete one prompt, then pause for user testing. Defer all Build changes and ROVER packages. Demonstrate at least one working Meterless Engine feature with a passing test or live demo. Nightshift integration remains an explicit full-workflow gate; do not claim it from endpoint health alone.

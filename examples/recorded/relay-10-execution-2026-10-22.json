@@ -1,0 +1,223 @@
+{
+  "ticket": "RELAY-10",
+  "tool": "Codex",
+  "capturedAt": "2026-10-23T01:00:33.077Z",
+  "scope": "Controlled loopback HTTP fixture; no real ROVER service, provider, sponsor call or private implementation",
+  "dataMode": "offline_sample",
+  "inferenceMode": "offline_sample",
+  "executionMode": "controlled_http_gateway_fixture",
+  "intent": {
+    "contractVersion": "1.0",
+    "intentId": "c0830f4a-41b6-4eae-96aa-82cabc0b0865",
+    "taskId": "caad8250-e05d-43a0-923a-923e7705a65a",
+    "missionId": "6d5e7d8d-c4fd-4cd5-89a1-8c5889b87a8e",
+    "request": {
+      "revision": 1,
+      "digest": "c1013d312373a89202a69e95f334a2d5dc7ef79d1923180ac69d543e7c5c253f"
+    },
+    "approvedPlan": {
+      "version": 1,
+      "digest": "6b3046483935ceba6af6a786e25f034ea66f49b4133ccba9453db4b540363f05"
+    },
+    "approvedAt": "2026-10-23T01:00:32.144Z",
+    "expiresAt": "2026-10-23T01:01:32.144Z",
+    "executionBackend": "http_gateway",
+    "selected": {
+      "supplierId": "supplier-a",
+      "courierId": "courier-1"
+    },
+    "equipment": {
+      "sku": "HDMI-USB-C",
+      "quantity": 2
+    },
+    "pickup": {
+      "locationId": "supplier-a"
+    },
+    "destination": {
+      "locationId": "auditorium",
+      "entrance": null
+    },
+    "money": {
+      "currency": "USD",
+      "itemEstimateCents": 2400,
+      "deliveryEstimateCents": 800,
+      "explicitFeesCents": 0,
+      "approvedTotalCents": 3200
+    },
+    "absoluteDeadlineAt": "2026-10-23T01:30:32.144Z",
+    "sourceFingerprint": "eea057789e5b86e775bca7c2ae378e67da0dbb381d223669e468137e926f6972",
+    "memoryRevision": "4523beb344d96c5c15d1fd5f930672309e2ee01057ed5b04a33a49405da4de9b",
+    "evidenceIds": [
+      "obs-supplier-b6e8fbf198042ec9d0a0e39ec204e8a35c4879cea9c3f5678e55bc0f9fb333b7",
+      "obs-courier-57c7c12d92875d37c3a20f780b73e82c1f80a1b9ca0dfeb37b5a15c10ae27a1b",
+      "obs-route_edge-1f64a2031ef0fc63b02541a522823f4123538028f1ffebbcef8d40789faff791",
+      "obs-route_edge-2c91e2d083bdaac7e2340cf4033c9a626675ddbc2b3e4ebeaab87a190a79f9d4",
+      "obs-route_edge-fc947294b94510aff39f9942ee9a2cc5f87a67fe3228659f5a8e40b96e2f3176"
+    ]
+  },
+  "timeout": {
+    "outcome": "dependency_unavailable",
+    "configuredTimeoutMs": 500,
+    "elapsedMs": 540,
+    "localTaskStatus": "queued",
+    "committedFixtureJobs": 1
+  },
+  "retry": {
+    "afterExpiry": true,
+    "adapterReconstructed": true,
+    "taskId": "caad8250-e05d-43a0-923a-923e7705a65a",
+    "intentId": "c0830f4a-41b6-4eae-96aa-82cabc0b0865",
+    "jobId": "6108f351-b953-49ce-8953-ee6f940c382b",
+    "status": "dispatch_requested",
+    "taskCount": 1,
+    "outboxCount": 1,
+    "outboxId": "d99407f9-05a8-4693-b1d8-6763f77cbae5",
+    "delivered": true
+  },
+  "cancellation": {
+    "request": {
+      "status": "dispatch_requested",
+      "revision": 3,
+      "requestedAt": "2026-10-23T01:02:32.144Z",
+      "confirmedAt": null,
+      "backend": "http_gateway",
+      "requestRevision": 2
+    },
+    "confirmed": {
+      "status": "cancelled",
+      "revision": 4,
+      "requestedAt": "2026-10-23T01:02:32.144Z",
+      "confirmedAt": "2026-10-23T01:02:32.144Z",
+      "backend": "http_gateway",
+      "requestRevision": 2
+    }
+  },
+  "unchangedSyntheticFixtures": true,
+  "simulatorOfferEvents": 0,
+  "gatewayEvents": [
+    {
+      "id": "65bcf03c-9458-4ea2-8e2e-f21b9ca3227a",
+      "sequence": 13,
+      "timestamp": "2026-10-23T01:02:32.144Z",
+      "contractVersion": "1.0",
+      "eventId": "f3b5d848-f717-402c-ba38-7db61502f38a",
+      "type": "dispatch_requested",
+      "task": {
+        "contractVersion": "1.0",
+        "taskId": "caad8250-e05d-43a0-923a-923e7705a65a",
+        "intentId": "c0830f4a-41b6-4eae-96aa-82cabc0b0865",
+        "missionId": "6d5e7d8d-c4fd-4cd5-89a1-8c5889b87a8e",
+        "executionBackend": "http_gateway",
+        "request": {
+          "revision": 1,
+          "digest": "c1013d312373a89202a69e95f334a2d5dc7ef79d1923180ac69d543e7c5c253f"
+        },
+        "approvedPlan": {
+          "version": 1,
+          "digest": "6b3046483935ceba6af6a786e25f034ea66f49b4133ccba9453db4b540363f05"
+        },
+        "selected": {
+          "supplierId": "supplier-a",
+          "courierId": "courier-1"
+        },
+        "jobId": "6108f351-b953-49ce-8953-ee6f940c382b",
+        "status": "dispatch_requested",
+        "revision": 2,
+        "updatedAt": "2026-10-23T01:00:32.144Z"
+      },
+      "simulated": false
+    },
+    {
+      "id": "d99af595-166d-40d8-b10e-1b5c827f7427",
+      "sequence": 15,
+      "timestamp": "2026-10-23T01:02:32.144Z",
+      "contractVersion": "1.0",
+      "eventId": "42494dc2-a96a-48d0-b473-a9d421f150fb",
+      "type": "cancel_requested",
+      "task": {
+        "contractVersion": "1.0",
+        "taskId": "caad8250-e05d-43a0-923a-923e7705a65a",
+        "intentId": "c0830f4a-41b6-4eae-96aa-82cabc0b0865",
+        "missionId": "6d5e7d8d-c4fd-4cd5-89a1-8c5889b87a8e",
+        "executionBackend": "http_gateway",
+        "request": {
+          "revision": 1,
+          "digest": "c1013d312373a89202a69e95f334a2d5dc7ef79d1923180ac69d543e7c5c253f"
+        },
+        "approvedPlan": {
+          "version": 1,
+          "digest": "6b3046483935ceba6af6a786e25f034ea66f49b4133ccba9453db4b540363f05"
+        },
+        "selected": {
+          "supplierId": "supplier-a",
+          "courierId": "courier-1"
+        },
+        "jobId": "6108f351-b953-49ce-8953-ee6f940c382b",
+        "status": "cancel_requested",
+        "revision": 3,
+        "updatedAt": "2026-10-23T01:00:32.144Z",
+        "cancellation": {
+          "requestedAt": "2026-10-23T01:02:32.144Z",
+          "confirmedAt": null
+        }
+      },
+      "simulated": false
+    },
+    {
+      "id": "2e64bd93-dd80-4d90-8b00-dbb4b0c1c8c8",
+      "sequence": 16,
+      "timestamp": "2026-10-23T01:02:32.144Z",
+      "contractVersion": "1.0",
+      "eventId": "ea091dbd-19cb-457c-aaad-818e8b06fc97",
+      "type": "cancelled",
+      "task": {
+        "contractVersion": "1.0",
+        "taskId": "caad8250-e05d-43a0-923a-923e7705a65a",
+        "intentId": "c0830f4a-41b6-4eae-96aa-82cabc0b0865",
+        "missionId": "6d5e7d8d-c4fd-4cd5-89a1-8c5889b87a8e",
+        "executionBackend": "http_gateway",
+        "request": {
+          "revision": 1,
+          "digest": "c1013d312373a89202a69e95f334a2d5dc7ef79d1923180ac69d543e7c5c253f"
+        },
+        "approvedPlan": {
+          "version": 1,
+          "digest": "6b3046483935ceba6af6a786e25f034ea66f49b4133ccba9453db4b540363f05"
+        },
+        "selected": {
+          "supplierId": "supplier-a",
+          "courierId": "courier-1"
+        },
+        "jobId": "6108f351-b953-49ce-8953-ee6f940c382b",
+        "status": "cancelled",
+        "revision": 4,
+        "updatedAt": "2026-10-23T01:00:32.144Z",
+        "cancellation": {
+          "requestedAt": "2026-10-23T01:02:32.144Z",
+          "confirmedAt": "2026-10-23T01:02:32.144Z"
+        }
+      },
+      "simulated": false
+    }
+  ],
+  "validation": {
+    "applicationTests": 111,
+    "postgresqlTests": 14,
+    "executionConformanceTests": 9,
+    "cleanSourceBuild": true,
+    "cleanSourceConformanceTests": 9,
+    "hmemOfficialFiles": 15,
+    "hmemUpstreamChecks": 13,
+    "protectedBaselineFiles": 82
+  },
+  "limits": [
+    "Fixture job IDs represent synthetic mappings only.",
+    "Gateway fixture persistence is in memory; PostgreSQL test separately proves Relay-side JSONB recovery.",
+    "Production identity verification, real provider/location/quote mapping, private transactional reservation and notifications remain deferred."
+  ],
+  "clock": {
+    "expiryCheck": "Controlled application/gateway clock advanced by 120000 ms; no real two-minute wait is claimed.",
+    "advancedMs": 120000,
+    "timeoutMeasurement": "Wall-clock elapsed time; configured 500 ms HTTP abort."
+  }
+}

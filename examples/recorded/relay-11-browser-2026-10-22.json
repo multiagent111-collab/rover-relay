@@ -1,0 +1,142 @@
+{
+  "ticket": "RELAY-11",
+  "kind": "Actual current browser interactions against disposable public test fixtures; no hosted model/data calls",
+  "recordedAt": "2026-10-23T04:07:36.414Z",
+  "sourceHelper": "tests/helpers/browser-server.ts",
+  "sourceHead": "d139f571a0bf48a4a2bec1501e7923e6e66c38e6",
+  "setup": "Eight synthetic API-created missions plus one browser-created/declined/reapproved/cancelled mission; disposable fixture only",
+  "seededMissionChronology": [
+    {
+      "id": "94224e83-dec9-484b-9ca5-f9ba79056aad",
+      "status": "awaiting_approval",
+      "createdAt": "2026-10-23T03:50:26.454Z",
+      "version": 1,
+      "taskId": null
+    },
+    {
+      "id": "29721ddb-bf5d-4e2a-b848-d8790774ea5b",
+      "status": "infeasible",
+      "createdAt": "2026-10-23T03:50:26.409Z",
+      "version": 1,
+      "taskId": null
+    },
+    {
+      "id": "0ddffbca-d3c6-42ab-bdfe-fc519197100e",
+      "status": "awaiting_approval",
+      "createdAt": "2026-10-23T03:50:26.358Z",
+      "version": 1,
+      "taskId": null
+    },
+    {
+      "id": "65864741-8bc5-45a9-9a85-bda769e8d31d",
+      "status": "infeasible",
+      "createdAt": "2026-10-23T03:50:26.305Z",
+      "version": 1,
+      "taskId": null
+    },
+    {
+      "id": "d1cae033-d6e2-4a47-a138-c1597ba7fb9f",
+      "status": "awaiting_approval",
+      "createdAt": "2026-10-23T03:50:26.205Z",
+      "version": 1,
+      "taskId": null
+    },
+    {
+      "id": "cc58f103-27ed-41aa-bb37-7ab8919584ff",
+      "status": "infeasible",
+      "createdAt": "2026-10-23T03:50:25.971Z",
+      "version": 1,
+      "taskId": null
+    },
+    {
+      "id": "ebcf8791-4b00-4f24-a2d1-0d0878346d76",
+      "status": "awaiting_approval",
+      "createdAt": "2026-10-23T03:50:25.930Z",
+      "version": 1,
+      "taskId": null
+    },
+    {
+      "id": "285c8a78-d172-4ca6-b2c1-f49b2b5e49b4",
+      "status": "infeasible",
+      "createdAt": "2026-10-23T03:50:25.897Z",
+      "version": 1,
+      "taskId": null
+    },
+    {
+      "id": "34f9f08d-46b8-4ccf-bdeb-037e17440fa8",
+      "status": "cancelled",
+      "createdAt": "2026-10-23T03:48:39.225Z",
+      "version": 2,
+      "taskId": "acd73127-e5ae-4897-896d-4e665faf88f7"
+    }
+  ],
+  "observed": [
+    {
+      "scenario": "canonical approval and decline",
+      "result": "pass",
+      "termsBefore": {
+        "cents": 3200,
+        "etaMinutes": 22
+      },
+      "termsAfter": {
+        "cents": 3500,
+        "etaMinutes": 28
+      },
+      "replacementPlanVersion": 2,
+      "firstTaskVisiblePrefix": "a782fe8b",
+      "freshApprovalRequired": true
+    },
+    {
+      "scenario": "explicit replacement approval and cancellation",
+      "result": "pass",
+      "taskId": "acd73127-e5ae-4897-896d-4e665faf88f7",
+      "status": "cancelled",
+      "taskRevision": 3
+    },
+    {
+      "scenario": "history beyond eight rows",
+      "result": "pass",
+      "totalMissions": 9,
+      "initiallyVisible": 8,
+      "expandedVisible": 9,
+      "chronologyCheckedAgainstApi": true
+    },
+    {
+      "scenario": "search cancelled and keyboard Tab",
+      "result": "pass",
+      "matchingRows": 1,
+      "nextFocusedControl": "Mission status",
+      "reopenedStoredPlanVersion": 2
+    },
+    {
+      "scenario": "authentication and dependency failure",
+      "result": "pass",
+      "initialMode": "unresolved",
+      "connectedConfiguration": "NVIDIA direct (fixture configuration only; no inference)",
+      "noSampleMapSubstituted": true,
+      "failedMissionPreserved": true,
+      "retryControl": "Retry planning with the original deadline"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "relay-11-browser-comparison.jpg",
+      "observedAt": "2026-10-23T03:49:31.949Z"
+    },
+    {
+      "path": "relay-11-browser-history.jpg",
+      "observedAt": "2026-10-23T03:51:10.876Z"
+    },
+    {
+      "path": "relay-11-browser-failure.jpg",
+      "observedAt": "2026-10-23T03:51:52.545Z"
+    }
+  ],
+  "cleanup": {
+    "bothFixtureServersStopped": true,
+    "verifiedTemporaryStateRemoved": true,
+    "temporaryTabsClosed": true,
+    "userServicesOrPreferencesMutated": false
+  },
+  "scope": "Only disposable fixture missions were created. No mobile viewport or Stop waiting interaction was repeated in this ticket; those earlier observations remain historical RELAY-09 evidence. The fixed browser token is a non-secret fixture value, not a real credential."
+}

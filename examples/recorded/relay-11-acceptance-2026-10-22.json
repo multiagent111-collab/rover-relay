@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "acceptance-summary-1.0",
+  "ticket": "RELAY-11",
+  "tool": "Codex",
+  "recordedAt": "2026-10-23T04:07:36.419Z",
+  "result": "public_scope_pass",
+  "scope": "21 applicable public Relay gates passed; A21-A23 private ROVER are deferred by user instruction. No all-24 or real execution claim.",
+  "artifacts": [
+    {
+      "path": "relay-11-live-evaluation-2026-10-22.json",
+      "sha256": "8849a4303f575ebbeaa163197b6512500b8658ac125df19e336ec3b8af3f318e"
+    },
+    {
+      "path": "relay-11-offline-evaluation-2026-10-22.json",
+      "sha256": "f1bbd727c7982db00011ec7934b6c1ac7a99c075c8cfdd14b3dfea80341ecd90"
+    },
+    {
+      "path": "relay-11-browser-2026-10-22.json",
+      "sha256": "6bb8a5433cca58a8fcf452fda77534f85fd8ca007829f8632850ae93ac1ac434"
+    }
+  ],
+  "runIds": {
+    "actualSponsor": "cf59b533-27cd-4110-8c4f-686596cb631b",
+    "finalOffline": "44aa9b86-50ba-46da-a095-1aa484f342a7"
+  },
+  "matrix": [
+    {
+      "id": "A01",
+      "scenario": "Canonical checked mission and explicit approval",
+      "result": "pass"
+    },
+    {
+      "id": "A02",
+      "scenario": "Clarification without invented constraints",
+      "result": "pass"
+    },
+    {
+      "id": "A03",
+      "scenario": "Observation-dependent bounded actions",
+      "result": "pass"
+    },
+    {
+      "id": "A04",
+      "scenario": "Independent critique and bounded repair",
+      "result": "pass"
+    },
+    {
+      "id": "A05",
+      "scenario": "Insufficient quantity and no fake reservation",
+      "result": "pass"
+    },
+    {
+      "id": "A06",
+      "scenario": "Canonical $30 budget and checked $2 alternative",
+      "result": "pass"
+    },
+    {
+      "id": "A07",
+      "scenario": "Impossible deadline and honest alternatives",
+      "result": "pass"
+    },
+    {
+      "id": "A08",
+      "scenario": "Named route closure invalidates approval",
+      "result": "pass"
+    },
+    {
+      "id": "A09",
+      "scenario": "Expired or stale approval cannot execute",
+      "result": "pass"
+    },
+    {
+      "id": "A10",
+      "scenario": "Concurrent double approval",
+      "result": "pass"
+    },
+    {
+      "id": "A11",
+      "scenario": "Competing missions do not double reserve",
+      "result": "pass"
+    },
+    {
+      "id": "A12",
+      "scenario": "Actual process crash, stable task/outbox retry",
+      "result": "pass"
+    },
+    {
+      "id": "A13",
+      "scenario": "Decline/cancel, release and fresh approval",
+      "result": "pass"
+    },
+    {
+      "id": "A14",
+      "scenario": "Actual serial restart changes agent/task memory",
+      "result": "pass"
+    },
+    {
+      "id": "A15",
+      "scenario": "Correction/forget cannot revive old approval",
+      "result": "pass"
+    },
+    {
+      "id": "A16",
+      "scenario": "Owner and tenant isolation",
+      "result": "pass"
+    },
+    {
+      "id": "A17",
+      "scenario": "Bounded model/connector failures",
+      "result": "pass"
+    },
+    {
+      "id": "A18",
+      "scenario": "Source freshness, coverage and provenance",
+      "result": "pass"
+    },
+    {
+      "id": "A19",
+      "scenario": "Browser presentation, recovery and PostgreSQL chronology",
+      "result": "pass"
+    },
+    {
+      "id": "A20",
+      "scenario": "Independent clean sample with official H-MEM",
+      "result": "pass"
+    },
+    {
+      "id": "A21",
+      "scenario": "Private ROVER shadow",
+      "result": "deferred"
+    },
+    {
+      "id": "A22",
+      "scenario": "Private ROVER execution",
+      "result": "deferred"
+    },
+    {
+      "id": "A23",
+      "scenario": "Ordinary ROVER regression",
+      "result": "deferred"
+    },
+    {
+      "id": "A24",
+      "scenario": "Immutable baseline and declared event delta",
+      "result": "pass"
+    }
+  ],
+  "results": {
+    "applicationTests": 114,
+    "actualPostgreSQLTests": 14,
+    "sampleScenarios": 7,
+    "independentCleanInstallBuildAndSevenScenarios": true,
+    "officialHmemHashes": 15,
+    "officialHmemConformanceChecks": 13,
+    "protectedBaselineInventoryFiles": 82,
+    "sourceTracked": 158,
+    "sourceUntracked": 8,
+    "sourceCandidates": 166,
+    "sourceUnchangedDuringFinalRun": true,
+    "sampleCalls": {
+      "generatorInvocations": 28,
+      "dataSnapshotInvocations": 18,
+      "modelHttpRequests": 0
+    },
+    "sampleExternalAttempts": 0,
+    "sampleMutationsRestored": true,
+    "actualSponsor": {
+      "missionId": "5865aac1-dc3a-4ebb-bb3b-a51d70d65a66",
+      "missionElapsedMs": 39917,
+      "httpRequests": 6,
+      "inferenceHttpRequests": 2,
+      "sourceHttpRequests": 2,
+      "tasksCreated": 0,
+      "receiptCorrelations": [
+        {
+          "responseId": "chatcmpl-d1d339b9-5c62-4200-9083-a4ab17d611c6",
+          "receiptId": "rcpt_req_25sqnibj",
+          "receiptLogMatched": true,
+          "routedModel": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+          "provider": "nvidia",
+          "fromCache": false
+        },
+        {
+          "responseId": "chatcmpl-ca775873-70ab-4a2f-9de2-b212c4205c00",
+          "receiptId": "rcpt_req_ex5ig7x7",
+          "receiptLogMatched": true,
+          "routedModel": "nvidia/nemotron-3-ultra-550b-a55b",
+          "provider": "nvidia",
+          "fromCache": false
+        }
+      ]
+    }
+  },
+  "reviewNotes": [
+    "The first full run includes the actual sponsor mission. Its working-tree production-build phase was mistakenly labeled clean_source; only the distinct independent install/build/sample phases used the clean export. The final offline run corrects that label and adds a start/end source-hash check. Original first-run bytes/timings/results are preserved unchanged.",
+    "No sponsor calls were repeated for report-only/source-review fixes. Application src/ and live verifier behavior were unchanged between these two runs.",
+    "An initial source-review check reported two credential-bearing URL findings; review identified an environment-variable placeholder and the existing deliberately invalid password fixture. Template and narrowly scoped fixture handling was corrected; final tracked/untracked scans passed. Findings were never real exposed keys.",
+    "Named tests cover controlled TLS/rate/auth/timeout faults, not real fault injection against sponsor services. Prior actual source-mutation/restoration evidence and earlier mobile/Stop waiting browser observations are referenced as historical, not recaptured."
+  ],
+  "limits": [
+    "One actual sponsor planning run is a functional check, not a reliability estimate. Mock/scenario times are not averaged with sponsor time.",
+    "Measured sample generator invocations are logical calls to deterministic substitutes; they are not hosted model calls. Overall regression generator totals are uninstrumented. Runtime internal provider fan-out is not counted by Relay HTTP metrics.",
+    "Live planning used actual Nightshift/Zetaris transports and synthetic campus business data, with two Runtime-reported NVIDIA Nemotron models correlated to persisted receipts. Exact Lightning pinning, cryptographic verification and independent NVIDIA attestation remain unverified.",
+    "A21-A23 are untested/deferred. No real provider booking, inventory reservation/purchase, payment, private ROVER implementation, deployment or publication occurred."
+  ]
+}

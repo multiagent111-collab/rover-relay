@@ -348,6 +348,8 @@ test("pending outbox delivery recovers after a database reopen without duplicati
     f.service.drainOutbox = async () => {};
     const task = (await f.approve(mission)).json<Task>();
     assert.equal(task.status, "queued");
+    // Recovery reopens a closed writer; concurrent writers must be refused.
+    await f.app.close();
     const reopened = new SqliteStore(join(f.directory, "relay.sqlite"));
     const recovered = await createApp({ config: f.config, store: reopened });
     try {
@@ -455,7 +457,7 @@ test("schema-invalid proposals exhaust a bounded loop and cannot dispatch", asyn
       payload: input,
     });
     assert.equal(response.statusCode, 503);
-    assert.equal(calls, 3);
+    assert.equal(calls, 2);
     assert.equal(Object.keys((await f.service.store.read()).tasks).length, 0);
   } finally {
     await f.dispose();

@@ -1,0 +1,481 @@
+{
+  "ticket": "RELAY-08",
+  "tool": "Codex",
+  "recordedAt": "2026-10-23T00:09:02.471Z",
+  "actualStart": "2026-10-22T23:54:43.949Z",
+  "parentCommit": "ddc2d53bab8ae2dff10185121af644577a0fc3f8",
+  "mode": "offline_sample",
+  "operations": "simulated",
+  "runtime": {
+    "mode": "offline_sample",
+    "operations": "simulated",
+    "node": "v26.2.0",
+    "docker": "29.9.2",
+    "postgresql": "16.15",
+    "image": "postgres:16-alpine",
+    "container": "relay-pg-test-7d5bbbd0-6886-43fa-a6a0-2ce7fcc8e07c",
+    "imageId": "sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea",
+    "storage": "disposable tmpfs",
+    "host": "127.0.0.1",
+    "port": 49171
+  },
+  "proofs": [
+    {
+      "proof": "change_receipt",
+      "scenario": "stock",
+      "missionId": "7766c5cf-eb46-4f5e-96fc-29b9f9e13919",
+      "oldApprovalStatus": 409,
+      "originalDigest": "165c14b6003ccdebf166e5ff43c634c4357c76d180de762d6cfa811d0e775349",
+      "replacementDigest": "30694a7f03b38b2abebd88c0a8761034ae616d8d99e038275d4d264c598b8f81",
+      "approvedTaskId": "e6a470fd-8bd5-422c-9b4e-2722fe050313",
+      "change": {
+        "schemaVersion": "change-1.0",
+        "reasons": [
+          "courier_changed",
+          "eta_changed",
+          "price_changed",
+          "route_changed",
+          "stock_changed",
+          "supplier_changed"
+        ],
+        "previous": {
+          "version": 1,
+          "digest": "165c14b6003ccdebf166e5ff43c634c4357c76d180de762d6cfa811d0e775349",
+          "terms": {
+            "candidateId": "supplier-a:courier-1",
+            "supplierId": "supplier-a",
+            "courierId": "courier-1",
+            "quantity": 2,
+            "unitPriceCents": 1200,
+            "deliveryCents": 800,
+            "totalCents": 3200,
+            "etaMinutes": 22,
+            "routeEdges": [
+              "E1",
+              "E4",
+              "E7"
+            ],
+            "entrance": null
+          }
+        },
+        "current": {
+          "version": 2,
+          "terms": {
+            "candidateId": "supplier-b:courier-2",
+            "supplierId": "supplier-b",
+            "courierId": "courier-2",
+            "quantity": 2,
+            "unitPriceCents": 1000,
+            "deliveryCents": 1500,
+            "totalCents": 3500,
+            "etaMinutes": 28,
+            "routeEdges": [
+              "E2",
+              "E5",
+              "E7"
+            ],
+            "entrance": null
+          }
+        },
+        "sourceChanges": [
+          {
+            "kind": "supplier",
+            "recordId": "supplier-a",
+            "before": {
+              "id": "supplier-a",
+              "name": "Campus Tech",
+              "sku": "HDMI-USB-C",
+              "stock": 6,
+              "unitPriceCents": 1200,
+              "pickupNode": "supplier-a",
+              "handlingMinutes": 2,
+              "version": 1
+            },
+            "after": {
+              "id": "supplier-a",
+              "name": "Campus Tech",
+              "sku": "HDMI-USB-C",
+              "stock": 0,
+              "unitPriceCents": 1200,
+              "pickupNode": "supplier-a",
+              "handlingMinutes": 2,
+              "version": 2
+            }
+          }
+        ],
+        "memory": {
+          "beforeRevision": "07f288ae3e38967a772e55b565212ac5491b541dbe6ccd19c11d316d27bce258",
+          "afterRevision": "07f288ae3e38967a772e55b565212ac5491b541dbe6ccd19c11d316d27bce258"
+        },
+        "originalDeadlineAt": "2026-10-22T23:30:00.000Z",
+        "confirmationRequired": true,
+        "operations": "simulated"
+      }
+    },
+    {
+      "proof": "change_receipt",
+      "scenario": "route",
+      "missionId": "fc170245-9750-4bbf-92e5-2e3968a1e15e",
+      "oldApprovalStatus": 409,
+      "originalDigest": "acde25f1a8d89496b05334c5238a6944b9f4b1445a8ae94b2de230acdc35f965",
+      "replacementDigest": "40f3ade670a3dcdd4989bcea404e8c574af4422cfa26ed5bd4f04305f09b8e9e",
+      "approvedTaskId": "f0975c7a-bbd0-4dec-8d98-f91824eb2bfe",
+      "change": {
+        "schemaVersion": "change-1.0",
+        "reasons": [
+          "courier_changed",
+          "eta_changed",
+          "price_changed",
+          "route_changed",
+          "supplier_changed"
+        ],
+        "previous": {
+          "version": 1,
+          "digest": "acde25f1a8d89496b05334c5238a6944b9f4b1445a8ae94b2de230acdc35f965",
+          "terms": {
+            "candidateId": "supplier-a:courier-1",
+            "supplierId": "supplier-a",
+            "courierId": "courier-1",
+            "quantity": 2,
+            "unitPriceCents": 1200,
+            "deliveryCents": 800,
+            "totalCents": 3200,
+            "etaMinutes": 22,
+            "routeEdges": [
+              "E1",
+              "E4",
+              "E7"
+            ],
+            "entrance": null
+          }
+        },
+        "current": {
+          "version": 2,
+          "terms": {
+            "candidateId": "supplier-b:courier-2",
+            "supplierId": "supplier-b",
+            "courierId": "courier-2",
+            "quantity": 2,
+            "unitPriceCents": 1000,
+            "deliveryCents": 1500,
+            "totalCents": 3500,
+            "etaMinutes": 28,
+            "routeEdges": [
+              "E2",
+              "E5",
+              "E7"
+            ],
+            "entrance": null
+          }
+        },
+        "sourceChanges": [
+          {
+            "kind": "route_edge",
+            "recordId": "E4",
+            "before": {
+              "id": "E4",
+              "from": "supplier-a",
+              "to": "junction",
+              "minutes": 6,
+              "closed": false
+            },
+            "after": {
+              "id": "E4",
+              "from": "supplier-a",
+              "to": "junction",
+              "minutes": 6,
+              "closed": true
+            }
+          }
+        ],
+        "memory": {
+          "beforeRevision": "d5206eb6a1ee940b267d7d406ef026398952c81e1e5946a1c16f4813bc880a7f",
+          "afterRevision": "d5206eb6a1ee940b267d7d406ef026398952c81e1e5946a1c16f4813bc880a7f"
+        },
+        "originalDeadlineAt": "2026-10-22T23:30:00.000Z",
+        "confirmationRequired": true,
+        "operations": "simulated"
+      }
+    },
+    {
+      "proof": "change_receipt",
+      "scenario": "entrance",
+      "missionId": "6ec9fc1c-3119-499b-a262-593369f0da4d",
+      "oldApprovalStatus": 409,
+      "originalDigest": "06de66079708791382c707ebe0ba34daa190ef249a42fc299e21ce10dcdccfe1",
+      "replacementDigest": "f79cbd7e14a6d7a76d61e853eb88335b3195b93912a0624310f4588c54c3ee3a",
+      "approvedTaskId": "df4d6023-d491-45db-b3d6-9312f14bc835",
+      "change": {
+        "schemaVersion": "change-1.0",
+        "reasons": [
+          "entrance_changed"
+        ],
+        "previous": {
+          "version": 1,
+          "digest": "06de66079708791382c707ebe0ba34daa190ef249a42fc299e21ce10dcdccfe1",
+          "terms": {
+            "candidateId": "supplier-a:courier-1",
+            "supplierId": "supplier-a",
+            "courierId": "courier-1",
+            "quantity": 2,
+            "unitPriceCents": 1200,
+            "deliveryCents": 800,
+            "totalCents": 3200,
+            "etaMinutes": 22,
+            "routeEdges": [
+              "E1",
+              "E4",
+              "E7"
+            ],
+            "entrance": null
+          }
+        },
+        "current": {
+          "version": 2,
+          "terms": {
+            "candidateId": "supplier-a:courier-1",
+            "supplierId": "supplier-a",
+            "courierId": "courier-1",
+            "quantity": 2,
+            "unitPriceCents": 1200,
+            "deliveryCents": 800,
+            "totalCents": 3200,
+            "etaMinutes": 22,
+            "routeEdges": [
+              "E1",
+              "E4",
+              "E7"
+            ],
+            "entrance": "New confirmed test stage door"
+          }
+        },
+        "sourceChanges": [],
+        "memory": {
+          "beforeRevision": "73a5b33a701c44cc1f04383c45f97dfe7068824fac67a2613f59df59fe0e4ab4",
+          "afterRevision": "2ae6bdcba11c17b7a7a71223134fb5b96153ca93d899c35ff806966ae5f3041f"
+        },
+        "originalDeadlineAt": "2026-10-22T23:30:00.000Z",
+        "confirmationRequired": true,
+        "operations": "simulated"
+      }
+    },
+    {
+      "proof": "decline",
+      "missionId": "1422cbd0-9b8d-492d-8a77-ed2c6bb41602",
+      "declinedTaskId": "857e97b4-8264-4069-96d7-efc45e4d882c",
+      "replacementTaskId": "01e91910-ed24-47d0-80c9-4968fc9a6858",
+      "replacementPlanVersion": 2,
+      "releasedCourierId": "courier-1",
+      "releasedCourierAvailable": true,
+      "duplicateResponses": 4,
+      "duplicateAddedPlanningCalls": 0,
+      "declineEvents": 1,
+      "originalDeadlineAt": "2026-10-22T23:30:00.000Z",
+      "reasons": [
+        "courier_changed",
+        "courier_declined",
+        "eta_changed",
+        "price_changed",
+        "route_changed",
+        "supplier_changed"
+      ]
+    },
+    {
+      "proof": "cancellation",
+      "stage": "queued",
+      "taskId": "342868e7-57a3-4543-9b77-95414de06b30",
+      "replacementTaskId": "5c5c991e-2717-41ec-86c2-0131eaffdd6b",
+      "cancellation": {
+        "requestedAt": "2026-10-22T23:00:00.000Z",
+        "confirmedAt": "2026-10-22T23:00:00.000Z",
+        "backend": "simulator"
+      },
+      "events": [
+        {
+          "id": "91bd6286-368e-462c-a907-4069963d74ea",
+          "type": "cancellation_requested",
+          "sequence": 13
+        },
+        {
+          "id": "7e4e2ea3-6519-408d-957e-2f41a26a3d6d",
+          "type": "simulated_cancelled",
+          "sequence": 14
+        }
+      ],
+      "pendingOfferSent": 0,
+      "duplicateChangedState": false
+    },
+    {
+      "proof": "cancellation",
+      "stage": "dispatch_requested",
+      "taskId": "ac3fde14-b475-4d28-8419-cecdfa751977",
+      "replacementTaskId": "a345ac11-067e-401e-8d63-51a6d4ed84a7",
+      "cancellation": {
+        "requestedAt": "2026-10-22T23:00:00.000Z",
+        "confirmedAt": "2026-10-22T23:00:00.000Z",
+        "backend": "simulator"
+      },
+      "events": [
+        {
+          "id": "cace8a58-c7fe-4584-b02a-07959cd8a87b",
+          "type": "cancellation_requested",
+          "sequence": 14
+        },
+        {
+          "id": "4dc45fb5-d18d-4181-980e-0d58992514d2",
+          "type": "simulated_cancelled",
+          "sequence": 15
+        }
+      ],
+      "pendingOfferSent": 1,
+      "duplicateChangedState": false
+    },
+    {
+      "proof": "cancellation",
+      "stage": "accepted",
+      "taskId": "29c940b8-5f15-417e-a9b8-4e8d53f6cb1d",
+      "replacementTaskId": "f356c69f-0d31-4dc9-866e-7a9b81fe9af0",
+      "cancellation": {
+        "requestedAt": "2026-10-22T23:00:00.000Z",
+        "confirmedAt": "2026-10-22T23:00:00.000Z",
+        "backend": "simulator"
+      },
+      "events": [
+        {
+          "id": "04045e56-0483-4f22-a05c-1c311fe9fac0",
+          "type": "cancellation_requested",
+          "sequence": 15
+        },
+        {
+          "id": "3e3f3c19-9fc4-41ac-b68d-5492a67b6ff1",
+          "type": "simulated_cancelled",
+          "sequence": 16
+        }
+      ],
+      "pendingOfferSent": 1,
+      "duplicateChangedState": false
+    },
+    {
+      "proof": "cancellation",
+      "stage": "in_progress",
+      "taskId": "0f6a2c72-e6d3-4ccb-a5a5-588a551cc949",
+      "replacementTaskId": "ffbe0be1-0c2d-49cc-8bff-7fca7171689a",
+      "cancellation": {
+        "requestedAt": "2026-10-22T23:00:00.000Z",
+        "confirmedAt": "2026-10-22T23:00:00.000Z",
+        "backend": "simulator"
+      },
+      "events": [
+        {
+          "id": "c31e9674-115c-4aa5-846a-72faeecfd36a",
+          "type": "cancellation_requested",
+          "sequence": 16
+        },
+        {
+          "id": "13c847c6-db24-4f7d-ac1a-13fcbd559440",
+          "type": "simulated_cancelled",
+          "sequence": 17
+        }
+      ],
+      "pendingOfferSent": 1,
+      "duplicateChangedState": false
+    },
+    {
+      "proof": "alternatives",
+      "onTimeVersusAffordable": {
+        "budgetIncreaseCents": 500,
+        "deadlineExtensionMinutes": 2,
+        "status": "either_change",
+        "explanation": "Separate checked options can work with extra budget alone or extra time alone. Review the computed alternatives; current constraints are unchanged."
+      },
+      "lowerBudget": {
+        "budgetIncreaseCents": 1000,
+        "deadlineExtensionMinutes": null,
+        "status": "increase_budget",
+        "explanation": "The minimum extra budget is computed only from on-time options. Extra time alone cannot satisfy the current budget."
+      },
+      "combined": {
+        "budgetIncreaseCents": null,
+        "deadlineExtensionMinutes": null,
+        "status": "combined_change_required",
+        "explanation": "Neither extra budget alone nor extra time alone is sufficient. Available options require both changes; a new confirmed request is needed."
+      },
+      "missingEvidence": {
+        "budgetIncreaseCents": null,
+        "deadlineExtensionMinutes": null,
+        "status": "no_available_option",
+        "explanation": "Neither extra budget alone nor extra time alone fixes the current stock, courier, compatibility or route constraints."
+      }
+    }
+  ],
+  "postgresqlRecoveryProofs": [
+    {
+      "proof": "overlapping_approvals",
+      "requests": 8,
+      "observedRowLockWaitersAtLeast": 2,
+      "taskId": "5a8f0745-93aa-4772-a2b1-08c4ff766ace",
+      "tasks": 1,
+      "outboxMessages": 1,
+      "dispatchEvents": 1,
+      "offerEvents": 1
+    },
+    {
+      "proof": "crash_recovery",
+      "taskId": "b04777a3-9e26-4202-89d7-042c93fc7ef5",
+      "outboxId": "1c0c5561-11e2-4995-847d-6c9423ca8ef1",
+      "dispatchEventId": "e955e7a6-fc49-4484-90bc-eee73a72be7c",
+      "offerEventId": "00b960ac-c28b-46bd-9119-f0457a25027f",
+      "digest": "aba9578a9523e6c7a6d0d9459cac6934645a837bbfe27226cefaab5593f4e567",
+      "version": 1,
+      "deadlineAt": "2026-10-23T00:38:29.458Z",
+      "entrance": "Confirmed PostgreSQL test entrance",
+      "queuedBeforeRecovery": true,
+      "originalTaskAndEventIdsPreserved": true,
+      "retriesAndDrainsAddedEvents": 0
+    }
+  ],
+  "checks": {
+    "application": {
+      "passed": 97,
+      "failed": 0,
+      "skipped": 0
+    },
+    "finalLifecycle": {
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    "postgresql": {
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    "productionBuild": "pass",
+    "officialHmem": "15 pinned source hashes and 13 conformance checks passed",
+    "protectedBaseline": "82 files matched"
+  },
+  "postgresqlCases": [
+    "PostgreSQL: eight approvals overlap at the row lock and replay one committed task",
+    "PostgreSQL: a duplicate whose source read finishes after the first COMMIT returns the original task",
+    "PostgreSQL: competing keys and competing missions cannot double reserve one courier",
+    "PostgreSQL: crash after approval COMMIT and after outbox COMMIT preserves IDs and terms on restart/retry",
+    "PostgreSQL: original key conflicts on changed payload, is owner scoped and denies cross-owner replay",
+    "PostgreSQL: expiry while waiting on the lock and replanning preserve the absolute deadline",
+    "PostgreSQL: row-lock timeout rolls back, returns safe 503, then original approval succeeds",
+    "PostgreSQL: memory, source and cancellation changes during lock waits block approval",
+    "PostgreSQL: a deferred COMMIT failure is uncertain to the caller and exact-key retry creates one task",
+    "PostgreSQL: duplicate declines commit once and reserve no replacement without approval",
+    "PostgreSQL: acceptance/cancellation races honor revisions, and cancelled queued outbox never sends later",
+    "PostgreSQL: real backend termination rolls back aggregate changes and the pool recovers"
+  ],
+  "cleanup": "Temporary lifecycle state removed; exact labelled PostgreSQL test container and verified temporary database/H-MEM storage removed",
+  "sampleRefresh": "Managed Relay 4183 gracefully refreshed with persisted data retained; readiness confirmed 2026-10-23T00:09:55.693Z (October 22 Pacific). Existing live services preserved.",
+  "earlierValidation": "Corrected an alternatives status type widening error and a test assumption of two model calls: the inherited sample intentionally uses a bounded four-call repair after decline. Final checks passed; duplicate declines still use only one planning run.",
+  "scope": "Unchanged official H-MEM; no live source or saved preference mutation, hosted inference, external provider message, Build changes or publication. Database lifecycle races use real isolated PostgreSQL; all task operations are simulated.",
+  "limitations": [
+    "No external execution adapter or authoritative real cancellation confirmation",
+    "Rich structured-change comparison UI deferred to RELAY-09",
+    "Per-mission decline exclusion lasts for the mission; no automatic retry of that declined courier",
+    "No host power-loss or external exactly-once guarantee"
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "ticket": "RELAY-05",
+  "installedVersion": "1.2.1",
+  "daemonVersion": "1.2.1",
+  "checks": [
+    {
+      "path": "/healthz",
+      "status": 200,
+      "elapsedMs": 70
+    },
+    {
+      "path": "/v1/models",
+      "status": 200,
+      "elapsedMs": 30,
+      "configuredRouteFound": true,
+      "expectedModelAddressable": true
+    }
+  ],
+  "smallInference": {
+    "startedAt": "2026-10-22T22:30:41.017Z",
+    "app": "rover-relay-nightshift-check",
+    "requestedRoute": "meterless/fast",
+    "timeoutMs": 45000,
+    "scope": "Actual small inference. Attempted dedicated-app fast/one-wide policy was NOT honored; receipt reports auto/six-wide. This is retained as a failed policy-control experiment, not a successful model pin.",
+    "status": 200,
+    "elapsedMs": 2130,
+    "responseId": "chatcmpl-e835d0bd-ae20-4672-82f9-11f760b1756f",
+    "reportedModel": "nvidia/nemotron-3-ultra-550b-a55b",
+    "receiptId": "rcpt_req_fsz55848",
+    "routedModel": "nvidia/nemotron-3-ultra-550b-a55b",
+    "winningRoute": {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "label": "Nemotron 3 Ultra 550B A55B",
+      "provider": "nvidia",
+      "kind": "cloud",
+      "tier": "C"
+    },
+    "receiptPolicy": {
+      "app": "rover-relay-nightshift-check",
+      "bound_mode": "auto",
+      "cross_check": "auto",
+      "has_rule": false,
+      "lanes": null,
+      "mode_coerced": true,
+      "premium_budget": null,
+      "privacy": "cloud-ok",
+      "race_width": 6,
+      "requested_mode": "fast",
+      "routed_mode": "auto"
+    },
+    "finishReason": "stop",
+    "contentLength": 23,
+    "statusReady": true,
+    "usage": {
+      "prompt_tokens": 58,
+      "completion_tokens": 9,
+      "total_tokens": 67
+    }
+  },
+  "cleanup": {
+    "checkedAt": "2026-10-22T22:38:41.197Z",
+    "diagnosticPersistedEntryRemoved": true,
+    "existingRelayAppPolicyPreserved": true,
+    "activeRelayProvider": "nvidia",
+    "activeRoute": "meterless/auto",
+    "privateRuntimeTokenStillMatches": true,
+    "scope": "Removed only the new idle diagnostic app entry from persisted state; no Runtime restart or global policy change. Existing in-memory auto defaults were not rewritten."
+  },
+  "limitation": "Requested fast mode and model labels did not pin execution. Recorded auto routing selected real NVIDIA Nemotron models. No organizer exception is used or claimed; this is actual Nightshift evidence."
+}

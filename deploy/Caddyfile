@@ -1,0 +1,7 @@
+{$JUDGE_HOSTNAME} {
+    basic_auth {
+        judge {$JUDGE_PASSWORD_HASH}
+    }
+    encode gzip
+    reverse_proxy relay:4173
+}

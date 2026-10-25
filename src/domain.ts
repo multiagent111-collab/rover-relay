@@ -7,8 +7,11 @@ import type {
   MissionRequest,
   Mode,
   State,
+  Evidence,
+  Receipt,
 } from "./types.ts";
 import { RelayError } from "./types.ts";
+import { edgeFacts, matchesObservation } from "./evidence.ts";
 
 export const hash = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
@@ -44,7 +47,11 @@ export function addEvent(
   return event;
 }
 
-export function shortestPath(fixtures: Fixtures, from: string, to: string) {
+export function shortestPath(
+  fixtures: Pick<Fixtures, "edges">,
+  from: string,
+  to: string,
+) {
   const distances = new Map([[from, 0]]);
   const previous = new Map<string, { node: string; edge: string }>();
   const visited = new Set<string>();
@@ -83,7 +90,7 @@ export function shortestPath(fixtures: Fixtures, from: string, to: string) {
 export function enumerateCandidates(
   fixtures: Fixtures,
   request: MissionRequest,
-  evidenceIds: string[],
+  evidence: Evidence[],
   remainingMinutes = request.deadlineMinutes,
 ): Candidate[] {
   return fixtures.suppliers
@@ -107,7 +114,59 @@ export function enumerateCandidates(
               : 100000;
           const totalCents =
             supplier.unitPriceCents * request.quantity + courier.deliveryCents;
+          const routeEdges = [
+            ...new Set([...(pickup?.edges ?? []), ...(delivery?.edges ?? [])]),
+          ];
+          // Proving absence of an open path needs the complete observed graph.
+          const requiredEdges =
+            pickup && delivery
+              ? fixtures.edges.filter((edge) => routeEdges.includes(edge.id))
+              : fixtures.edges;
+          const required = [
+            evidence.find((item) =>
+              matchesObservation(
+                item,
+                "supplier",
+                supplier.id,
+                String(supplier.version),
+                supplier,
+              ),
+            ),
+            evidence.find((item) =>
+              matchesObservation(
+                item,
+                "courier",
+                courier.id,
+                String(courier.version),
+                courier,
+              ),
+            ),
+            ...requiredEdges.map((edge) =>
+              evidence.find((item) =>
+                matchesObservation(
+                  item,
+                  "route_edge",
+                  edge.id,
+                  String(edge.version ?? fixtures.revision),
+                  edgeFacts(edge),
+                ),
+              ),
+            ),
+          ];
+          const evidenceIds = [
+            ...new Set(
+              required
+                .filter((item): item is Evidence => !!item)
+                .map((item) => item.id),
+            ),
+          ];
           const checks = [
+            {
+              code: "evidence",
+              passed: required.every(Boolean),
+              detail:
+                "Required supplier, courier and route observations must match the checked facts.",
+            },
             {
               code: "sku",
               passed: supplier.sku === request.sku,
@@ -153,7 +212,7 @@ export function enumerateCandidates(
             id: `${supplier.id}:${courier.id}`,
             supplier,
             courier,
-            routeEdges: [...(pickup?.edges ?? []), ...(delivery?.edges ?? [])],
+            routeEdges,
             routeNodes: [
               ...(pickup?.nodes ?? []),
               ...(delivery?.nodes.slice(1) ?? []),
@@ -178,7 +237,7 @@ export function alternatives(
   candidates: Candidate[],
   request: MissionRequest,
   remainingMinutes: number,
-) {
+): Required<Receipt["alternatives"]> {
   const structurallyValid = candidates.filter((candidate) =>
     candidate.checks
       .filter((check) => !["budget", "deadline"].includes(check.code))
@@ -190,23 +249,50 @@ export function alternatives(
   const affordable = structurallyValid.filter(
     (candidate) => candidate.totalCents <= request.budgetCents,
   );
+  const budgetIncreaseCents = onTime.length
+    ? Math.max(
+        0,
+        Math.min(...onTime.map((c) => c.totalCents)) - request.budgetCents,
+      )
+    : null;
+  const deadlineExtensionMinutes = affordable.length
+    ? Math.max(
+        0,
+        Math.ceil(
+          Math.min(...affordable.map((c) => c.travelMinutes)) -
+            remainingMinutes,
+        ),
+      )
+    : null;
+  const status = candidates.some((c) => c.feasible)
+    ? "within_constraints"
+    : !structurallyValid.length
+      ? "no_available_option"
+      : budgetIncreaseCents === null && deadlineExtensionMinutes === null
+        ? "combined_change_required"
+        : budgetIncreaseCents !== null && deadlineExtensionMinutes !== null
+          ? "either_change"
+          : budgetIncreaseCents !== null
+            ? "increase_budget"
+            : "extend_deadline";
+  const explanation = {
+    within_constraints:
+      "A checked option meets the current constraints; review its terms before approval.",
+    no_available_option:
+      "Neither extra budget alone nor extra time alone fixes the current stock, courier, compatibility or route constraints.",
+    combined_change_required:
+      "Neither extra budget alone nor extra time alone is sufficient. Available options require both changes; a new confirmed request is needed.",
+    either_change:
+      "Separate checked options can work with extra budget alone or extra time alone. Review the computed alternatives; current constraints are unchanged.",
+    increase_budget:
+      "The minimum extra budget is computed only from on-time options. Extra time alone cannot satisfy the current budget.",
+    extend_deadline:
+      "The minimum extra time is computed only from within-budget options. Extra budget alone cannot meet the original deadline.",
+  }[status];
   return {
-    budgetIncreaseCents: onTime.length
-      ? Math.max(
-          0,
-          Math.min(...onTime.map((candidate) => candidate.totalCents)) -
-            request.budgetCents,
-        )
-      : null,
-    deadlineExtensionMinutes: affordable.length
-      ? Math.max(
-          0,
-          Math.ceil(
-            Math.min(
-              ...affordable.map((candidate) => candidate.travelMinutes),
-            ) - remainingMinutes,
-          ),
-        )
-      : null,
+    budgetIncreaseCents,
+    deadlineExtensionMinutes,
+    status,
+    explanation,
   };
 }

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "contractVersion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "error": {
+      "type": "string",
+      "enum": [
+        "identity_mismatch",
+        "unapproved_plan",
+        "plan_changed",
+        "intent_expired",
+        "provider_unavailable",
+        "quote_changed",
+        "mapping_missing",
+        "idempotency_conflict",
+        "job_already_active",
+        "dependency_unavailable",
+        "unsupported_contract_version",
+        "invalid_execution_intent",
+        "stale_task_revision"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    }
+  },
+  "required": ["contractVersion", "error", "message"],
+  "additionalProperties": false
+}

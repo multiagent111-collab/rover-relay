@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import { NvidiaGenerator, liveGenerator } from "../src/agents.ts";
 import { runPreflight } from "../src/preflight.ts";
 import { enumerateCandidates } from "../src/domain.ts";
+import { sampleEvidence } from "../src/evidence.ts";
 import { seedFixtures } from "../src/fixtures.ts";
+import { proposalFor } from "../src/review.ts";
 
 function environment(values: Record<string, string>) {
   const before = Object.fromEntries(
@@ -27,7 +29,11 @@ const request = {
 };
 const input = {
   request,
-  candidates: enumerateCandidates(seedFixtures(), request, ["e1"]),
+  candidates: enumerateCandidates(
+    seedFixtures(),
+    request,
+    sampleEvidence(seedFixtures(), new Date().toISOString()),
+  ),
   memory: {
     records: [],
     context: "",
@@ -186,11 +192,7 @@ test("Nightshift route discovery and successful inference do not attest an under
         (c: { feasible: boolean }) => c.feasible,
       );
       const value = payload.messages[0].content.includes("Relay Planner")
-        ? {
-            candidateId: candidate.id,
-            evidenceIds: candidate.evidenceIds,
-            summary: "Controlled valid plan",
-          }
+        ? proposalFor(data.request, data.memory, data.candidates, candidate)
         : { approved: true, issues: [], refreshEvidence: false };
       return Response.json({
         model: "meterless/fast",

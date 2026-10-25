@@ -1,0 +1,216 @@
+{
+  "checkedAt": "2026-10-22T00:55:23.537Z",
+  "mode": "live_sponsors",
+  "operations": "simulated",
+  "inferenceProvider": "nvidia-direct",
+  "checks": [
+    {
+      "check": "Live application and PostgreSQL",
+      "status": "PASS",
+      "health": {
+        "status": "ok",
+        "project": "ROVER Relay",
+        "version": "0.1.0",
+        "mode": "live_sponsors",
+        "operations": "simulated",
+        "storage": "postgresql",
+        "sponsorCallsVerified": false
+      }
+    },
+    {
+      "check": "Wrong Relay token rejected",
+      "status": "PASS",
+      "statusCode": 401
+    },
+    {
+      "check": "Real Zetaris federation and Nemotron Planner/Critic",
+      "status": "PASS",
+      "provider": "nvidia-direct",
+      "missionId": "21060046-79da-41c7-9bf0-2c36d8350ec9",
+      "selectedId": "supplier-a:courier-1",
+      "models": [
+        "nvidia/nemotron-3.5-lightning-30b-a3b"
+      ],
+      "queryIds": [
+        "c8861ffa-3edf-4e92-992e-4612e6ed3f0a",
+        "aa62ccf4-451d-4f43-bbb5-47e0b436e92a"
+      ],
+      "evidenceRecords": 13
+    },
+    {
+      "check": "Approval revalidates sources and duplicate dispatch is idempotent",
+      "status": "PASS",
+      "taskId": "bef7f42c-c1ca-4549-95d4-7016cbf63f2b",
+      "duplicateTaskId": "bef7f42c-c1ca-4549-95d4-7016cbf63f2b"
+    },
+    {
+      "check": "Simulated courier completes delivery",
+      "status": "PASS",
+      "taskId": "bef7f42c-c1ca-4549-95d4-7016cbf63f2b",
+      "taskStatus": "completed"
+    },
+    {
+      "check": "Tight budget fails without dispatch or relaxed constraints",
+      "status": "PASS",
+      "missionId": "080f45db-30f7-44ce-8bd0-0283cd637e98",
+      "minimumExtraCents": 200
+    },
+    {
+      "check": "Independent supplier change invalidates old approval and replans",
+      "status": "PASS",
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "rejectedApproval": "plan_replaced",
+      "oldPlan": 1,
+      "newPlan": 2,
+      "oldCandidate": "supplier-a:courier-1",
+      "newCandidate": "supplier-b:courier-2"
+    },
+    {
+      "check": "Machine-readable live evidence exported",
+      "status": "PASS",
+      "eventCount": 11
+    }
+  ],
+  "sources": {
+    "supplier": "Independent SQLite inventory via HTTP REST connector",
+    "courier": "PostgreSQL simulator via dedicated read-only JDBC role",
+    "join": "Zetaris rover_relay.relay_candidates",
+    "routes": "Zetaris rover_relay.relay_route_edges"
+  },
+  "modelCalls": [
+    {
+      "missionId": "21060046-79da-41c7-9bf0-2c36d8350ec9",
+      "role": "Planner",
+      "round": 1,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-a6f30c58-b166-48c1-aa17-29a973e0e32e"
+    },
+    {
+      "missionId": "21060046-79da-41c7-9bf0-2c36d8350ec9",
+      "role": "Critic",
+      "round": 1,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-22a35ef5-e63b-40e8-b877-d7adf0751d5a"
+    },
+    {
+      "missionId": "080f45db-30f7-44ce-8bd0-0283cd637e98",
+      "role": "Planner",
+      "round": 1,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-cad9a287-6d59-473e-a114-4bc38f392c17"
+    },
+    {
+      "missionId": "080f45db-30f7-44ce-8bd0-0283cd637e98",
+      "role": "Critic",
+      "round": 1,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-469fbb80-37b8-489a-95cc-c5836eaa2155"
+    },
+    {
+      "missionId": "080f45db-30f7-44ce-8bd0-0283cd637e98",
+      "role": "Planner",
+      "round": 2,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-36abd8b1-a6dd-4fd9-82b3-113d3a63721f"
+    },
+    {
+      "missionId": "080f45db-30f7-44ce-8bd0-0283cd637e98",
+      "role": "Critic",
+      "round": 2,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-7bf62bce-8766-4e4d-9e83-372436b989df"
+    },
+    {
+      "missionId": "080f45db-30f7-44ce-8bd0-0283cd637e98",
+      "role": "Planner",
+      "round": 3,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-d7cf57ae-cab4-4b20-b0ec-70f716259f15"
+    },
+    {
+      "missionId": "080f45db-30f7-44ce-8bd0-0283cd637e98",
+      "role": "Critic",
+      "round": 3,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-edcbeace-99fe-4d78-b8f2-919ac618d4d9"
+    },
+    {
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "role": "Planner",
+      "round": 1,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-f7379e9e-941d-496e-94f4-a1f8a6d86056"
+    },
+    {
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "role": "Critic",
+      "round": 1,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-9cb65627-d99c-4b0e-8d80-147421fbb1cb"
+    },
+    {
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "role": "Planner",
+      "round": 2,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-8140ca21-df08-40ac-a3ea-41b719257e32"
+    },
+    {
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "role": "Critic",
+      "round": 2,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-c092e7dc-2d46-447b-9ae0-9700c2c4f538"
+    },
+    {
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "role": "Planner",
+      "round": 3,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-555b2f3f-a8ab-4e61-bdb5-efad91452a68"
+    },
+    {
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "role": "Critic",
+      "round": 3,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-eb86a54d-cc0e-495f-8ecc-c7b7700dfb64"
+    },
+    {
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "role": "Planner",
+      "round": 1,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-a95cf9fe-c5fc-4473-976c-7d94d253c979"
+    },
+    {
+      "missionId": "e70c5db9-79f6-4dcf-af82-148c3e83162b",
+      "role": "Critic",
+      "round": 1,
+      "provider": "nvidia-direct",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "requestId": "chatcmpl-3a46c03b-a7b0-47a7-af03-cfca9cf9fb1e"
+    }
+  ],
+  "limitations": [
+    "All inventory, courier and delivery operations are simulated.",
+    "Nightshift discovery and small inference checks passed; complete Relay missions timed out or failed through its router.",
+    "The health endpoint sponsorCallsVerified flag remains false and is not an attestation mechanism.",
+    "This record does not establish sponsor credit activation, Cursor use or organizer acceptance."
+  ]
+}

@@ -6,13 +6,28 @@ import { timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 import { seedFixtures } from "../src/fixtures.ts";
 import { loadEnvironment } from "../src/config.ts";
+import {
+  acquireWriterLock,
+  assertPortAvailable,
+  installLocalControl,
+  supplierSettings,
+  supplierConfigurationId,
+} from "../src/lifecycle.ts";
 
 // Independently persisted source for Zetaris registration. It does not read
 // Relay's mission/courier aggregate or call the Relay API.
 loadEnvironment();
-const path = resolve(
-  process.env.SUPPLIER_DATA_FILE || ".data/supplier/inventory.sqlite",
-);
+const settings = supplierSettings();
+try {
+  await assertPortAvailable(settings.host, settings.port);
+} catch {
+  console.error(
+    "Supplier port is occupied or blocked. Reuse the existing source or select another port.",
+  );
+  process.exit(1);
+}
+const path = settings.path;
+const lock = acquireWriterLock(settings.directory, ".supplier-writer.lock");
 mkdirSync(dirname(path), { recursive: true });
 const db = new DatabaseSync(path);
 db.exec(
@@ -24,6 +39,14 @@ for (const supplier of seedFixtures().suppliers)
     JSON.stringify(supplier),
   );
 const app = Fastify({ logger: false, bodyLimit: 4096 });
+app.get("/health", async () => ({
+  status: "ok",
+  project: "Relay supplier",
+  instanceId: lock.instanceId,
+  launchId: process.env.RELAY_LOCAL_LAUNCH_ID || null,
+  configurationId: supplierConfigurationId(settings),
+}));
+installLocalControl(app, process.env.RELAY_LOCAL_CONTROL_TOKEN);
 app.get("/inventory", async () => ({
   data: (
     db.prepare("SELECT value FROM inventory ORDER BY id").all() as {
@@ -75,10 +98,13 @@ app.post("/inventory/:id/stock", async (request, reply) => {
   );
   return { id, stock: supplier.stock, version: supplier.version };
 });
-app.addHook("onClose", async () => db.close());
+app.addHook("onClose", async () => {
+  db.close();
+  lock.release();
+});
 await app.listen({
-  host: process.env.SUPPLIER_HOST || "127.0.0.1",
-  port: Number(process.env.SUPPLIER_PORT || 4174),
+  host: settings.host,
+  port: settings.port,
 });
 console.log(
   "Independent supplier source listening on port " +

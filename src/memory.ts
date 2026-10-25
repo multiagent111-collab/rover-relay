@@ -1,86 +1,131 @@
-import { join } from "node:path";
 import { HMEM } from "../vendor/hmem/src/index.ts";
 import { hash, ownerKey } from "./domain.ts";
-import type { Identity, MemoryContext } from "./types.ts";
-
-export const HMEM_REVISION = "1742dec56a66e58eef9dda2d2b865823758ca8cd";
+import {
+  MemoryStorage,
+  confirmedEntrance,
+  HMEM_REVISION,
+} from "./memory-storage.ts";
+import { RelayError, type Identity, type MemoryContext } from "./types.ts";
+export { HMEM_REVISION } from "./memory-storage.ts";
 export class MemoryAdapter {
+  private storage: MemoryStorage;
   constructor(
-    private directory: string,
+    directory: string,
     private clock = Date.now,
-  ) {}
-  private engine(identity: Identity, venue: string) {
-    return new HMEM({
-      persistDir: join(this.directory, ownerKey(identity), venue),
-      clock: this.clock,
-      actor: "relay-confirmed-preferences",
-    });
+  ) {
+    this.storage = new MemoryStorage(directory);
   }
-  recall(identity: Identity, venue: string): MemoryContext {
-    const engine = this.engine(identity, venue);
+  private run<T>(
+    identity: Identity,
+    venue: string,
+    change: boolean,
+    operation: (engine: HMEM, generation: number, storeId: string) => T,
+  ) {
+    return this.storage.run(
+      identity,
+      venue,
+      change,
+      (directory, generation, storeId) => {
+        const engine = new HMEM({
+          persistDir: directory,
+          clock: this.clock,
+          actor: "relay-confirmed-preferences",
+        });
+        const result = operation(engine, generation, storeId);
+        engine.store.persist();
+        return result;
+      },
+    );
+  }
+  private context(
+    engine: HMEM,
+    identity: Identity,
+    venue: string,
+    generation: number,
+    storeId: string,
+  ): MemoryContext {
     const result = engine.query(`Delivery entrance preference for ${venue}`, {
       threshold: 0,
-      topN: 5,
+      topN: Math.max(1, engine.store.all().length),
     });
-    engine.store.persist();
-    const records = result.memories.map(({ memory, relevance }) => ({
+    const recalled = result.memories.filter(({ memory }) =>
+      confirmedEntrance(memory),
+    );
+    const records = recalled.map(({ memory, relevance }) => ({
       id: memory.id,
       content: memory.content,
       relevance,
     }));
-    const preference = result.memories.find(({ memory }) =>
-      memory.tags.includes("entrance"),
-    )?.memory;
     return {
       records,
-      context: result.context,
+      context: engine.retrieval.formatReinjection(recalled),
       entrance:
-        preference?.content.replace(/^Delivery entrance preference: /, "") ??
-        null,
-      revision: hash(
-        records.map((record) => [record.id, record.content]).sort(),
-      ),
+        recalled[0]?.memory.content.slice(
+          "Delivery entrance preference: ".length,
+        ) ?? null,
+      revision: hash({
+        storeId,
+        owner: ownerKey(identity),
+        venue,
+        generation,
+        sequence: engine.store.snapshotAll().seq,
+        records: records.map((r) => [r.id, r.content]).sort(),
+      }),
       engine: `Meterless H-MEM reference ${HMEM_REVISION}`,
     };
   }
+  recall(identity: Identity, venue: string) {
+    return this.run(identity, venue, false, (engine, generation, storeId) =>
+      this.context(engine, identity, venue, generation, storeId),
+    );
+  }
   set(identity: Identity, venue: string, entrance: string) {
-    const engine = this.engine(identity, venue);
-    const old = engine.store
-      .all()
-      .filter((record) => record.tags.includes("entrance"));
-    // Explicitly remove superseded records from retrieval; H-MEM's default
-    // supersession penalty alone does not exclude an obsolete preference.
-    for (const record of old)
-      engine.store.delete(record.id, "Superseded by user-confirmed entrance");
-    engine.add({
-      content: `Delivery entrance preference: ${entrance}`,
-      type: "preference",
-      layer: "long_term",
-      source: "user_confirmed",
-      tags: ["entrance", venue],
-      confidence: 1,
-      supersedes: old[0]?.id,
-      provenance: {
-        origin: "user_correction",
-        learnedAt: this.clock(),
-        label: "Explicit entrance confirmation",
-      },
+    if (
+      typeof entrance !== "string" ||
+      entrance !== entrance.trim() ||
+      entrance.length < 2 ||
+      entrance.length > 120
+    )
+      throw new RelayError(
+        400,
+        "invalid_preference",
+        "Confirm an entrance between 2 and 120 characters.",
+      );
+    return this.run(identity, venue, true, (engine, generation, storeId) => {
+      const old = engine.store.all().filter(confirmedEntrance);
+      for (const record of old)
+        engine.store.delete(record.id, "Superseded by user-confirmed entrance");
+      engine.add({
+        content: `Delivery entrance preference: ${entrance}`,
+        type: "preference",
+        layer: "long_term",
+        source: "user_confirmed",
+        tags: ["entrance", venue],
+        confidence: 1,
+        supersedes: old[0]?.id,
+        provenance: {
+          origin: "user_correction",
+          learnedAt: this.clock(),
+          label: "Explicit entrance confirmation",
+        },
+      });
+      return this.context(engine, identity, venue, generation, storeId);
     });
-    return this.recall(identity, venue);
   }
   forget(identity: Identity, venue: string) {
-    const engine = this.engine(identity, venue);
-    for (const record of engine.store.all())
-      engine.store.delete(record.id, "User requested forgetting");
-    return this.recall(identity, venue);
+    return this.run(identity, venue, true, (engine, generation, storeId) => {
+      for (const record of engine.store.all().filter(confirmedEntrance))
+        engine.store.delete(record.id, "User requested forgetting");
+      return this.context(engine, identity, venue, generation, storeId);
+    });
   }
+  // Private local audit includes deleted IDs. Forgetting removes active
+  // influence; earlier receipts, task instructions and audit text remain.
   audit(identity: Identity, venue: string) {
-    const engine = this.engine(identity, venue);
-    return engine.store
-      .all()
-      .map((record) => ({
-        id: record.id,
-        history: engine.ledger.history(record.id),
-      }));
+    return this.run(identity, venue, false, (engine) =>
+      [...new Set(engine.ledger.all().map((entry) => entry.memoryId))].map(
+        (id) => ({ id, history: engine.ledger.history(id) }),
+      ),
+    );
   }
 }
